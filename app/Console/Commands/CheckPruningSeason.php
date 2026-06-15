@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Plant;
 use App\Models\User;
+use App\Notifications\PruningSeasonNotification;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Notifications\DatabaseNotification;
 
 class CheckPruningSeason extends Command
 {
@@ -24,14 +23,41 @@ class CheckPruningSeason extends Command
 
         foreach ($users as $user) {
             foreach ($user->plants as $plant) {
-                if ($plant->isPruningSeason($currentSeason)) {
-                    $this->createNotification($user, $plant, $currentSeason);
-                    $this->info("Notificação criada para {$user->name} sobre {$plant->nome_popular}");
+                if (! $plant->isPruningSeason($currentSeason)) {
+                    continue;
                 }
+
+                if ($this->alreadyNotified($user, $plant, $currentSeason)) {
+                    $this->line("Já notificado: {$user->name} sobre {$plant->nome_popular}");
+                    continue;
+                }
+
+                $user->notify(new PruningSeasonNotification($plant, $currentSeason));
+                $this->info("Notificação enviada para {$user->name} sobre {$plant->nome_popular}");
             }
         }
 
         $this->info('Verificação concluída!');
+    }
+
+    /**
+     * Evita reenviar a mesma notificação de poda (mesma planta + estação)
+     * em uma janela recente, mesmo que o comando rode todos os dias.
+     */
+    private function alreadyNotified(User $user, $plant, string $season): bool
+    {
+        // Evita o operador JSON no SQL (incompativel com coluna `text` no Postgres):
+        // busca as notificacoes recentes desse tipo e compara o payload em PHP.
+        return $user->notifications()
+            ->where('type', PruningSeasonNotification::class)
+            ->where('created_at', '>=', now()->subDays(60))
+            ->get()
+            ->contains(function ($notification) use ($plant, $season) {
+                $data = $notification->data;
+
+                return ($data['planta_nome'] ?? null) === $plant->nome_popular
+                    && ($data['season'] ?? null) === $season;
+            });
     }
 
     private function getSeason()
@@ -48,25 +74,5 @@ class CheckPruningSeason extends Command
         } else {
             return 'verão';
         }
-    }
-
-    private function createNotification($user, $plant, $season)
-    {
-        $data = [
-            'titulo' => '🌿 Época de Poda: ' . ucfirst($plant->nome_popular),
-            'mensagem' => "Sua planta {$plant->nome_popular} está em sua época ideal de poda para {$season}. Verifique os detalhes!",
-            'planta_nome' => $plant->nome_popular,
-            'season' => $season,
-        ];
-
-        \DB::table('notifications')->insert([
-            'id' => \Illuminate\Support\Str::uuid(),
-            'notifiable_type' => 'App\\Models\\User',
-            'notifiable_id' => $user->id,
-            'type' => 'App\\Notifications\\PruningSeasonNotification',
-            'data' => json_encode($data),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
     }
 }

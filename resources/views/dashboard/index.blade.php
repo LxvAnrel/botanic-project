@@ -38,6 +38,21 @@
         </a>
     </div>
 
+    {{-- Banner de notificações push --}}
+    <div id="push-banner" class="glass-gold rounded-2xl p-4 md:p-5 mb-6 flex items-center gap-4" style="display:none;">
+        <div class="shrink-0 w-10 h-10 glass rounded-full flex items-center justify-center text-lg">🔔</div>
+        <div class="flex-1 min-w-0">
+            <p class="text-[#EDE0CC] text-sm">Receba alertas de poda no seu celular</p>
+            <p class="text-[#7A8E72] text-xs mt-0.5">Avisamos na hora certa de cuidar de cada planta.</p>
+        </div>
+        <button type="button" onclick="floraBannerEnable()"
+                class="shrink-0 bg-[#C8A96E] hover:bg-[#D4BA8A] text-[#0E1A0B] text-[10px] uppercase tracking-widest font-semibold px-4 py-2.5 rounded-full transition-all duration-200">
+            Ativar
+        </button>
+        <button type="button" onclick="floraBannerDismiss()" aria-label="Dispensar"
+                class="shrink-0 text-[#7A8E72] hover:text-[#C8A96E] transition-colors text-lg leading-none px-1">×</button>
+    </div>
+
     {{-- Stats --}}
     <div class="grid grid-cols-3 gap-3 mb-8">
         <div class="glass rounded-2xl p-4 md:p-6 text-center">
@@ -126,4 +141,77 @@
         </div>
     @endif
 </div>
+
+{{-- Modal de onboarding: pergunta sobre notificações logo após o cadastro --}}
+@if(session('ask_push'))
+<div id="push-onboarding" class="fixed inset-0 z-[60] flex items-center justify-center px-4" style="display:none;">
+    <div class="absolute inset-0 bg-[#0A1408]/80 backdrop-blur-sm" onclick="floraOnboardingClose()"></div>
+    <div class="relative glass rounded-3xl p-8 max-w-sm w-full text-center">
+        <div class="w-16 h-16 glass-gold rounded-full flex items-center justify-center mx-auto mb-5 text-3xl">🔔</div>
+        <h2 class="font-serif font-light text-2xl text-[#EDE0CC] mb-2">Quer receber alertas?</h2>
+        <p class="text-[#7A8E72] text-sm mb-7 leading-relaxed">
+            Podemos avisar no seu celular quando for a época ideal de poda das suas plantas. Você pode mudar isso depois no perfil.
+        </p>
+        <div class="space-y-2">
+            <button type="button" onclick="floraOnboardingEnable()"
+                    class="w-full bg-[#C8A96E] hover:bg-[#D4BA8A] text-[#0E1A0B] text-xs uppercase tracking-widest font-semibold py-3.5 rounded-full transition-all duration-200">
+                Ativar agora
+            </button>
+            <button type="button" onclick="floraOnboardingClose()"
+                    class="w-full text-[#7A8E72] hover:text-[#C8A96E] text-xs uppercase tracking-widest py-3 rounded-full transition-colors">
+                Agora não
+            </button>
+        </div>
+    </div>
+</div>
+@endif
+
+<script>
+const FLORA_PUSH_DISMISS = 'flora_push_dismissed';
+
+function floraBannerDismiss() {
+    localStorage.setItem(FLORA_PUSH_DISMISS, '1');
+    var b = document.getElementById('push-banner');
+    if (b) b.style.display = 'none';
+}
+
+async function floraBannerEnable() {
+    if (!window.Flora || !window.Flora.push) return;
+    var ok = await window.Flora.push.subscribe();
+    if (ok) floraBannerDismiss();
+}
+
+function floraOnboardingClose() {
+    var m = document.getElementById('push-onboarding');
+    if (m) m.style.display = 'none';
+}
+
+async function floraOnboardingEnable() {
+    floraOnboardingClose();
+    if (window.Flora && window.Flora.push) {
+        var ok = await window.Flora.push.subscribe();
+        if (ok) localStorage.setItem(FLORA_PUSH_DISMISS, '1');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+    var supported = window.Flora && window.Flora.push && window.Flora.push.supported();
+    var onboarding = document.getElementById('push-onboarding');
+
+    // Mostra o modal de onboarding (pós-cadastro) se push é suportado e ainda não foi decidido.
+    if (onboarding && supported && Notification.permission === 'default') {
+        onboarding.style.display = 'flex';
+        return; // não mostra o banner junto com o modal
+    }
+
+    // Banner persistente para quem ainda não ativou nem dispensou.
+    if (supported && Notification.permission !== 'denied' && !localStorage.getItem(FLORA_PUSH_DISMISS)) {
+        var on = await window.Flora.push.isSubscribed();
+        if (!on) {
+            var b = document.getElementById('push-banner');
+            if (b) b.style.display = 'flex';
+        }
+    }
+});
+</script>
 @endsection

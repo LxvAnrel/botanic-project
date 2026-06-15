@@ -65,6 +65,25 @@
         </div>
     </div>
 
+    {{-- Notificações push --}}
+    <div class="glass rounded-2xl p-6 mb-4" id="push-card">
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E] mb-1">Notificações</p>
+                <p class="text-[#EDE0CC] text-sm">Alertas de poda no celular</p>
+                <p class="text-[#7A8E72] text-xs mt-1" id="push-status">Verificando…</p>
+            </div>
+            <button type="button" id="push-toggle"
+                    onclick="floraTogglePush()"
+                    class="shrink-0 glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200 disabled:opacity-40">
+                …
+            </button>
+        </div>
+        <p class="text-[#3A5E2D] text-[10px] mt-3 leading-relaxed" id="push-hint" style="display:none;">
+            Seu navegador bloqueou as notificações. Permita-as nas configurações do site para ativar.
+        </p>
+    </div>
+
     {{-- Ações --}}
     <div class="space-y-2">
         <a href="{{ route('profile.edit') }}"
@@ -81,4 +100,56 @@
         </form>
     </div>
 </div>
+
+<script>
+function floraRenderPush(state) {
+    var status = document.getElementById('push-status');
+    var btn = document.getElementById('push-toggle');
+    var hint = document.getElementById('push-hint');
+    btn.disabled = false;
+    hint.style.display = 'none';
+
+    if (!window.Flora || !window.Flora.push || !window.Flora.push.supported()) {
+        status.textContent = 'Não suportado neste navegador';
+        btn.style.display = 'none';
+        return;
+    }
+    if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
+        status.textContent = 'Bloqueadas pelo navegador';
+        btn.style.display = 'none';
+        hint.style.display = 'block';
+        return;
+    }
+    if (state === 'on') {
+        status.textContent = 'Ativadas neste dispositivo';
+        btn.textContent = 'Desativar';
+    } else {
+        status.textContent = 'Desativadas';
+        btn.textContent = 'Ativar';
+    }
+    btn.dataset.state = state;
+}
+
+async function floraTogglePush() {
+    var btn = document.getElementById('push-toggle');
+    btn.disabled = true;
+    btn.textContent = '…';
+    if (btn.dataset.state === 'on') {
+        await window.Flora.push.unsubscribe();
+        floraRenderPush('off');
+    } else {
+        var ok = await window.Flora.push.subscribe();
+        floraRenderPush(ok ? 'on' : 'off');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async function () {
+    if (window.Flora && window.Flora.push && window.Flora.push.supported()) {
+        var on = await window.Flora.push.isSubscribed();
+        floraRenderPush(on ? 'on' : 'off');
+    } else {
+        floraRenderPush('off');
+    }
+});
+</script>
 @endsection

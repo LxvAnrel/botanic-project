@@ -115,4 +115,22 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Markdown Mail Settings
+    |--------------------------------------------------------------------------
+    |
+    | Tema visual usado pelos emails markdown do Laravel (ex.: redefinicao de
+    | senha). O tema "flora" segue a identidade escura/dourada do site.
+    |
+    */
+
+    'markdown' => [
+        'theme' => 'flora',
+
+        'paths' => [
+            resource_path('views/vendor/mail'),
+        ],
+    ],
+
 ];
