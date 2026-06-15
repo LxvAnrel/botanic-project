@@ -10,6 +10,11 @@ class SecurityHeaders
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // Forca HTTPS em producao: qualquer acesso http e redirecionado (301).
+        if (app()->environment('production') && ! $request->isSecure()) {
+            return redirect()->secure($request->getRequestUri(), 301);
+        }
+
         $response = $next($request);
 
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
