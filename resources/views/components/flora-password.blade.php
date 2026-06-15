@@ -1,9 +1,11 @@
 @props(['id', 'name', 'autocomplete' => 'current-password', 'placeholder' => ''])
 
+@php $borderCls = $errors->has($name) ? 'border-red-400/50' : 'border-white/[0.08]'; @endphp
+
 <div class="relative">
     <input id="{{ $id }}" name="{{ $name }}" type="password" required
            autocomplete="{{ $autocomplete }}" placeholder="{{ $placeholder }}"
-           class="w-full glass text-[#EDE0CC] placeholder-[#3A5E2D]/60 text-sm pl-4 pr-11 py-3 rounded-xl focus:outline-none focus:border-[#C8A96E]/50 transition-all duration-200 @error($name) border-red-400/50 @else border-white/[0.08] @enderror">
+           class="w-full glass text-[#EDE0CC] placeholder-[#3A5E2D]/60 text-sm pl-4 pr-11 py-3 rounded-xl focus:outline-none focus:border-[#C8A96E]/50 transition-all duration-200 {{ $borderCls }}">
     <button type="button" tabindex="-1" aria-label="Mostrar senha"
             onclick="floraTogglePassword(this, '{{ $id }}')"
             class="absolute inset-y-0 right-0 px-3.5 flex items-center text-[#3A5E2D] hover:text-[#C8A96E] transition-colors">
