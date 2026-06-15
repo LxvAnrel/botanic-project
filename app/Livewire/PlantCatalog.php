@@ -23,6 +23,11 @@ class PlantCatalog extends Component
     public function updatingPetFriendly() { $this->resetPage(); }
     public function updatingSize() { $this->resetPage(); }
 
+    public function setHabitat(string $value): void { $this->habitat = $value; $this->resetPage(); }
+    public function setSize(string $value): void { $this->size = $value; $this->resetPage(); }
+    public function togglePet(): void { $this->petFriendly = !$this->petFriendly; $this->resetPage(); }
+    public function clearFilters(): void { $this->search = ''; $this->habitat = ''; $this->petFriendly = false; $this->size = ''; $this->resetPage(); }
+
     public function render()
     {
         $query = Plant::query();

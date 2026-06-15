@@ -20,43 +20,43 @@
             <div class="flex gap-2 items-center w-max px-1">
                 <span class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72] shrink-0 mr-1">Luz:</span>
 
-                <button wire:click="$set('habitat', '')"
+                <button wire:click="setHabitat('')"
                         class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ !$habitat ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
                     Todas
                 </button>
-                <button wire:click="$set('habitat', 'sol_pleno')"
+                <button wire:click="setHabitat('sol_pleno')"
                         class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $habitat === 'sol_pleno' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
                     ☀ Sol
                 </button>
-                <button wire:click="$set('habitat', 'meia_sombra')"
+                <button wire:click="setHabitat('meia_sombra')"
                         class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $habitat === 'meia_sombra' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
                     ◑ Meia
                 </button>
-                <button wire:click="$set('habitat', 'sombra')"
+                <button wire:click="setHabitat('sombra')"
                         class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $habitat === 'sombra' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
                     ● Sombra
                 </button>
-                <button wire:click="$set('petFriendly', !$petFriendly)"
+                <button wire:click="togglePet"
                         class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $petFriendly ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
                     🐾 Pet
                 </button>
 
                 <span class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72] shrink-0 mx-1">Porte:</span>
-                <button wire:click="$set('size', 'pequeno')"
+                <button wire:click="setSize('pequeno')"
                         class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $size === 'pequeno' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
                     Pequeno
                 </button>
-                <button wire:click="$set('size', 'medio')"
+                <button wire:click="setSize('medio')"
                         class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $size === 'medio' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
                     Médio
                 </button>
-                <button wire:click="$set('size', 'grande')"
+                <button wire:click="setSize('grande')"
                         class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $size === 'grande' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
                     Grande
                 </button>
 
                 @if($search || $habitat || $petFriendly || $size)
-                <button wire:click="$set('search', ''); $set('habitat', ''); $set('petFriendly', false); $set('size', '');"
+                <button wire:click="clearFilters"
                         class="shrink-0 text-xs text-[#7A8E72] hover:text-[#C8A96E] ml-1 transition-colors underline underline-offset-4 whitespace-nowrap">
                     Limpar
                 </button>

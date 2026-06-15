@@ -20,7 +20,7 @@
     </div>
 
     {{-- Navbar --}}
-    <header class="sticky top-0 z-50 px-4 pt-3 pb-2" x-data="{ open: false }">
+    <header class="sticky top-0 z-50 px-4 pt-3 pb-2">
         <div class="max-w-7xl mx-auto">
             <div class="glass rounded-2xl px-4 md:px-6">
                 <div class="flex items-center justify-between h-14 relative">
@@ -38,10 +38,10 @@
                     </nav>
 
                     {{-- Hamburguer (mobile) --}}
-                    <button @click="open = !open" class="md:hidden flex flex-col gap-1.5 p-2 rounded-xl hover:bg-white/5 transition-colors" aria-label="Menu">
-                        <span class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300" :class="open ? 'rotate-45 translate-y-2' : ''"></span>
-                        <span class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300" :class="open ? 'opacity-0' : ''"></span>
-                        <span class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300" :class="open ? '-rotate-45 -translate-y-2' : ''"></span>
+                    <button id="nav-toggle" onclick="floraNavToggle()" class="md:hidden flex flex-col gap-1.5 p-2 rounded-xl hover:bg-white/5 transition-colors" aria-label="Menu">
+                        <span id="nav-bar1" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
+                        <span id="nav-bar2" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
+                        <span id="nav-bar3" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
                     </button>
 
                     {{-- Logo centro --}}
@@ -83,30 +83,24 @@
             </div>
 
             {{-- Mobile menu --}}
-            <div x-show="open"
-                 style="display: none;"
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0 -translate-y-2"
-                 x-transition:enter-end="opacity-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100 translate-y-0"
-                 x-transition:leave-end="opacity-0 -translate-y-2"
-                 class="md:hidden glass rounded-2xl mt-2 p-4 space-y-1">
-                <a href="{{ route('plants.index') }}" @click="open=false"
+            <div id="mobile-menu"
+                 class="md:hidden glass rounded-2xl mt-2 p-4 space-y-1 overflow-hidden transition-all duration-200 ease-out"
+                 style="display:none;">
+                <a href="{{ route('plants.index') }}"
                    class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
                     Catálogo
                 </a>
-                <a href="{{ route('quiz') }}" @click="open=false"
+                <a href="{{ route('quiz') }}"
                    class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
                     Quiz
                 </a>
                 <div class="border-t border-white/[0.06] my-2"></div>
                 @auth
-                    <a href="{{ route('dashboard') }}" @click="open=false"
+                    <a href="{{ route('dashboard') }}"
                        class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
                         Meu Diário
                     </a>
-                    <a href="{{ route('alertas') }}" @click="open=false"
+                    <a href="{{ route('alertas') }}"
                        class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
                         Alertas
                     </a>
@@ -117,11 +111,11 @@
                         </button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" @click="open=false"
+                    <a href="{{ route('login') }}"
                        class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
                         Entrar
                     </a>
-                    <a href="{{ route('register') }}" @click="open=false"
+                    <a href="{{ route('register') }}"
                        class="block glass-gold text-[#C8A96E] text-sm uppercase tracking-widest font-medium px-4 py-3 rounded-xl transition-all duration-200 text-center mt-1">
                         Registrar
                     </a>
@@ -129,6 +123,20 @@
             </div>
         </div>
     </header>
+
+    <script>
+        function floraNavToggle() {
+            var menu = document.getElementById('mobile-menu');
+            var b1 = document.getElementById('nav-bar1');
+            var b2 = document.getElementById('nav-bar2');
+            var b3 = document.getElementById('nav-bar3');
+            var open = menu.style.display === 'block';
+            menu.style.display = open ? 'none' : 'block';
+            b1.style.transform = open ? '' : 'rotate(45deg) translateY(8px)';
+            b2.style.opacity  = open ? '' : '0';
+            b3.style.transform = open ? '' : 'rotate(-45deg) translateY(-8px)';
+        }
+    </script>
 
     <main class="flex-1 relative z-10">
         @yield('content')
