@@ -41,12 +41,17 @@ class CheckLoginDevice
             'last_seen_at' => now(),
         ]);
 
-        Mail::to($user->email)->send(new NewDeviceAlertMail(
-            user: $user,
-            ip: $request->ip() ?? 'desconhecido',
-            device: self::describeDevice($userAgent),
-            when: now()->timezone(config('app.timezone'))->format('d/m/Y H:i'),
-        ));
+        // O envio de email nunca deve quebrar o login.
+        try {
+            Mail::to($user->email)->send(new NewDeviceAlertMail(
+                user: $user,
+                ip: $request->ip() ?? 'desconhecido',
+                device: self::describeDevice($userAgent),
+                when: now()->timezone(config('app.timezone'))->format('d/m/Y H:i'),
+            ));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Falha ao enviar alerta de novo dispositivo: ' . $e->getMessage());
+        }
     }
 
     /**
