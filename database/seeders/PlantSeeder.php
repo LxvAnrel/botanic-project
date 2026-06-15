@@ -353,8 +353,29 @@ class PlantSeeder extends Seeder
             ],
         ];
 
+        // Ajustes de cuidado por especie (rega em dias). Plantas que armazenam
+        // agua nas folhas/raizes toleram intervalos maiores.
+        $regaPorEspecie = [
+            'Kalanchoe blossfeldiana' => 10,  // suculenta
+            'Peperomia obtusifolia'   => 9,   // folhas carnudas
+            'Epipremnum aureum'       => 7,   // jiboia, resiliente
+            'Dendrobium nobile'       => 6,   // orquidea
+        ];
+
         foreach ($plants as $plant) {
             $plant['slug'] = Str::slug($plant['nome_popular']);
+
+            // Rega: override por especie ou heuristica por luz.
+            $plant['dias_entre_regas'] = $regaPorEspecie[$plant['nome_cientifico']]
+                ?? match ($plant['habitat_luz']) {
+                    'sol_pleno' => 3,
+                    'sombra' => 7,
+                    default => 5,
+                };
+
+            // Adubacao: mensal por padrao; bimestral para plantas de sombra.
+            $plant['dias_entre_adubacoes'] = ($plant['habitat_luz'] === 'sombra') ? 60 : 30;
+
             Plant::updateOrCreate(
                 ['nome_cientifico' => $plant['nome_cientifico']],
                 $plant

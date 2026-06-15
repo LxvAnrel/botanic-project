@@ -62,4 +62,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(KnownDevice::class);
     }
+
+    public function careLogs()
+    {
+        return $this->hasMany(CareLog::class);
+    }
 }

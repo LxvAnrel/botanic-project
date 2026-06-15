@@ -17,6 +17,8 @@ class Plant extends Model
         'especie',
         'origem',
         'habitat_luz',
+        'dias_entre_regas',
+        'dias_entre_adubacoes',
         'porte_max_cm',
         'toxica_pets',
         'epoca_poda',
@@ -71,5 +73,31 @@ class Plant extends Model
     public function isPruningSeason($season)
     {
         return in_array(strtolower($season), array_map('strtolower', $this->epoca_poda ?? []));
+    }
+
+    public function careLogs()
+    {
+        return $this->hasMany(CareLog::class);
+    }
+
+    /**
+     * Intervalo de rega em dias. Usa o valor cadastrado ou uma heuristica
+     * baseada na exigencia de luz quando o dado nao existe.
+     */
+    public function intervaloRega(): int
+    {
+        return $this->dias_entre_regas ?? match ($this->habitat_luz) {
+            'sol_pleno' => 3,
+            'sombra' => 7,
+            default => 5,
+        };
+    }
+
+    /**
+     * Intervalo de adubacao em dias (padrao mensal quando nao cadastrado).
+     */
+    public function intervaloAdubacao(): int
+    {
+        return $this->dias_entre_adubacoes ?? 30;
     }
 }

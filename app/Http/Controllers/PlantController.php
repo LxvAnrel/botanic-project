@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plant;
+use App\Support\PlantCare;
 use Illuminate\Http\Request;
 
 class PlantController extends Controller
@@ -15,7 +16,24 @@ class PlantController extends Controller
     public function show($plant)
     {
         $plant = Plant::where('slug', $plant)->orWhere('id', $plant)->firstOrFail();
-        return view('plants.show', compact('plant'));
+
+        $care = null;
+        $user = auth()->user();
+
+        if ($user && $user->plants()->where('plant_id', $plant->id)->exists()) {
+            $logs = $user->careLogs()->where('plant_id', $plant->id)->latest('data')->latest('id')->get();
+
+            $ultima = fn (string $tipo) => $logs->firstWhere('tipo', $tipo)?->data;
+
+            $care = [
+                'rega' => PlantCare::status($ultima('rega'), $plant->intervaloRega()),
+                'adubacao' => PlantCare::status($ultima('adubacao'), $plant->intervaloAdubacao()),
+                'ultima_poda' => $ultima('poda'),
+                'historico' => $logs->take(8),
+            ];
+        }
+
+        return view('plants.show', compact('plant', 'care'));
     }
 
     public function toggleFavorite(Plant $plant)

@@ -109,6 +109,114 @@
                     Faça login para salvar esta planta
                 </a>
             @endauth
+
+            {{-- Painel de cuidados (apenas para plantas do Diário) --}}
+            @if($care)
+            @php
+                $corEstado = fn($e) => match($e) {
+                    'atrasado' => 'text-red-400',
+                    'em_breve' => 'text-[#C8A96E]',
+                    'nunca' => 'text-[#7A8E72]',
+                    default => 'text-[#3A5E2D]',
+                };
+            @endphp
+            <div class="glass rounded-2xl p-6 space-y-5">
+                <div class="flex items-center justify-between">
+                    <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E]">Cuidados</p>
+                    <p class="text-[9px] uppercase tracking-wider text-[#3A5E2D]">Rega a cada {{ $plant->intervaloRega() }}d · Aduba a cada {{ $plant->intervaloAdubacao() }}d</p>
+                </div>
+
+                @if(session('care_ok'))
+                <div class="text-[#C8A96E] text-xs glass-gold rounded-xl px-4 py-2.5">✓ {{ session('care_ok') }}</div>
+                @endif
+
+                {{-- Rega --}}
+                <div class="flex items-center justify-between gap-3 border-t border-white/[0.06] pt-4">
+                    <div class="min-w-0">
+                        <p class="text-[#EDE0CC] text-sm flex items-center gap-2">💧 Rega
+                            <span class="text-[10px] uppercase tracking-wider {{ $corEstado($care['rega']['estado']) }}">
+                                {{ \App\Support\PlantCare::rotulo($care['rega']) }}
+                            </span>
+                        </p>
+                        <p class="text-[#7A8E72] text-[11px] mt-0.5">
+                            @if($care['rega']['proxima'])
+                                Próxima: {{ $care['rega']['proxima']->format('d/m') }}
+                            @else
+                                Registre a primeira rega
+                            @endif
+                        </p>
+                    </div>
+                    <form method="POST" action="{{ route('care.store', $plant->id) }}" class="shrink-0">
+                        @csrf
+                        <input type="hidden" name="tipo" value="rega">
+                        <button class="glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200">Reguei hoje</button>
+                    </form>
+                </div>
+
+                {{-- Adubação --}}
+                <div class="flex items-center justify-between gap-3 border-t border-white/[0.06] pt-4">
+                    <div class="min-w-0">
+                        <p class="text-[#EDE0CC] text-sm flex items-center gap-2">🌱 Adubação
+                            <span class="text-[10px] uppercase tracking-wider {{ $corEstado($care['adubacao']['estado']) }}">
+                                {{ \App\Support\PlantCare::rotulo($care['adubacao']) }}
+                            </span>
+                        </p>
+                        <p class="text-[#7A8E72] text-[11px] mt-0.5">
+                            @if($care['adubacao']['proxima'])
+                                Próxima: {{ $care['adubacao']['proxima']->format('d/m') }}
+                            @else
+                                Registre a primeira adubação
+                            @endif
+                        </p>
+                    </div>
+                    <form method="POST" action="{{ route('care.store', $plant->id) }}" class="shrink-0">
+                        @csrf
+                        <input type="hidden" name="tipo" value="adubacao">
+                        <button class="glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200">Adubei</button>
+                    </form>
+                </div>
+
+                {{-- Poda --}}
+                <div class="flex items-center justify-between gap-3 border-t border-white/[0.06] pt-4">
+                    <div class="min-w-0">
+                        <p class="text-[#EDE0CC] text-sm flex items-center gap-2">✂️ Poda</p>
+                        <p class="text-[#7A8E72] text-[11px] mt-0.5">
+                            @if($care['ultima_poda'])
+                                Última: {{ $care['ultima_poda']->format('d/m/Y') }}
+                            @else
+                                Sem registro de poda
+                            @endif
+                            @if(!empty($plant->epoca_poda)) · época: {{ implode(', ', array_map('ucfirst', $plant->epoca_poda)) }} @endif
+                        </p>
+                    </div>
+                    <form method="POST" action="{{ route('care.store', $plant->id) }}" class="shrink-0">
+                        @csrf
+                        <input type="hidden" name="tipo" value="poda">
+                        <button class="glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200">Podei</button>
+                    </form>
+                </div>
+
+                {{-- Histórico --}}
+                @if($care['historico']->count() > 0)
+                <div class="border-t border-white/[0.06] pt-4">
+                    <p class="text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-3">Histórico recente</p>
+                    <div class="space-y-1.5">
+                        @foreach($care['historico'] as $log)
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-[#7A8E72]">
+                                {{ \App\Models\CareLog::rotulo($log->tipo) }} · {{ $log->data->format('d/m/Y') }}
+                            </span>
+                            <form method="POST" action="{{ route('care.destroy', $log->id) }}">
+                                @csrf @method('DELETE')
+                                <button class="text-[#3A5E2D] hover:text-red-400 transition-colors text-[10px] uppercase tracking-wider">remover</button>
+                            </form>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+            </div>
+            @endif
         </div>
     </div>
 

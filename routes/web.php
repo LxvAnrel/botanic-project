@@ -4,6 +4,7 @@ use App\Http\Controllers\PlantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PushSubscriptionController;
+use App\Http\Controllers\CareController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,6 +29,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
     Route::post('/push/unsubscribe', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
+
+    Route::post('/planta/{plant}/cuidado', [CareController::class, 'store'])->name('care.store');
+    Route::delete('/cuidado/{careLog}', [CareController::class, 'destroy'])->name('care.destroy');
 });
 
 require __DIR__.'/auth.php';

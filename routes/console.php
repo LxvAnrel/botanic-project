@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('plants:check-pruning-season')->daily();
+Schedule::command('plants:check-care')->dailyAt('09:00');

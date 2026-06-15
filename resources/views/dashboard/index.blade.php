@@ -113,6 +113,24 @@
                     </div>
                 @endif
 
+                {{-- Selo de rega --}}
+                @php $rs = $regaStatus[$planta->id] ?? null; @endphp
+                @if($rs)
+                    @php
+                        $regaCls = match($rs['estado']) {
+                            'atrasado' => 'bg-red-500/20 text-red-300 border-red-400/30',
+                            'em_breve' => 'bg-[#C8A96E]/20 text-[#C8A96E] border-[#C8A96E]/30',
+                            'nunca' => 'bg-white/10 text-[#7A8E72] border-white/15',
+                            default => 'bg-[#1A3A1A]/40 text-[#7A8E72] border-white/10',
+                        };
+                    @endphp
+                    <div class="absolute top-2 right-2">
+                        <span class="text-[8px] uppercase tracking-wider {{ $regaCls }} border px-2 py-0.5 rounded-full backdrop-blur-sm">
+                            💧 {{ \App\Support\PlantCare::rotulo($rs) }}
+                        </span>
+                    </div>
+                @endif
+
                 <div class="absolute bottom-0 left-0 right-0 p-3">
                     <p class="font-serif text-sm text-[#EDE0CC] leading-tight group-hover:text-[#C8A96E] transition-colors duration-200">{{ $planta->nome_popular }}</p>
                     <p class="text-[#3A5E2D] text-[10px] mt-0.5">{{ $planta->pivot->created_at->diffForHumans() }}</p>
