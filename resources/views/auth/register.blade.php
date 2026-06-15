@@ -10,15 +10,13 @@
 
         <div>
             <x-input-label for="name" :value="__('Nome')" />
-            <x-text-input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Como podemos te chamar?"
-                          class="@error('name') border-red-400/50 @enderror" />
+            <x-text-input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Como podemos te chamar?" />
             <x-input-error :messages="$errors->get('name')" class="mt-1.5" />
         </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="voce@exemplo.com"
-                          class="@error('email') border-red-400/50 @enderror" />
+            <x-text-input id="email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="voce@exemplo.com" />
             <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
         </div>
 

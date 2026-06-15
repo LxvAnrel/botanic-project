@@ -10,8 +10,7 @@
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="voce@exemplo.com"
-                          class="@error('email') border-red-400/50 @enderror" />
+            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="voce@exemplo.com" />
         </div>
 
         <div>
