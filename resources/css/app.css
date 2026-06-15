@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Alpine x-cloak — hide until Alpine initializes */
+[x-cloak] { display: none !important; }
+
 /* ── Base ──────────────────────────────────────────────────── */
 body {
   background-color: #0E1A0B;
