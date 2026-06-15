@@ -91,7 +91,6 @@
                  x-transition:leave="transition ease-in duration-150"
                  x-transition:leave-start="opacity-100 translate-y-0"
                  x-transition:leave-end="opacity-0 -translate-y-2"
-                 @click.away="open = false"
                  class="md:hidden glass rounded-2xl mt-2 p-4 space-y-1">
                 <a href="{{ route('plants.index') }}" @click="open=false"
                    class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
