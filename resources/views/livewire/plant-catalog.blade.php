@@ -67,7 +67,7 @@
 
     {{-- Contagem --}}
     @if($plants->count() > 0)
-    <p class="text-[#3A5E2D] text-xs uppercase tracking-widest">{{ $plants->total() }} espécie{{ $plants->total() !== 1 ? 's' : '' }}</p>
+    <p class="text-[#3A5E2D] text-xs uppercase tracking-widest">{{ $total }} espécie{{ $total !== 1 ? 's' : '' }}</p>
     @endif
 
     {{-- Grid de cards --}}
@@ -141,15 +141,26 @@
             @endforeach
         </div>
 
-        <div class="mt-8 pt-6 border-t border-white/[0.06]">
-            {{ $plants->links() }}
+        @if($plants->count() < $total)
+        <div class="mt-10 text-center">
+            <button wire:click="loadMore"
+                    wire:loading.attr="disabled"
+                    class="inline-flex items-center gap-3 glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-xs uppercase tracking-widest px-8 py-3.5 rounded-full transition-all duration-200 shadow-[0_0_20px_rgba(200,169,110,0.15)] disabled:opacity-50">
+                <span wire:loading.remove wire:target="loadMore">Carregar mais</span>
+                <span wire:loading wire:target="loadMore">Carregando…</span>
+                <svg wire:loading.remove wire:target="loadMore" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <p class="text-[10px] uppercase tracking-[0.3em] text-[#3A5E2D] mt-3">{{ $plants->count() }} de {{ $total }} espécies</p>
         </div>
+        @endif
 
     @else
         <div class="glass rounded-3xl p-20 text-center">
             <p class="font-serif text-4xl text-[#2D4A23] mb-4">∅</p>
             <p class="text-[#7A8E72] text-sm mb-6">Nenhuma espécie encontrada com esses critérios.</p>
-            <button wire:click="$set('search', ''); $set('habitat', ''); $set('petFriendly', false);"
+            <button wire:click="clearFilters"
                     class="text-xs uppercase tracking-widest text-[#C8A96E] glass-gold px-6 py-2.5 rounded-full hover:text-[#D4BA8A] transition-all duration-200">
                 Limpar filtros
             </button>
