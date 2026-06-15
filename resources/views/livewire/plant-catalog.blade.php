@@ -15,51 +15,53 @@
             >
         </div>
 
-        {{-- Pills --}}
-        <div class="flex flex-wrap gap-2 items-center">
-            <span class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72] mr-2">Filtrar:</span>
+        {{-- Pills (scrollable on mobile) --}}
+        <div class="overflow-x-auto -mx-1 pb-1">
+            <div class="flex gap-2 items-center w-max px-1">
+                <span class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72] shrink-0 mr-1">Luz:</span>
 
-            <button wire:click="$set('habitat', '')"
-                    class="text-xs uppercase tracking-wider px-5 py-2 rounded-full border transition-all duration-200 {{ !$habitat ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
-                Todas
-            </button>
-            <button wire:click="$set('habitat', 'sol_pleno')"
-                    class="text-xs uppercase tracking-wider px-5 py-2 rounded-full border transition-all duration-200 {{ $habitat === 'sol_pleno' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
-                ☀ Sol Pleno
-            </button>
-            <button wire:click="$set('habitat', 'meia_sombra')"
-                    class="text-xs uppercase tracking-wider px-5 py-2 rounded-full border transition-all duration-200 {{ $habitat === 'meia_sombra' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
-                ◑ Meia Sombra
-            </button>
-            <button wire:click="$set('habitat', 'sombra')"
-                    class="text-xs uppercase tracking-wider px-5 py-2 rounded-full border transition-all duration-200 {{ $habitat === 'sombra' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
-                ● Sombra
-            </button>
-            <button wire:click="$set('petFriendly', !$petFriendly)"
-                    class="text-xs uppercase tracking-wider px-5 py-2 rounded-full border transition-all duration-200 {{ $petFriendly ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
-                🐾 Pet-friendly
-            </button>
+                <button wire:click="$set('habitat', '')"
+                        class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ !$habitat ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
+                    Todas
+                </button>
+                <button wire:click="$set('habitat', 'sol_pleno')"
+                        class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $habitat === 'sol_pleno' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
+                    ☀ Sol
+                </button>
+                <button wire:click="$set('habitat', 'meia_sombra')"
+                        class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $habitat === 'meia_sombra' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
+                    ◑ Meia
+                </button>
+                <button wire:click="$set('habitat', 'sombra')"
+                        class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $habitat === 'sombra' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
+                    ● Sombra
+                </button>
+                <button wire:click="$set('petFriendly', !$petFriendly)"
+                        class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $petFriendly ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
+                    🐾 Pet
+                </button>
 
-            <span class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72] mx-1">Porte:</span>
-            <button wire:click="$set('size', 'pequeno')"
-                    class="text-xs uppercase tracking-wider px-5 py-2 rounded-full border transition-all duration-200 {{ $size === 'pequeno' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
-                ◻ Pequeno
-            </button>
-            <button wire:click="$set('size', 'medio')"
-                    class="text-xs uppercase tracking-wider px-5 py-2 rounded-full border transition-all duration-200 {{ $size === 'medio' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
-                ◼ Médio
-            </button>
-            <button wire:click="$set('size', 'grande')"
-                    class="text-xs uppercase tracking-wider px-5 py-2 rounded-full border transition-all duration-200 {{ $size === 'grande' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
-                ▣ Grande
-            </button>
+                <span class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72] shrink-0 mx-1">Porte:</span>
+                <button wire:click="$set('size', 'pequeno')"
+                        class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $size === 'pequeno' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
+                    Pequeno
+                </button>
+                <button wire:click="$set('size', 'medio')"
+                        class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $size === 'medio' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
+                    Médio
+                </button>
+                <button wire:click="$set('size', 'grande')"
+                        class="shrink-0 text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-200 {{ $size === 'grande' ? 'pill-active' : 'glass border-white/[0.07] text-[#7A8E72] hover:border-[#C8A96E]/40 hover:text-[#C8A96E]' }}">
+                    Grande
+                </button>
 
-            @if($search || $habitat || $petFriendly || $size)
-            <button wire:click="$set('search', ''); $set('habitat', ''); $set('petFriendly', false); $set('size', '');"
-                    class="text-xs text-[#7A8E72] hover:text-[#C8A96E] ml-2 transition-colors underline underline-offset-4">
-                Limpar
-            </button>
-            @endif
+                @if($search || $habitat || $petFriendly || $size)
+                <button wire:click="$set('search', ''); $set('habitat', ''); $set('petFriendly', false); $set('size', '');"
+                        class="shrink-0 text-xs text-[#7A8E72] hover:text-[#C8A96E] ml-1 transition-colors underline underline-offset-4 whitespace-nowrap">
+                    Limpar
+                </button>
+                @endif
+            </div>
         </div>
     </div>
 
@@ -76,9 +78,9 @@
 
                 {{-- Imagem ou placeholder --}}
                 @if($planta->image_path)
-                    <img src="{{ asset('storage/' . $planta->image_path) }}"
+                    <img src="{{ asset($planta->image_path) }}"
                          alt="{{ $planta->nome_popular }}"
-                         class="w-full h-72 object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
+                         class="w-full h-56 sm:h-72 object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-100">
                 @else
                     @php
                         $bgs = [
@@ -89,7 +91,7 @@
                         ];
                         $plant_icons = ['🌿','🪴','🌱','🍃','🌾','🌳'];
                     @endphp
-                    <div class="w-full h-72 {{ $bgs[$loop->index % 4] }} flex items-center justify-center relative">
+                    <div class="w-full h-56 sm:h-72 {{ $bgs[$loop->index % 4] }} flex items-center justify-center relative">
                         <span class="text-6xl opacity-30 group-hover:opacity-60 group-hover:scale-110 transition-all duration-500">
                             {{ $plant_icons[$loop->index % 6] }}
                         </span>

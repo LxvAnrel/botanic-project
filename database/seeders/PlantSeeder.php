@@ -29,6 +29,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Planta ornamental resistente; flores duram semanas ou até meses. Precisa de pouca água e pouca manutenção — ótima para decorar interiores e varandas.',
                 'maleficios'     => 'Tóxica para cães e gatos. Pode causar irritação gastrointestinal, salivação excessiva e vômito se ingerida por animais domésticos.',
                 'curiosidades'   => 'Simboliza boa sorte e tem floração duradoura (até 3 meses). Suas cores variam entre vermelho, amarelo, branco e rosa.',
+                'image_path'     => '/images/plants/flor-da-fortuna.jpg',
             ],
             [
                 'nome_popular'   => 'Olho-de-Boneca',
@@ -44,6 +45,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Muito usada na decoração, flores bonitas e duradouras. Ajuda a deixar o ambiente mais agradável.',
                 'maleficios'     => 'Pode causar leve irritação se ingerida, especialmente em pets. Pode desencadear alergia em algumas pessoas.',
                 'curiosidades'   => 'O segredo para floração abundante é um período de dormência no outono/inverno: menos água, temperaturas noturnas mais baixas e muita luz.',
+                'image_path'     => '/images/plants/olho-de-boneca.png',
             ],
             [
                 'nome_popular'   => 'Cambará',
@@ -59,6 +61,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Atrai polinizadores (borboletas e abelhas). Usada na medicina popular para problemas respiratórios, inflamações e febre.',
                 'maleficios'     => 'Planta tóxica, principalmente os frutos verdes. Pode causar náusea, vômito, dor abdominal e problemas no fígado em casos graves.',
                 'curiosidades'   => 'Muda a cor das flores durante o processo de maturação. Também conhecida como Lantana, Camará e Lantana-arbustiva.',
+                'image_path'     => '/images/plants/cambara.jpg',
             ],
             [
                 'nome_popular'   => 'Luca-manso',
@@ -74,6 +77,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Ação anti-inflamatória e antioxidante; auxilia na digestão e pode fortalecer o sistema imunológico. Uso ornamental marcante no paisagismo.',
                 'maleficios'     => 'Pode ser tóxica se consumida de forma inadequada, causando náusea e irritação no estômago. Folhas pontiagudas podem causar cortes.',
                 'curiosidades'   => 'Planta ornamental perene muito resistente, nativa de regiões áridas e semiáridas. Também chamada de Agulha-de-Adão.',
+                'image_path'     => '/images/plants/luca-manso.jpg',
             ],
             [
                 'nome_popular'   => 'Glória-da-Manhã',
@@ -89,6 +93,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Planta nativa com flores azuis vibrantes. Usada para cobrir cercas e pergolados; atrai abelhas e borboletas.',
                 'maleficios'     => 'Pode ser tóxica se ingerida — sementes e folhas podem causar náusea, vômito e diarreia em pessoas e animais.',
                 'curiosidades'   => 'Nativa do Brasil, também chamada de Azulzinha. Uma das poucas plantas com flores verdadeiramente azuis.',
+                'image_path'     => '/images/plants/gloria-da-manha.jpg',
             ],
             [
                 'nome_popular'   => 'Maria-Pretinha',
@@ -104,6 +109,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Uso medicinal tradicional para inflamações, febre e problemas de pele. Possui compostos estudados na fitoterapia.',
                 'maleficios'     => 'Frutos verdes e folhas cruas são tóxicos. Pode causar náusea, vômito e diarreia. Risco especial para crianças e animais.',
                 'curiosidades'   => 'Também chamada de Pimenta-de-galinha. Seus frutos pretos maduros são menos tóxicos, mas o preparo inadequado é perigoso.',
+                'image_path'     => '/images/plants/maria-pretinha.jpg',
             ],
             [
                 'nome_popular'   => 'Imbé Burle Marx',
@@ -119,6 +125,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Planta ornamental imponente, muito usada em jardins e interiores. Fácil de cuidar e adapta-se bem à meia-sombra.',
                 'maleficios'     => 'Tóxica se ingerida (oxalato de cálcio): causa irritação na boca, garganta, inchaço e vômito. Seiva irrita a pele. Perigosa para pets.',
                 'curiosidades'   => 'Recebeu o nome em homenagem ao paisagista Roberto Burle Marx. A espécie está em risco em seu habitat natural por causa do tráfico ilegal.',
+                'image_path'     => '/images/plants/imbe-burle-marx.jpg',
             ],
             [
                 'nome_popular'   => 'Lavanda-Francesa',
@@ -134,6 +141,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Relaxamento, melhora do sono, auxílio na digestão, ação antibacteriana e cuidado da pele. Também usada como repelente natural.',
                 'maleficios'     => 'Pode causar alergias, irritação e sonolência excessiva se usada em excesso. Evitar contato direto com mucosas.',
                 'curiosidades'   => 'A lavanda-francesa é mais tolerante ao calor e umidade do que outras espécies do gênero, o que a torna ideal para o clima brasileiro.',
+                'image_path'     => '/images/plants/lavanda-francesa.jpg',
             ],
             [
                 'nome_popular'   => 'Croton',
@@ -149,6 +157,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Folhas multicoloridas e vibrantes tornam a planta um destaque em jardins e interiores. Fácil de cultivar em clima quente.',
                 'maleficios'     => 'Tóxica se ingerida: causa náusea, vômito e diarreia. A seiva pode irritar a pele e os olhos.',
                 'curiosidades'   => 'As cores das folhas intensificam com mais exposição ao sol. Pode apresentar vermelho, amarelo, laranja e verde na mesma folha.',
+                'image_path'     => '/images/plants/croton.jpg',
             ],
             [
                 'nome_popular'   => 'Goiabeira',
@@ -164,6 +173,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Frutos ricos em vitamina C, fibras e antioxidantes. As folhas têm propriedades medicinais reconhecidas para diarreia e inflamações.',
                 'maleficios'     => 'Consumo excessivo pode causar prisão de ventre. Frutos verdes têm maior adstringência e podem causar desconforto intestinal.',
                 'curiosidades'   => 'Seus frutos têm maior concentração de vitamina C do que a laranja. Nativa das Américas, é cultivada em todo o mundo tropical.',
+                'image_path'     => '/images/plants/goiabeira.jpg',
             ],
             [
                 'nome_popular'   => 'Alamanda-Roxa',
@@ -179,6 +189,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Planta ornamental com flores roxas vistosas. Usada em cercas, muros e paisagismo. Floração intensa na primavera e verão.',
                 'maleficios'     => 'Tóxica se ingerida: pode causar náusea, vômito e diarreia. A seiva leitosa pode causar irritação na pele e nos olhos.',
                 'curiosidades'   => 'Nativa do Brasil e altamente rústica, com floração quase o ano todo em regiões tropicais. Nome em homenagem ao médico Friedrich Allaman.',
+                'image_path'     => '/images/plants/alamanda-roxa.jpg',
             ],
             [
                 'nome_popular'   => 'Palmeira Areca',
@@ -194,6 +205,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Excelente purificadora de ar em ambientes internos; umidifica o ambiente naturalmente e cria sensação de bem-estar tropical.',
                 'maleficios'     => 'Pode causar alergias leves em pessoas sensíveis ao pólen. Deixa cair folhas secas com frequência.',
                 'curiosidades'   => 'Está ameaçada de extinção em seu habitat natural em Madagascar. É uma das palmeiras mais vendidas no mundo para uso ornamental.',
+                'image_path'     => '/images/plants/palmeira-areca.jpg',
             ],
             [
                 'nome_popular'   => 'Coqueiro de Vênus',
@@ -209,6 +221,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Planta ornamental fácil de cuidar, valoriza jardins e espaços abertos. Produz flores perfumadas com aroma adocicado.',
                 'maleficios'     => 'Pode causar leve irritação ou desconforto em pessoas sensíveis. Não deve ser ingerida por pets.',
                 'curiosidades'   => 'Associada ao misticismo e à sorte em várias culturas do Pacífico. Suas folhas variam do verde ao roxo-avermelhado conforme a cultivar.',
+                'image_path'     => '/images/plants/coqueiro-de-venus.jpg',
             ],
             [
                 'nome_popular'   => 'Bambu da Sorte',
@@ -224,6 +237,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Planta decorativa fácil de cuidar, associada à prosperidade e energia positiva no Feng Shui.',
                 'maleficios'     => 'Pode ser tóxica para cães e gatos se ingerida, causando vômito e salivação excessiva.',
                 'curiosidades'   => 'Famoso por atrair prosperidade. Extremamente adaptável: cresce tanto em água quanto em terra. Não é um bambu de verdade.',
+                'image_path'     => '/images/plants/bambu-da-sorte.jpg',
             ],
             [
                 'nome_popular'   => 'Aperta-Ruão',
@@ -239,6 +253,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Usada popularmente para inflamações e cicatrização. Possui propriedades medicinais e pode ser usada como tempero em algumas culturas.',
                 'maleficios'     => 'Pode ser tóxica se ingerida em grande quantidade, causando vômito e diarreia. Não deve ser usada internamente sem orientação.',
                 'curiosidades'   => 'Parente da pimenta-do-reino. Considerada espécie invasora em algumas regiões do mundo por seu crescimento rápido.',
+                'image_path'     => '/images/plants/aperta-ruao.jpg',
             ],
             [
                 'nome_popular'   => 'Palmeira de Leque',
@@ -254,6 +269,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Planta ornamental imponente que melhora a umidade do ambiente. Símbolo de longevidade em várias culturas asiáticas.',
                 'maleficios'     => 'Pode causar alergias leves e pequenos cortes ao manusear suas folhas. Frutos não devem ser ingeridos.',
                 'curiosidades'   => 'Suas folhas em formato de leque podem chegar a 1,5 m de diâmetro. Nativa do sul da China e Japão, apesar do nome de origem.',
+                'image_path'     => '/images/plants/palmeira-de-leque.jpg',
             ],
             [
                 'nome_popular'   => 'Espada de São Jorge',
@@ -269,6 +285,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Purificadora de ar reconhecida pela NASA. Converte CO₂ em oxigênio à noite. Símbolo de proteção e resistência.',
                 'maleficios'     => 'Tóxica se ingerida por pets: causa salivação excessiva, náusea e vômito. Evitar contato das folhas com olhos.',
                 'curiosidades'   => 'Uma das plantas mais resistentes do planeta: sobrevive semanas sem água e tolera ambientes com pouquíssima luz.',
+                'image_path'     => '/images/plants/espada-de-sao-jorge.jpg',
             ],
             [
                 'nome_popular'   => 'Peperômia-Filodendro',
@@ -284,6 +301,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Segura para pets e crianças. Planta decorativa compacta e fácil de cuidar. Adaptável a vários tipos de iluminação interna.',
                 'maleficios'     => 'Consumo excessivo pode causar leve desconforto gástrico. Não apresenta toxicidade significativa.',
                 'curiosidades'   => 'Comestível com sabor similar ao da pimenta-do-reino. Muito usada em terrários e jardins verticais pela sua forma rasteira.',
+                'image_path'     => '/images/plants/peperomia-filodendro.jpg',
             ],
             [
                 'nome_popular'   => 'Barba de Falcão',
@@ -299,6 +317,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Pode auxiliar na digestão e tem ação anti-inflamatória. Folhas jovens comestíveis com sabor suave e versátil.',
                 'maleficios'     => 'Consumo excessivo pode causar irritação no estômago. Algumas pessoas com alergia a Asteraceae podem reagir.',
                 'curiosidades'   => 'Considerada erva daninha em muitos países, mas valorizada na medicina tradicional chinesa. Funciona bem como planta companheira em hortas.',
+                'image_path'     => '/images/plants/barba-de-falcao.jpg',
             ],
             // ── Plantas originais do catálogo ────────────────────────────────
             [
@@ -315,6 +334,7 @@ class PlantSeeder extends Seeder
                 'beneficios'     => 'Cresce rápido e vicia fácil. Ótima para pendurar ou trepar em suportes. Purifica o ar de compostos orgânicos voláteis.',
                 'maleficios'     => 'Tóxica para pets: oxalato de cálcio pode causar irritação na boca e no trato digestivo de cães e gatos.',
                 'curiosidades'   => 'Pode crescer em água indefinidamente. Uma das plantas mais recomendadas para iniciantes por sua extrema resiliência.',
+                'image_path'     => '/images/plants/jiboia.jpg',
             ],
             [
                 'nome_popular'   => 'Peperômia',

@@ -3,21 +3,21 @@
 @section('title', $plant->nome_popular)
 
 @section('content')
-<div class="max-w-7xl mx-auto px-6 lg:px-10 py-10">
+<div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-10 py-8 md:py-10">
 
     {{-- Breadcrumb --}}
-    <nav class="flex items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-12">
+    <nav class="flex items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-6 md:mb-12">
         <a href="{{ route('plants.index') }}" class="hover:text-[#C8A96E] transition-colors">Catálogo</a>
         <span>—</span>
-        <span class="text-[#7A8E72]">{{ $plant->nome_popular }}</span>
+        <span class="text-[#7A8E72] truncate max-w-[160px]">{{ $plant->nome_popular }}</span>
     </nav>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
 
         {{-- Imagem --}}
         <div class="relative">
             @if($plant->image_path)
-                <img src="{{ asset('storage/' . $plant->image_path) }}"
+                <img src="{{ asset($plant->image_path) }}"
                      alt="{{ $plant->nome_popular }}"
                      class="w-full aspect-square object-cover rounded-3xl">
             @else
@@ -32,10 +32,10 @@
 
             <div>
                 <p class="text-[9px] uppercase tracking-[0.4em] text-[#7A8E72] mb-4">{{ $plant->familia }}</p>
-                <h1 class="font-serif font-light text-5xl text-[#EDE0CC] leading-tight mb-2">
+                <h1 class="font-serif font-light text-3xl md:text-5xl text-[#EDE0CC] leading-tight mb-2">
                     {{ $plant->nome_popular }}
                 </h1>
-                <p class="font-serif italic text-[#7A8E72] text-lg">{{ $plant->nome_cientifico }}</p>
+                <p class="font-serif italic text-[#7A8E72] text-base md:text-lg">{{ $plant->nome_cientifico }}</p>
             </div>
 
             {{-- Badges --}}

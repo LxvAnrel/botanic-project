@@ -20,12 +20,12 @@
     </div>
 
     {{-- Navbar --}}
-    <header class="sticky top-0 z-50 px-4 pt-3 pb-2">
+    <header class="sticky top-0 z-50 px-4 pt-3 pb-2" x-data="{ open: false }">
         <div class="max-w-7xl mx-auto">
-            <div class="glass rounded-2xl px-6">
-                <div class="flex items-center justify-between h-14">
+            <div class="glass rounded-2xl px-4 md:px-6">
+                <div class="flex items-center justify-between h-14 relative">
 
-                    {{-- Nav esq --}}
+                    {{-- Nav esq (desktop) --}}
                     <nav class="hidden md:flex items-center gap-1">
                         <a href="{{ route('plants.index') }}"
                            class="text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
@@ -37,13 +37,20 @@
                         </a>
                     </nav>
 
+                    {{-- Hamburguer (mobile) --}}
+                    <button @click="open = !open" class="md:hidden flex flex-col gap-1.5 p-2 rounded-xl hover:bg-white/5 transition-colors" aria-label="Menu">
+                        <span class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300" :class="open ? 'rotate-45 translate-y-2' : ''"></span>
+                        <span class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300" :class="open ? 'opacity-0' : ''"></span>
+                        <span class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300" :class="open ? '-rotate-45 -translate-y-2' : ''"></span>
+                    </button>
+
                     {{-- Logo centro --}}
                     <a href="/" class="absolute left-1/2 -translate-x-1/2 text-center">
                         <span class="font-serif text-2xl tracking-[0.2em] text-[#C8A96E] uppercase leading-none">Flora</span>
                         <span class="block text-[8px] uppercase tracking-[0.4em] text-[#7A8E72] mt-0.5">Botânica Interativa</span>
                     </a>
 
-                    {{-- Nav dir --}}
+                    {{-- Nav dir (desktop) --}}
                     <nav class="hidden md:flex items-center gap-1">
                         @auth
                             <a href="{{ route('dashboard') }}"
@@ -74,6 +81,52 @@
                     </nav>
                 </div>
             </div>
+
+            {{-- Mobile menu --}}
+            <div x-show="open"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-2"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-2"
+                 @click.away="open = false"
+                 class="md:hidden glass rounded-2xl mt-2 p-4 space-y-1">
+                <a href="{{ route('plants.index') }}" @click="open=false"
+                   class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
+                    Catálogo
+                </a>
+                <a href="{{ route('quiz') }}" @click="open=false"
+                   class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
+                    Quiz
+                </a>
+                <div class="border-t border-white/[0.06] my-2"></div>
+                @auth
+                    <a href="{{ route('dashboard') }}" @click="open=false"
+                       class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
+                        Meu Diário
+                    </a>
+                    <a href="{{ route('alertas') }}" @click="open=false"
+                       class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
+                        Alertas
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full text-left text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-red-400 hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
+                            Sair
+                        </button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" @click="open=false"
+                       class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
+                        Entrar
+                    </a>
+                    <a href="{{ route('register') }}" @click="open=false"
+                       class="block glass-gold text-[#C8A96E] text-sm uppercase tracking-widest font-medium px-4 py-3 rounded-xl transition-all duration-200 text-center mt-1">
+                        Registrar
+                    </a>
+                @endauth
+            </div>
         </div>
     </header>
 
@@ -83,7 +136,7 @@
 
     {{-- Footer --}}
     <footer class="relative z-10 mt-24 px-4 pb-4">
-        <div class="max-w-7xl mx-auto glass rounded-3xl px-8 lg:px-12 py-14">
+        <div class="max-w-7xl mx-auto glass rounded-3xl px-5 md:px-8 lg:px-12 py-8 md:py-14">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                 <div>
                     <p class="font-serif text-3xl text-[#C8A96E] tracking-widest uppercase mb-4">Flora</p>

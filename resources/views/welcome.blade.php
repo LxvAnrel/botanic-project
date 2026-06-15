@@ -52,10 +52,10 @@
         </div>
 
         {{-- Stats --}}
-        <div class="mt-20 pt-10 border-t border-white/[0.06] grid grid-cols-3 gap-4 max-w-lg">
+        <div class="mt-12 md:mt-20 pt-8 md:pt-10 border-t border-white/[0.06] grid grid-cols-3 gap-3 max-w-lg">
             @php $stats = [['v'=>'21+','l'=>'Espécies'],['v'=>'4','l'=>'Etapas do quiz'],['v'=>'∞','l'=>'Descobertas']]; @endphp
             @foreach($stats as $s)
-            <div class="glass rounded-2xl px-6 py-5 text-center">
+            <div class="glass rounded-2xl px-3 py-4 md:px-6 md:py-5 text-center">
                 <p class="font-serif text-3xl text-[#C8A96E]" style="text-shadow:0 0 30px rgba(200,169,110,0.4)">{{ $s['v'] }}</p>
                 <p class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72] mt-1">{{ $s['l'] }}</p>
             </div>
@@ -65,9 +65,9 @@
 </section>
 
 {{-- Seção: Features --}}
-<section class="max-w-7xl mx-auto px-6 lg:px-10 py-24">
-    <div class="flex items-end justify-between mb-16 border-b border-white/[0.06] pb-8">
-        <h2 class="font-serif font-light text-5xl text-[#EDE0CC]">Tudo que<br><em class="text-[#C8A96E]">você precisa</em></h2>
+<section class="max-w-7xl mx-auto px-4 md:px-6 lg:px-10 py-16 md:py-24">
+    <div class="flex items-end justify-between mb-10 md:mb-16 border-b border-white/[0.06] pb-6 md:pb-8">
+        <h2 class="font-serif font-light text-3xl md:text-5xl text-[#EDE0CC]">Tudo que<br><em class="text-[#C8A96E]">você precisa</em></h2>
         <p class="text-[#7A8E72] text-sm max-w-xs text-right hidden md:block">
             Da descoberta ao cuidado diário, a Flora transforma sua relação com as plantas.
         </p>
