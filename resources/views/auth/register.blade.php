@@ -1,18 +1,24 @@
 <x-guest-layout>
     <p class="text-[9px] uppercase tracking-[0.4em] text-[#7A8E72] mb-6">— Crie sua conta</p>
 
+    @if($errors->any())
+        <x-auth-error :messages="['Confira os campos destacados abaixo e tente novamente.']" title="Não foi possível criar a conta" />
+    @endif
+
     <form method="POST" action="{{ route('register') }}" class="space-y-5" onsubmit="floraSubmit(this)">
         @csrf
 
         <div>
             <x-input-label for="name" :value="__('Nome')" />
-            <x-text-input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Como podemos te chamar?" />
+            <x-text-input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" placeholder="Como podemos te chamar?"
+                          class="@error('name') border-red-400/50 @enderror" />
             <x-input-error :messages="$errors->get('name')" class="mt-1.5" />
         </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="voce@exemplo.com" />
+            <x-text-input id="email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="voce@exemplo.com"
+                          class="@error('email') border-red-400/50 @enderror" />
             <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
         </div>
 

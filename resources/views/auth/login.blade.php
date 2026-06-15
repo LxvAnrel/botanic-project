@@ -3,19 +3,20 @@
 
     <p class="text-[9px] uppercase tracking-[0.4em] text-[#7A8E72] mb-6">— Acesse sua conta</p>
 
+    <x-auth-error :messages="$errors->all()" title="Não foi possível entrar" />
+
     <form method="POST" action="{{ route('login') }}" class="space-y-5" onsubmit="floraSubmit(this)">
         @csrf
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="voce@exemplo.com" />
-            <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
+            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="voce@exemplo.com"
+                          class="@error('email') border-red-400/50 @enderror" />
         </div>
 
         <div>
             <x-input-label for="password" :value="__('Senha')" />
             <x-flora-password id="password" name="password" autocomplete="current-password" placeholder="Sua senha" />
-            <x-input-error :messages="$errors->get('password')" class="mt-1.5" />
         </div>
 
         <div class="flex items-center gap-3 pt-1">
