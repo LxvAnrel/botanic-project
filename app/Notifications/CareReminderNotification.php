@@ -57,6 +57,7 @@ class CareReminderNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
+            ->from(config('flora.mail.alertas.address'), config('flora.mail.alertas.name'))
             ->subject("{$this->icone()} Hora de " . $this->verbo() . ': ' . $this->plant->nome_popular)
             ->greeting("Olá, {$notifiable->name} 🌿")
             ->line("Sua **{$this->plant->nome_popular}** está esperando: a " . CareLog::rotulo($this->tipo) . " está atrasada em {$this->diasAtraso} dia(s).")

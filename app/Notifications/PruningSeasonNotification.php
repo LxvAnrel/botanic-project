@@ -49,6 +49,7 @@ class PruningSeasonNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
+            ->from(config('flora.mail.alertas.address'), config('flora.mail.alertas.name'))
             ->subject('✂️ Hora de podar: ' . $this->plant->nome_popular)
             ->greeting("Olá, {$notifiable->name} 🌿")
             ->line("Chegou a época ideal de poda da sua **{$this->plant->nome_popular}** ({$this->season}).")
