@@ -33,5 +33,27 @@
     <p class="mt-8 text-[#2D4A23] text-[10px] uppercase tracking-widest relative z-10">
         © {{ date('Y') }} Flora · Plataforma Botânica
     </p>
+
+    <script>
+        function floraTogglePassword(btn, inputId) {
+            var input = document.getElementById(inputId);
+            var open = btn.querySelector('[data-eye="open"]');
+            var closed = btn.querySelector('[data-eye="closed"]');
+            var show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            open.classList.toggle('hidden', show);
+            closed.classList.toggle('hidden', !show);
+            btn.setAttribute('aria-label', show ? 'Ocultar senha' : 'Mostrar senha');
+        }
+
+        function floraSubmit(form) {
+            var btn = form.querySelector('button[type="submit"], [data-loading]');
+            if (btn && btn.dataset.loading) {
+                btn.disabled = true;
+                btn.textContent = btn.dataset.loading;
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>

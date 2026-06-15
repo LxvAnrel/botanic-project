@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function plants()
     {
-        return $this->belongsToMany(Plant::class, 'plant_user');
+        return $this->belongsToMany(Plant::class, 'plant_user')->withTimestamps();
     }
 
     public function diarioVerde()

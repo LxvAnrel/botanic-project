@@ -3,18 +3,18 @@
 
     <p class="text-[9px] uppercase tracking-[0.4em] text-[#7A8E72] mb-6">— Acesse sua conta</p>
 
-    <form method="POST" action="{{ route('login') }}" class="space-y-5">
+    <form method="POST" action="{{ route('login') }}" class="space-y-5" onsubmit="floraSubmit(this)">
         @csrf
 
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="voce@exemplo.com" />
             <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
         </div>
 
         <div>
             <x-input-label for="password" :value="__('Senha')" />
-            <x-text-input id="password" type="password" name="password" required autocomplete="current-password" />
+            <x-flora-password id="password" name="password" autocomplete="current-password" placeholder="Sua senha" />
             <x-input-error :messages="$errors->get('password')" class="mt-1.5" />
         </div>
 
@@ -31,7 +31,7 @@
                     Esqueceu a senha?
                 </a>
             @endif
-            <x-primary-button>Entrar →</x-primary-button>
+            <x-primary-button data-label="Entrar →" data-loading="Entrando…">Entrar →</x-primary-button>
         </div>
     </form>
 

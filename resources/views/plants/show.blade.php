@@ -91,11 +91,17 @@
 
             {{-- Ação --}}
             @auth
+                @php $inDiario = auth()->user()->plants()->where('plant_id', $plant->id)->exists(); @endphp
                 <button id="btn-favorite"
+                        data-active="{{ $inDiario ? '1' : '0' }}"
                         onclick="toggleFavorite({{ $plant->id }})"
-                        class="w-full bg-[#C8A96E] hover:bg-[#D4BA8A] text-[#0E1A0B] text-xs uppercase tracking-widest font-semibold py-4 rounded-full transition-all duration-200 flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(200,169,110,0.3)]">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                    Adicionar ao Diário Verde
+                        @class([
+                            'w-full text-xs uppercase tracking-widest font-semibold py-4 rounded-full transition-all duration-200 flex items-center justify-center gap-3',
+                            'bg-[#C8A96E] hover:bg-[#D4BA8A] text-[#0E1A0B] shadow-[0_0_30px_rgba(200,169,110,0.3)]' => !$inDiario,
+                            'glass-gold text-[#C8A96E] hover:text-[#D4BA8A]' => $inDiario,
+                        ])>
+                    <svg id="btn-favorite-icon" class="w-4 h-4" fill="{{ $inDiario ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    <span id="btn-favorite-label">{{ $inDiario ? 'No seu Diário Verde' : 'Adicionar ao Diário Verde' }}</span>
                 </button>
             @else
                 <a href="{{ route('login') }}"
@@ -131,25 +137,60 @@
 </div>
 
 <script>
+let favoriteBusy = false;
+
+function showToast(msg, icon) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    document.getElementById('toast-icon').textContent = icon;
+    toast.classList.remove('translate-y-16', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => {
+        toast.classList.add('translate-y-16', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+    }, 3000);
+}
+
+function setFavoriteState(active) {
+    const btn = document.getElementById('btn-favorite');
+    const icon = document.getElementById('btn-favorite-icon');
+    const label = document.getElementById('btn-favorite-label');
+    btn.dataset.active = active ? '1' : '0';
+    label.textContent = active ? 'No seu Diário Verde' : 'Adicionar ao Diário Verde';
+    icon.setAttribute('fill', active ? 'currentColor' : 'none');
+    const goldSolid = ['bg-[#C8A96E]', 'hover:bg-[#D4BA8A]', 'text-[#0E1A0B]', 'shadow-[0_0_30px_rgba(200,169,110,0.3)]'];
+    const goldGhost = ['glass-gold', 'text-[#C8A96E]', 'hover:text-[#D4BA8A]'];
+    btn.classList.remove(...(active ? goldSolid : goldGhost));
+    btn.classList.add(...(active ? goldGhost : goldSolid));
+}
+
 function toggleFavorite(plantId) {
+    if (favoriteBusy) return;
+    favoriteBusy = true;
+    const btn = document.getElementById('btn-favorite');
+    btn.classList.add('opacity-60', 'pointer-events-none');
+
     fetch(`/planta/${plantId}/favorite`, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
         }
     })
-    .then(r => r.json())
+    .then(r => {
+        if (!r.ok) throw new Error('request failed');
+        return r.json();
+    })
     .then(data => {
-        const toast = document.getElementById('toast');
-        document.getElementById('toast-msg').textContent = data.added ? 'Adicionada ao Diário Verde' : 'Removida do Diário Verde';
-        document.getElementById('toast-icon').textContent = data.added ? '✓' : '✕';
-        toast.classList.remove('translate-y-16', 'opacity-0');
-        toast.classList.add('translate-y-0', 'opacity-100');
-        setTimeout(() => {
-            toast.classList.add('translate-y-16', 'opacity-0');
-            toast.classList.remove('translate-y-0', 'opacity-100');
-        }, 3000);
+        setFavoriteState(data.added);
+        showToast(data.added ? 'Adicionada ao Diário Verde' : 'Removida do Diário Verde', data.added ? '✓' : '✕');
+    })
+    .catch(() => showToast('Algo deu errado. Tente novamente.', '!'))
+    .finally(() => {
+        favoriteBusy = false;
+        btn.classList.remove('opacity-60', 'pointer-events-none');
     });
 }
 </script>
