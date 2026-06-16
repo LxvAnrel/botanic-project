@@ -10,7 +10,7 @@
         {{-- Avatar --}}
         <div class="shrink-0">
             @if($user->avatar_path)
-                <img src="{{ asset('storage/' . $user->avatar_path) }}"
+                <img src="{{ $user->avatar_url }}"
                      alt="{{ $user->name }}"
                      class="w-24 h-24 rounded-full object-cover border-2 border-[#C8A96E]/40">
             @else

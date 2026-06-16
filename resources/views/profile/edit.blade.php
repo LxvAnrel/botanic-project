@@ -51,7 +51,7 @@
 
             {{-- Preview atual --}}
             @if($user->avatar_path)
-                <img src="{{ asset('storage/' . $user->avatar_path) }}" id="avatar-preview"
+                <img src="{{ $user->avatar_url }}" id="avatar-preview"
                      class="w-16 h-16 rounded-full object-cover border-2 border-[#C8A96E]/30 shrink-0">
             @else
                 <div id="avatar-initials" class="w-16 h-16 rounded-full bg-[#C8A96E]/10 border-2 border-[#C8A96E]/30 flex items-center justify-center text-xl font-serif text-[#C8A96E] shrink-0">

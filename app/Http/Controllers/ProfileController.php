@@ -90,7 +90,32 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        if ($user->avatar_path) {
+        // Cloudinary (persistente) quando configurado; senao, disco local.
+        if (config('services.cloudinary.url')) {
+            try {
+                $cloudinary = new \Cloudinary\Cloudinary(config('services.cloudinary.url'));
+                $result = $cloudinary->uploadApi()->upload(
+                    $request->file('avatar')->getRealPath(),
+                    [
+                        'folder' => 'flora/avatars',
+                        'transformation' => ['width' => 400, 'height' => 400, 'crop' => 'fill'],
+                    ]
+                );
+                $user->avatar_path = $result['secure_url'];
+                $user->save();
+
+                return Redirect::route('profile.edit')->with('status', 'avatar-updated');
+            } catch (\Throwable $e) {
+                logger()->warning('Falha no upload do avatar (Cloudinary): ' . $e->getMessage());
+
+                return Redirect::route('profile.edit')->withErrors([
+                    'avatar' => 'Não foi possível enviar a imagem agora. Tente novamente.',
+                ]);
+            }
+        }
+
+        // Fallback local (desenvolvimento/testes).
+        if ($user->avatar_path && ! str_starts_with($user->avatar_path, 'http')) {
             Storage::disk('public')->delete($user->avatar_path);
         }
 

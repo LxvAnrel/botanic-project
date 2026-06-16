@@ -81,4 +81,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserBadge::class);
     }
+
+    /**
+     * URL da foto de perfil. Aceita URL externa (Cloudinary) ou caminho
+     * local no disco public. Retorna null quando nao ha foto.
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (! $this->avatar_path) {
+            return null;
+        }
+
+        return str_starts_with($this->avatar_path, 'http')
+            ? $this->avatar_path
+            : asset('storage/' . $this->avatar_path);
+    }
 }
