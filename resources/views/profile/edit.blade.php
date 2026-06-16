@@ -35,7 +35,50 @@
         <h1 class="font-serif font-light text-3xl text-[#EDE0CC]">Editar perfil</h1>
     </div>
 
-    {{-- ① Informações pessoais --}}
+    {{-- ① Avatar --}}
+    <div class="glass rounded-2xl p-6">
+        <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E] mb-5">Foto de perfil</p>
+
+        @if(session('status') === 'avatar-updated')
+        <div class="flex items-center gap-2 glass-gold rounded-xl px-4 py-2.5 mb-5">
+            <span class="text-[#C8A96E] text-sm">✓</span>
+            <p class="text-[#C8A96E] text-xs uppercase tracking-wider">Foto atualizada com sucesso</p>
+        </div>
+        @endif
+
+        <form method="POST" action="{{ route('profile.avatar') }}" enctype="multipart/form-data" class="flex items-center gap-5">
+            @csrf
+
+            {{-- Preview atual --}}
+            @if($user->avatar_path)
+                <img src="{{ asset('storage/' . $user->avatar_path) }}" id="avatar-preview"
+                     class="w-16 h-16 rounded-full object-cover border-2 border-[#C8A96E]/30 shrink-0">
+            @else
+                <div id="avatar-initials" class="w-16 h-16 rounded-full bg-[#C8A96E]/10 border-2 border-[#C8A96E]/30 flex items-center justify-center text-xl font-serif text-[#C8A96E] shrink-0">
+                    {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
+                </div>
+                <img id="avatar-preview" class="w-16 h-16 rounded-full object-cover border-2 border-[#C8A96E]/30 shrink-0 hidden">
+            @endif
+
+            <div class="flex-1 min-w-0">
+                <label for="avatar" class="block glass border border-dashed border-white/20 hover:border-[#C8A96E]/40 rounded-xl px-4 py-3 cursor-pointer transition-all duration-200 text-center">
+                    <span class="text-[#7A8E72] text-xs" id="avatar-label">Escolher imagem (JPG, PNG, WebP — máx. 2 MB)</span>
+                    <input type="file" id="avatar" name="avatar" accept="image/jpeg,image/png,image/webp" class="sr-only"
+                           onchange="previewAvatar(this)">
+                </label>
+                @error('avatar')
+                <p class="mt-1.5 text-xs text-red-400/80">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <button type="submit"
+                    class="glass-gold text-[#C8A96E] text-[10px] uppercase tracking-widest px-5 py-3 rounded-full transition-all duration-200 shrink-0">
+                Salvar
+            </button>
+        </form>
+    </div>
+
+    {{-- ② Informações pessoais --}}
     <div class="glass rounded-2xl p-6">
         <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E] mb-5">Informações pessoais</p>
 
@@ -79,7 +122,59 @@
         </form>
     </div>
 
-    {{-- ② Alterar senha --}}
+    {{-- ③ Perfil público --}}
+    <div class="glass rounded-2xl p-6">
+        <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E] mb-1">Perfil público &amp; Biografia</p>
+        <p class="text-[#7A8E72] text-xs mb-5">Sua bio e conquistas aparecem no perfil público. Seu e-mail <strong class="text-[#EDE0CC]">nunca</strong> é compartilhado.</p>
+
+        @if(session('status') === 'settings-updated')
+        <div class="flex items-center gap-2 glass-gold rounded-xl px-4 py-2.5 mb-5">
+            <span class="text-[#C8A96E] text-sm">✓</span>
+            <p class="text-[#C8A96E] text-xs uppercase tracking-wider">Configurações salvas</p>
+        </div>
+        @endif
+
+        <form method="POST" action="{{ route('profile.settings') }}" class="space-y-4">
+            @csrf
+            @method('PATCH')
+
+            <div>
+                <label for="bio" class="block text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-2">Bio <span class="text-[#3A5E2D]/50 normal-case tracking-normal">(até 280 caracteres)</span></label>
+                <textarea id="bio" name="bio" rows="3" maxlength="280"
+                          placeholder="Fale um pouco sobre você e suas plantas favoritas..."
+                          class="w-full glass border border-white/[0.08] focus:border-[#C8A96E]/50 text-[#EDE0CC] placeholder-[#3A5E2D]/50 text-sm rounded-xl px-4 py-3 focus:outline-none transition-all duration-200 resize-none">{{ old('bio', $user->bio) }}</textarea>
+                @error('bio')
+                <p class="mt-1.5 text-xs text-red-400/80">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <label class="flex items-center justify-between gap-4 glass rounded-xl px-4 py-3.5 cursor-pointer hover:glass-gold transition-all duration-200">
+                <div>
+                    <p class="text-[#EDE0CC] text-sm">Perfil visível na comunidade</p>
+                    <p class="text-[#7A8E72] text-[10px] mt-0.5">Apareça no ranking Top 10 dos mais engajados</p>
+                </div>
+                <div class="relative shrink-0">
+                    <input type="checkbox" name="profile_public" id="profile_public" value="1" class="sr-only peer"
+                           {{ old('profile_public', $user->profile_public) ? 'checked' : '' }}>
+                    <div class="w-10 h-6 bg-white/10 peer-checked:bg-[#C8A96E]/70 rounded-full transition-colors duration-200"></div>
+                    <div class="absolute left-1 top-1 w-4 h-4 bg-white/60 peer-checked:bg-white rounded-full transition-transform duration-200 peer-checked:translate-x-4"></div>
+                </div>
+            </label>
+
+            @if($user->profile_public)
+            <a href="{{ route('perfil.publico', $user) }}" class="block text-center text-[10px] text-[#3A5E2D] hover:text-[#C8A96E] transition-colors">
+                Ver meu perfil público →
+            </a>
+            @endif
+
+            <button type="submit"
+                    class="w-full glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-xs uppercase tracking-widest py-3.5 rounded-full transition-all duration-200">
+                Salvar configurações
+            </button>
+        </form>
+    </div>
+
+    {{-- ④ Alterar senha --}}
     <div class="glass rounded-2xl p-6">
         <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E] mb-5">Alterar senha</p>
 
@@ -131,7 +226,7 @@
         </form>
     </div>
 
-    {{-- ③ Notificações por e-mail --}}
+    {{-- ⑤ Notificações por e-mail --}}
     <div class="glass rounded-2xl p-6">
         <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E] mb-1">E-mails de alertas</p>
         <p class="text-[#7A8E72] text-xs mb-5">Controle se deseja receber e-mails de cuidados de plantas, conquistas e avisos de sequência. E-mails essenciais de conta (exclusão, reativação) são sempre enviados.</p>
@@ -160,7 +255,7 @@
         </form>
     </div>
 
-    {{-- ④ Apagar conta --}}
+    {{-- ⑥ Apagar conta --}}
     <div class="glass rounded-2xl p-6 border border-red-900/10">
         <p class="text-[9px] uppercase tracking-[0.3em] text-red-400/60 mb-3">Zona de perigo</p>
 
@@ -252,6 +347,20 @@
 </div>
 
 <script>
+function previewAvatar(input) {
+    if (!input.files || !input.files[0]) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+        var preview = document.getElementById('avatar-preview');
+        var initials = document.getElementById('avatar-initials');
+        preview.src = e.target.result;
+        preview.classList.remove('hidden');
+        if (initials) initials.classList.add('hidden');
+        document.getElementById('avatar-label').textContent = input.files[0].name;
+    };
+    reader.readAsDataURL(input.files[0]);
+}
+
 function floraRevealDelete() {
     var form = document.getElementById('delete-confirm');
     var btn  = document.getElementById('delete-reveal-btn');

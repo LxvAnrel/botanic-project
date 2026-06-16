@@ -3,6 +3,7 @@
 use App\Http\Controllers\PlantController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicProfileController;
 use App\Http\Controllers\PushSubscriptionController;
 use App\Http\Controllers\CareController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,9 @@ Route::get('/conta/reativar', [App\Http\Controllers\ProfileController::class, 'r
 
 Route::get('/privacidade', fn() => view('legal.privacidade'))->name('privacidade');
 Route::get('/termos', fn() => view('legal.termos'))->name('termos');
+
+Route::get('/comunidade', [PublicProfileController::class, 'community'])->name('comunidade');
+Route::get('/u/{user}', [PublicProfileController::class, 'show'])->name('perfil.publico');
 
 Route::get('/catalogo', [PlantController::class, 'index'])->name('plants.index');
 Route::get('/planta/{plant}', [PlantController::class, 'show'])->name('plants.show')->where('plant', '[a-z0-9-]+');
@@ -39,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::patch('/profile/email-notifications', [ProfileController::class, 'toggleEmailNotifications'])->name('profile.email-notifications');
+    Route::post('/profile/avatar', [ProfileController::class, 'uploadAvatar'])->name('profile.avatar');
+    Route::patch('/profile/settings', [ProfileController::class, 'updateSettings'])->name('profile.settings');
 
     Route::post('/push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
     Route::post('/push/unsubscribe', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');

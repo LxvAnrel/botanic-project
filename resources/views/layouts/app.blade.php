@@ -66,6 +66,10 @@
                                 Conquistas
                             </a>
                             @endauth
+                            <a href="{{ route('comunidade') }}"
+                               class="text-xs uppercase tracking-widest font-medium hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200 {{ request()->routeIs('comunidade') ? 'text-[#C8A96E]' : 'text-[#DFD0B8]/70' }}">
+                                Comunidade
+                            </a>
                         </nav>
                     </div>
 
@@ -199,6 +203,14 @@
                        class="flex items-center gap-3 text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('conquistas') ? 'text-[#C8A96E]' : '' }}">
                         <span>🏆</span> Conquistas
                     </a>
+                    @endauth
+                    <div class="border-t border-white/[0.06] my-1.5 mx-2"></div>
+                    <p class="px-4 pb-1 text-[8px] uppercase tracking-[0.4em] text-[#3A5E2D]">Social</p>
+                    <a href="{{ route('comunidade') }}"
+                       class="flex items-center gap-3 text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('comunidade') ? 'text-[#C8A96E]' : '' }}">
+                        <span>🌿</span> Comunidade
+                    </a>
+                    @auth
                     @else
                     <div class="border-t border-white/[0.06] my-1.5 mx-2"></div>
                     <a href="{{ route('login') }}"

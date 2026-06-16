@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 
@@ -79,6 +80,40 @@ class ProfileController extends Controller
             : 'E-mails de alertas desativados. Você ainda receberá e-mails essenciais de conta.';
 
         return Redirect::route('profile.edit')->with('status', $status);
+    }
+
+    public function uploadAvatar(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'max:2048', 'mimes:jpg,jpeg,png,webp'],
+        ]);
+
+        $user = $request->user();
+
+        if ($user->avatar_path) {
+            Storage::disk('public')->delete($user->avatar_path);
+        }
+
+        $path = $request->file('avatar')->store('avatars', 'public');
+        $user->avatar_path = $path;
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('status', 'avatar-updated');
+    }
+
+    public function updateSettings(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'bio'            => ['nullable', 'string', 'max:280'],
+            'profile_public' => ['nullable', 'boolean'],
+        ]);
+
+        $user = $request->user();
+        $user->bio            = $validated['bio'] ?? null;
+        $user->profile_public = isset($validated['profile_public']) ? (bool) $validated['profile_public'] : false;
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('status', 'settings-updated');
     }
 
     public function reactivate(Request $request): RedirectResponse

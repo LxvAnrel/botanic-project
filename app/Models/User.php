@@ -28,6 +28,8 @@ class User extends Authenticatable
         'streak_days',
         'streak_last_date',
         'avatar_path',
+        'bio',
+        'profile_public',
         'deletion_scheduled_at',
     ];
 
