@@ -11,6 +11,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/conta/reativar', [App\Http\Controllers\ProfileController::class, 'reactivate'])
+    ->name('conta.reativar')
+    ->middleware('signed');
+
 Route::get('/catalogo', [PlantController::class, 'index'])->name('plants.index');
 Route::get('/planta/{plant}', [PlantController::class, 'show'])->name('plants.show')->where('plant', '[a-z0-9-]+');
 Route::get('/quiz', function () {

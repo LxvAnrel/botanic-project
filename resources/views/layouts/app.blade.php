@@ -149,6 +149,40 @@
         }
     </script>
 
+    {{-- Flash: conta agendada para exclusão --}}
+    @if(session('conta_agendada_exclusao'))
+    <div id="flora-flash-exclusao"
+         class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] w-[min(92vw,480px)] glass rounded-2xl p-5 border border-amber-400/20 shadow-[0_8px_40px_rgba(0,0,0,0.4)]">
+        <div class="flex items-start gap-4">
+            <div class="shrink-0 w-10 h-10 bg-amber-400/10 rounded-full flex items-center justify-center text-xl">⏳</div>
+            <div class="flex-1">
+                <p class="text-[#EDE0CC] text-sm font-medium">Solicitação recebida</p>
+                <p class="text-[#7A8E72] text-xs leading-relaxed mt-1">
+                    Sua conta está agendada para exclusão. Enviamos um e-mail com um link para cancelar caso mude de ideia. Você tem <strong class="text-[#C8A96E]">30 dias</strong> para reativar.
+                </p>
+            </div>
+            <button onclick="document.getElementById('flora-flash-exclusao').remove()"
+                    class="shrink-0 text-[#7A8E72] hover:text-[#C8A96E] text-lg leading-none mt-0.5 transition-colors">×</button>
+        </div>
+    </div>
+    @endif
+
+    {{-- Flash: conta reativada --}}
+    @if(session('status') && str_contains(session('status'), 'reativada'))
+    <div id="flora-flash-reativada"
+         class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] w-[min(92vw,480px)] glass-gold rounded-2xl p-5 border border-[#C8A96E]/30 shadow-[0_8px_40px_rgba(200,169,110,0.2)]">
+        <div class="flex items-start gap-4">
+            <div class="shrink-0 w-10 h-10 bg-[#C8A96E]/15 rounded-full flex items-center justify-center text-xl">🌱</div>
+            <div class="flex-1">
+                <p class="text-[#EDE0CC] text-sm font-medium">Conta reativada!</p>
+                <p class="text-[#7A8E72] text-xs leading-relaxed mt-1">{{ session('status') }}</p>
+            </div>
+            <button onclick="document.getElementById('flora-flash-reativada').remove()"
+                    class="shrink-0 text-[#7A8E72] hover:text-[#C8A96E] text-lg leading-none mt-0.5 transition-colors">×</button>
+        </div>
+    </div>
+    @endif
+
     <main class="flex-1 relative z-10">
         @yield('content')
     </main>

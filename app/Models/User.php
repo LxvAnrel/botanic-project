@@ -27,6 +27,7 @@ class User extends Authenticatable
         'streak_days',
         'streak_last_date',
         'avatar_path',
+        'deletion_scheduled_at',
     ];
 
     /**

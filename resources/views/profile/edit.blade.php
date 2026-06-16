@@ -133,10 +133,7 @@
 
     {{-- ③ Apagar conta --}}
     <div class="glass rounded-2xl p-6 border border-red-900/10">
-        <p class="text-[9px] uppercase tracking-[0.3em] text-red-400/60 mb-1">Zona de perigo</p>
-        <p class="text-[#7A8E72] text-xs leading-relaxed mb-5">
-            Ao apagar sua conta, todos os seus dados — diário de plantas, alertas e preferências — serão permanentemente removidos. Esta ação não pode ser desfeita.
-        </p>
+        <p class="text-[9px] uppercase tracking-[0.3em] text-red-400/60 mb-3">Zona de perigo</p>
 
         {{-- Erros de exclusão --}}
         @if($errors->userDeletion->isNotEmpty())
@@ -145,44 +142,79 @@
         </div>
         @endif
 
-        {{-- Botão que revela o formulário --}}
+        {{-- Botão que abre o painel --}}
         <button id="delete-reveal-btn" type="button" onclick="floraRevealDelete()"
                 class="w-full flex items-center justify-center gap-2 glass border border-red-900/20 text-red-400/60 hover:text-red-400 hover:border-red-400/30 text-xs uppercase tracking-widest py-3.5 rounded-full transition-all duration-200">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-            Apagar minha conta
+            Solicitar exclusão de conta
         </button>
 
-        {{-- Formulário de confirmação (oculto por padrão) --}}
-        <div id="delete-confirm" style="display:none;" class="mt-4 space-y-4">
-            <div class="glass rounded-xl px-4 py-3 border border-red-400/15">
-                <p class="text-red-400/70 text-xs leading-relaxed">
-                    Para confirmar, insira sua senha abaixo. Esta ação é irreversível.
-                </p>
+        {{-- Painel explicativo + confirmação --}}
+        <div id="delete-confirm" style="display:none;" class="mt-5 space-y-4">
+
+            {{-- O que acontece --}}
+            <div class="glass rounded-2xl p-5 space-y-4">
+                <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E]">O que acontece</p>
+
+                <div class="space-y-3">
+                    <div class="flex gap-3 items-start">
+                        <span class="shrink-0 w-6 h-6 rounded-full bg-[#C8A96E]/10 flex items-center justify-center text-[10px] text-[#C8A96E] font-bold mt-0.5">1</span>
+                        <div>
+                            <p class="text-[#EDE0CC] text-xs font-medium">Sua conta fica pausada por 30 dias</p>
+                            <p class="text-[#7A8E72] text-[10px] mt-0.5">Você será desconectado imediatamente, mas seus dados ficam preservados.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span class="shrink-0 w-6 h-6 rounded-full bg-[#C8A96E]/10 flex items-center justify-center text-[10px] text-[#C8A96E] font-bold mt-0.5">2</span>
+                        <div>
+                            <p class="text-[#EDE0CC] text-xs font-medium">Você recebe um e-mail com link de reativação</p>
+                            <p class="text-[#7A8E72] text-[10px] mt-0.5">Se mudar de ideia, basta clicar no link para recuperar tudo.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span class="shrink-0 w-6 h-6 rounded-full bg-red-400/20 flex items-center justify-center text-[10px] text-red-400 font-bold mt-0.5">3</span>
+                        <div>
+                            <p class="text-[#EDE0CC] text-xs font-medium">Após 30 dias, exclusão permanente</p>
+                            <p class="text-[#7A8E72] text-[10px] mt-0.5">Diário Verde, cuidados, badges, XP e preferências serão apagados para sempre.</p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- O que será apagado --}}
+                <div class="border-t border-white/[0.06] pt-4">
+                    <p class="text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-2">Será excluído permanentemente</p>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        @foreach(['Diário Verde','Histórico de cuidados','Alertas e notificações','Conquistas e XP','Dados de perfil','Preferências'] as $item)
+                        <div class="flex items-center gap-1.5 text-[10px] text-[#7A8E72]">
+                            <span class="text-red-400/50 text-[8px]">✕</span> {{ $item }}
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
 
-            <form method="POST" action="{{ route('profile.destroy') }}">
+            {{-- Formulário de confirmação --}}
+            <form method="POST" action="{{ route('profile.destroy') }}" class="space-y-3">
                 @csrf
                 @method('DELETE')
 
-                <div class="space-y-3">
-                    <div>
-                        <label for="delete_password" class="block text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-2">Senha atual</label>
-                        <input id="delete_password" name="password" type="password"
-                               placeholder="Confirme com sua senha"
-                               autocomplete="current-password"
-                               class="w-full glass border border-red-900/20 focus:border-red-400/40 text-[#EDE0CC] placeholder-[#3A5E2D]/50 text-sm rounded-xl px-4 py-3 focus:outline-none transition-all duration-200">
-                    </div>
+                <div>
+                    <label for="delete_password" class="block text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-2">Confirme sua senha para continuar</label>
+                    <input id="delete_password" name="password" type="password"
+                           placeholder="Sua senha atual"
+                           autocomplete="current-password"
+                           class="w-full glass border border-red-900/20 focus:border-red-400/40 text-[#EDE0CC] placeholder-[#3A5E2D]/50 text-sm rounded-xl px-4 py-3 focus:outline-none transition-all duration-200">
+                </div>
 
-                    <div class="flex gap-3">
-                        <button type="button" onclick="floraRevealDelete()"
-                                class="flex-1 glass border border-white/[0.07] text-[#7A8E72] hover:text-[#C8A96E] text-xs uppercase tracking-widest py-3 rounded-full transition-all duration-200">
-                            Cancelar
-                        </button>
-                        <button type="submit"
-                                class="flex-1 bg-red-500/15 border border-red-400/30 text-red-400 hover:bg-red-500/25 hover:border-red-400/50 text-xs uppercase tracking-widest py-3 rounded-full transition-all duration-200">
-                            Confirmar exclusão
-                        </button>
-                    </div>
+                <div class="flex gap-3">
+                    <button type="button" onclick="floraRevealDelete()"
+                            class="flex-1 glass border border-white/[0.07] text-[#7A8E72] hover:text-[#C8A96E] text-xs uppercase tracking-widest py-3 rounded-full transition-all duration-200">
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                            class="flex-1 bg-red-500/10 border border-red-400/25 text-red-400 hover:bg-red-500/20 hover:border-red-400/40 text-xs uppercase tracking-widest py-3 rounded-full transition-all duration-200">
+                        Solicitar exclusão
+                    </button>
                 </div>
             </form>
         </div>
