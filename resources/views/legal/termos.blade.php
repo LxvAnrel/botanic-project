@@ -110,7 +110,7 @@
 
         <section>
             <h2 class="font-serif text-xl text-[#EDE0CC] mb-3">12. Contato</h2>
-            <p>Dúvidas, solicitações ou reclamações: <a href="mailto:{{ config('flora.mail.ola.address', 'contato@florabotanic.site') }}" class="text-[#C8A96E] hover:underline">{{ config('flora.mail.ola.address', 'contato@florabotanic.site') }}</a></p>
+            <p>Dúvidas, solicitações ou reclamações: <a href="mailto:{{ config('flora.mail.contato.address', 'contato@florabotanic.site') }}" class="text-[#C8A96E] hover:underline">{{ config('flora.mail.contato.address', 'contato@florabotanic.site') }}</a></p>
         </section>
 
     </div>

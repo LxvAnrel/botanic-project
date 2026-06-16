@@ -29,6 +29,10 @@ return [
             'address' => env('MAIL_FROM_OLA', 'ola@florabotanic.site'),
             'name' => 'Flora',
         ],
+        'contato' => [
+            'address' => env('MAIL_FROM_CONTATO', 'contato@florabotanic.site'),
+            'name' => 'Flora · Contato',
+        ],
     ],
 
 ];
