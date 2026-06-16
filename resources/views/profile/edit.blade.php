@@ -50,7 +50,7 @@
             @csrf
 
             {{-- Preview atual --}}
-            @if($user->avatar_path)
+            @if($user->avatar_url)
                 <img src="{{ $user->avatar_url }}" id="avatar-preview"
                      class="w-16 h-16 rounded-full object-cover border-2 border-[#C8A96E]/30 shrink-0">
             @else

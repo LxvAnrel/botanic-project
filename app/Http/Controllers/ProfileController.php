@@ -109,21 +109,28 @@ class ProfileController extends Controller
                 logger()->warning('Falha no upload do avatar (Cloudinary): ' . $e->getMessage());
 
                 return Redirect::route('profile.edit')->withErrors([
-                    'avatar' => 'Não foi possível enviar a imagem agora. Tente novamente.',
+                    'avatar' => 'Falha no envio (Cloudinary): ' . $e->getMessage(),
                 ]);
             }
         }
 
-        // Fallback local (desenvolvimento/testes).
-        if ($user->avatar_path && ! str_starts_with($user->avatar_path, 'http')) {
-            Storage::disk('public')->delete($user->avatar_path);
-        }
-
-        $path = $request->file('avatar')->store('avatars', 'public');
-        $user->avatar_path = $path;
+        // Padrao: guarda a imagem no banco (persiste no Railway, sem servico externo).
+        $file = $request->file('avatar');
+        $user->avatar_data = base64_encode(file_get_contents($file->getRealPath()));
+        $user->avatar_mime = $file->getMimeType();
+        $user->avatar_path = null;
         $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'avatar-updated');
+    }
+
+    public function showAvatar(User $user)
+    {
+        abort_unless($user->avatar_data, 404);
+
+        return response(base64_decode($user->avatar_data))
+            ->header('Content-Type', $user->avatar_mime ?: 'image/jpeg')
+            ->header('Cache-Control', 'public, max-age=86400');
     }
 
     public function updateSettings(Request $request): RedirectResponse

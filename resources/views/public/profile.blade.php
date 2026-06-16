@@ -9,7 +9,7 @@
     <div class="glass-gold rounded-3xl p-8 md:p-10 mb-6 flex flex-col sm:flex-row items-center sm:items-start gap-6">
         {{-- Avatar --}}
         <div class="shrink-0">
-            @if($user->avatar_path)
+            @if($user->avatar_url)
                 <img src="{{ $user->avatar_url }}"
                      alt="{{ $user->name }}"
                      class="w-24 h-24 rounded-full object-cover border-2 border-[#C8A96E]/40">

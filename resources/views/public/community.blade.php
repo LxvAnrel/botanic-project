@@ -24,7 +24,7 @@
         {{-- 2º lugar --}}
         <div class="glass rounded-3xl p-5 text-center">
             <div class="text-2xl mb-3">🥈</div>
-            @if($top[1]->avatar_path)
+            @if($top[1]->avatar_url)
                 <img src="{{ $top[1]->avatar_url }}" class="w-14 h-14 rounded-full object-cover mx-auto mb-2 border-2 border-white/20">
             @else
                 <div class="w-14 h-14 rounded-full bg-[#C8A96E]/10 border-2 border-white/20 flex items-center justify-center text-lg font-bold text-[#C8A96E] mx-auto mb-2">
@@ -39,7 +39,7 @@
         {{-- 1º lugar --}}
         <div class="glass-gold rounded-3xl p-5 text-center border border-[#C8A96E]/20">
             <div class="text-3xl mb-3">🥇</div>
-            @if($top[0]->avatar_path)
+            @if($top[0]->avatar_url)
                 <img src="{{ $top[0]->avatar_url }}" class="w-16 h-16 rounded-full object-cover mx-auto mb-2 border-2 border-[#C8A96E]/50">
             @else
                 <div class="w-16 h-16 rounded-full bg-[#C8A96E]/20 border-2 border-[#C8A96E]/50 flex items-center justify-center text-xl font-bold text-[#C8A96E] mx-auto mb-2">
@@ -54,7 +54,7 @@
         {{-- 3º lugar --}}
         <div class="glass rounded-3xl p-5 text-center">
             <div class="text-2xl mb-3">🥉</div>
-            @if($top[2]->avatar_path)
+            @if($top[2]->avatar_url)
                 <img src="{{ $top[2]->avatar_url }}" class="w-14 h-14 rounded-full object-cover mx-auto mb-2 border-2 border-white/20">
             @else
                 <div class="w-14 h-14 rounded-full bg-[#C8A96E]/10 border-2 border-white/20 flex items-center justify-center text-lg font-bold text-[#C8A96E] mx-auto mb-2">
@@ -76,7 +76,7 @@
            class="glass rounded-2xl px-5 py-4 flex items-center gap-4 hover:glass-gold transition-all duration-200 group">
             <span class="w-7 text-center font-serif text-lg text-[#3A5E2D] shrink-0">{{ $i + 4 }}</span>
 
-            @if($u->avatar_path)
+            @if($u->avatar_url)
                 <img src="{{ $u->avatar_url }}" class="w-10 h-10 rounded-full object-cover shrink-0 border border-white/10">
             @else
                 <div class="w-10 h-10 rounded-full bg-[#C8A96E]/10 border border-white/10 flex items-center justify-center text-sm font-bold text-[#C8A96E] shrink-0">

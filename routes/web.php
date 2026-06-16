@@ -22,6 +22,7 @@ Route::get('/termos', fn() => view('legal.termos'))->name('termos');
 
 Route::get('/comunidade', [PublicProfileController::class, 'community'])->name('comunidade');
 Route::get('/u/{user}', [PublicProfileController::class, 'show'])->name('perfil.publico');
+Route::get('/avatar/{user}', [ProfileController::class, 'showAvatar'])->name('avatar.show');
 
 Route::get('/catalogo', [PlantController::class, 'index'])->name('plants.index');
 Route::get('/planta/{plant}', [PlantController::class, 'show'])->name('plants.show')->where('plant', '[a-z0-9-]+');

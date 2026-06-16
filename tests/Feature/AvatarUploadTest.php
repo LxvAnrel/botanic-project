@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AvatarUploadTest extends TestCase
@@ -14,19 +13,25 @@ class AvatarUploadTest extends TestCase
 
     public function test_usuario_consegue_enviar_avatar(): void
     {
-        Storage::fake('public');
-
         $user = User::factory()->create();
 
+        // PNG 1x1 real (conteudo de verdade, sem precisar de GD)
+        $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M8AAAMBAQDJ/pLvAAAAAElFTkSuQmCC');
+
         $response = $this->actingAs($user)->post(route('profile.avatar'), [
-            'avatar' => UploadedFile::fake()->create('foto.jpg', 500, 'image/jpeg'),
+            'avatar' => UploadedFile::fake()->createWithContent('foto.png', $png),
         ]);
 
         $response->assertRedirect(route('profile.edit'));
         $response->assertSessionHas('status', 'avatar-updated');
 
         $user->refresh();
-        $this->assertNotNull($user->avatar_path, 'avatar_path nao foi salvo no banco');
-        Storage::disk('public')->assertExists($user->avatar_path);
+        $this->assertNotNull($user->avatar_data, 'avatar_data nao foi salvo no banco');
+        $this->assertNotNull($user->avatar_url);
+
+        // A rota publica do avatar devolve a imagem.
+        $this->get(route('avatar.show', $user))
+            ->assertOk()
+            ->assertHeader('Content-Type', 'image/png');
     }
 }
