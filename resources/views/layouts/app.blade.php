@@ -101,11 +101,11 @@
 
                             {{-- Dropdown de conta --}}
                             <div id="profile-dropdown"
-                                 class="absolute right-0 top-[calc(100%+8px)] w-60 glass rounded-2xl p-2 shadow-[0_8px_40px_rgba(0,0,0,0.5)] border border-white/[0.06] z-50"
+                                 class="absolute right-0 top-[calc(100%+8px)] w-60 bg-[#0E1A0B] border border-[#C8A96E]/20 rounded-2xl p-2 shadow-[0_12px_48px_rgba(0,0,0,0.8)] z-50"
                                  style="display:none;">
 
                                 {{-- Cabeçalho --}}
-                                <div class="px-3 py-3 border-b border-white/[0.06] mb-1">
+                                <div class="px-3 py-3 border-b border-[#C8A96E]/10 mb-1">
                                     <p class="text-[#EDE0CC] text-sm font-medium truncate">{{ $navUser->name }}</p>
                                     <p class="text-[#3A5E2D] text-[10px] truncate">{{ $navUser->email }}</p>
                                     @php $navLevel = \App\Support\Gamification::level($navUser->xp ?? 0); @endphp
@@ -118,30 +118,30 @@
 
                                 {{-- Opções de conta --}}
                                 <a href="{{ route('perfil') }}"
-                                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/[0.05] transition-all duration-150 {{ request()->routeIs('perfil') ? 'text-[#C8A96E] bg-white/[0.04]' : '' }}">
+                                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#9AA88E] hover:text-[#C8A96E] hover:bg-[#C8A96E]/8 transition-all duration-150 {{ request()->routeIs('perfil') ? 'text-[#C8A96E] bg-[#C8A96E]/8' : '' }}">
                                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                     <span class="uppercase tracking-widest">Meu perfil</span>
                                 </a>
                                 <a href="{{ route('profile.edit') }}"
-                                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/[0.05] transition-all duration-150 {{ request()->routeIs('profile.edit') ? 'text-[#C8A96E] bg-white/[0.04]' : '' }}">
+                                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#9AA88E] hover:text-[#C8A96E] hover:bg-[#C8A96E]/8 transition-all duration-150 {{ request()->routeIs('profile.edit') ? 'text-[#C8A96E] bg-[#C8A96E]/8' : '' }}">
                                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                                     <span class="uppercase tracking-widest">Editar perfil</span>
                                 </a>
                                 @if($navUnread > 0)
                                 <a href="{{ route('alertas') }}"
-                                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/[0.05] transition-all duration-150">
+                                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#9AA88E] hover:text-[#C8A96E] hover:bg-[#C8A96E]/8 transition-all duration-150">
                                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
                                     <span class="uppercase tracking-widest">Alertas</span>
                                     <span class="ml-auto text-[9px] bg-[#C8A96E]/20 text-[#C8A96E] px-1.5 py-0.5 rounded-full">{{ $navUnread }}</span>
                                 </a>
                                 @endif
 
-                                <div class="border-t border-white/[0.06] my-1"></div>
+                                <div class="border-t border-[#C8A96E]/10 my-1"></div>
 
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit"
-                                            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#DFD0B8]/70 hover:text-red-400 hover:bg-white/[0.05] transition-all duration-150">
+                                            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#9AA88E] hover:text-red-400 hover:bg-red-400/8 transition-all duration-150">
                                         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                                         <span class="uppercase tracking-widest">Sair</span>
                                     </button>
