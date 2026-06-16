@@ -126,54 +126,36 @@
                     <p class="text-[9px] uppercase tracking-wider text-[#3A5E2D]">Rega a cada {{ $plant->intervaloRega() }}d · Aduba a cada {{ $plant->intervaloAdubacao() }}d</p>
                 </div>
 
-                @if(session('care_ok'))
-                <div class="text-[#C8A96E] text-xs glass-gold rounded-xl px-4 py-2.5">✓ {{ session('care_ok') }}</div>
-                @endif
-
                 {{-- Rega --}}
                 <div class="flex items-center justify-between gap-3 border-t border-white/[0.06] pt-4">
                     <div class="min-w-0">
                         <p class="text-[#EDE0CC] text-sm flex items-center gap-2">💧 Rega
-                            <span class="text-[10px] uppercase tracking-wider {{ $corEstado($care['rega']['estado']) }}">
+                            <span id="care-status-rega" class="text-[10px] uppercase tracking-wider {{ $corEstado($care['rega']['estado']) }}">
                                 {{ \App\Support\PlantCare::rotulo($care['rega']) }}
                             </span>
                         </p>
-                        <p class="text-[#7A8E72] text-[11px] mt-0.5">
-                            @if($care['rega']['proxima'])
-                                Próxima: {{ $care['rega']['proxima']->format('d/m') }}
-                            @else
-                                Registre a primeira rega
-                            @endif
+                        <p id="care-next-rega" class="text-[#7A8E72] text-[11px] mt-0.5">
+                            {{ $care['rega']['proxima'] ? 'Próxima: ' . $care['rega']['proxima']->format('d/m') : 'Registre a primeira rega' }}
                         </p>
                     </div>
-                    <form method="POST" action="{{ route('care.store', $plant->id) }}" class="shrink-0">
-                        @csrf
-                        <input type="hidden" name="tipo" value="rega">
-                        <button class="glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200">Reguei hoje</button>
-                    </form>
+                    <button type="button" onclick="careAction(this, {{ $plant->id }}, 'rega')"
+                            class="shrink-0 glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200 disabled:opacity-50">Reguei hoje</button>
                 </div>
 
                 {{-- Adubação --}}
                 <div class="flex items-center justify-between gap-3 border-t border-white/[0.06] pt-4">
                     <div class="min-w-0">
                         <p class="text-[#EDE0CC] text-sm flex items-center gap-2">🌱 Adubação
-                            <span class="text-[10px] uppercase tracking-wider {{ $corEstado($care['adubacao']['estado']) }}">
+                            <span id="care-status-adubacao" class="text-[10px] uppercase tracking-wider {{ $corEstado($care['adubacao']['estado']) }}">
                                 {{ \App\Support\PlantCare::rotulo($care['adubacao']) }}
                             </span>
                         </p>
-                        <p class="text-[#7A8E72] text-[11px] mt-0.5">
-                            @if($care['adubacao']['proxima'])
-                                Próxima: {{ $care['adubacao']['proxima']->format('d/m') }}
-                            @else
-                                Registre a primeira adubação
-                            @endif
+                        <p id="care-next-adubacao" class="text-[#7A8E72] text-[11px] mt-0.5">
+                            {{ $care['adubacao']['proxima'] ? 'Próxima: ' . $care['adubacao']['proxima']->format('d/m') : 'Registre a primeira adubação' }}
                         </p>
                     </div>
-                    <form method="POST" action="{{ route('care.store', $plant->id) }}" class="shrink-0">
-                        @csrf
-                        <input type="hidden" name="tipo" value="adubacao">
-                        <button class="glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200">Adubei</button>
-                    </form>
+                    <button type="button" onclick="careAction(this, {{ $plant->id }}, 'adubacao')"
+                            class="shrink-0 glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200 disabled:opacity-50">Adubei</button>
                 </div>
 
                 {{-- Poda --}}
@@ -181,40 +163,26 @@
                     <div class="min-w-0">
                         <p class="text-[#EDE0CC] text-sm flex items-center gap-2">✂️ Poda</p>
                         <p class="text-[#7A8E72] text-[11px] mt-0.5">
-                            @if($care['ultima_poda'])
-                                Última: {{ $care['ultima_poda']->format('d/m/Y') }}
-                            @else
-                                Sem registro de poda
-                            @endif
-                            @if(!empty($plant->epoca_poda)) · época: {{ implode(', ', array_map('ucfirst', $plant->epoca_poda)) }} @endif
+                            <span id="care-last-poda">{{ $care['ultima_poda'] ? 'Última: ' . $care['ultima_poda']->format('d/m/Y') : 'Sem registro de poda' }}</span>@if(!empty($plant->epoca_poda)) · época: {{ implode(', ', array_map('ucfirst', $plant->epoca_poda)) }}@endif
                         </p>
                     </div>
-                    <form method="POST" action="{{ route('care.store', $plant->id) }}" class="shrink-0">
-                        @csrf
-                        <input type="hidden" name="tipo" value="poda">
-                        <button class="glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200">Podei</button>
-                    </form>
+                    <button type="button" onclick="careAction(this, {{ $plant->id }}, 'poda')"
+                            class="shrink-0 glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200 disabled:opacity-50">Podei</button>
                 </div>
 
                 {{-- Histórico --}}
-                @if($care['historico']->count() > 0)
-                <div class="border-t border-white/[0.06] pt-4">
+                <div id="care-historico-wrap" class="border-t border-white/[0.06] pt-4" style="{{ $care['historico']->count() ? '' : 'display:none;' }}">
                     <p class="text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-3">Histórico recente</p>
-                    <div class="space-y-1.5">
+                    <div id="care-historico" class="space-y-1.5">
                         @foreach($care['historico'] as $log)
-                        <div class="flex items-center justify-between text-xs">
-                            <span class="text-[#7A8E72]">
-                                {{ \App\Models\CareLog::rotulo($log->tipo) }} · {{ $log->data->format('d/m/Y') }}
-                            </span>
-                            <form method="POST" action="{{ route('care.destroy', $log->id) }}">
-                                @csrf @method('DELETE')
-                                <button class="text-[#3A5E2D] hover:text-red-400 transition-colors text-[10px] uppercase tracking-wider">remover</button>
-                            </form>
+                        <div class="flex items-center justify-between text-xs" data-log="{{ $log->id }}">
+                            <span class="text-[#7A8E72]">{{ \App\Models\CareLog::rotulo($log->tipo) }} · {{ $log->data->format('d/m/Y') }}</span>
+                            <button type="button" onclick="careRemove(this, {{ $log->id }})"
+                                    class="text-[#3A5E2D] hover:text-red-400 transition-colors text-[10px] uppercase tracking-wider disabled:opacity-50">remover</button>
                         </div>
                         @endforeach
                     </div>
                 </div>
-                @endif
             </div>
             @endif
         </div>
@@ -300,6 +268,86 @@ function toggleFavorite(plantId) {
         favoriteBusy = false;
         btn.classList.remove('opacity-60', 'pointer-events-none');
     });
+}
+
+/* ── Cuidados (sem reload) ───────────────────────────────────────── */
+const FLORA_CSRF = document.querySelector('meta[name="csrf-token"]').content;
+
+function careColor(estado) {
+    return ({ atrasado: 'text-red-400', em_breve: 'text-[#C8A96E]', nunca: 'text-[#7A8E72]' })[estado] || 'text-[#3A5E2D]';
+}
+
+function renderCareTipo(tipo, s) {
+    const status = document.getElementById('care-status-' + tipo);
+    const next = document.getElementById('care-next-' + tipo);
+    if (status) {
+        status.textContent = s.rotulo;
+        status.className = 'text-[10px] uppercase tracking-wider ' + careColor(s.estado);
+    }
+    if (next) {
+        next.textContent = s.proxima
+            ? 'Próxima: ' + s.proxima
+            : (tipo === 'rega' ? 'Registre a primeira rega' : 'Registre a primeira adubação');
+    }
+}
+
+function renderHistorico(list) {
+    const wrap = document.getElementById('care-historico');
+    const section = document.getElementById('care-historico-wrap');
+    if (!wrap) return;
+    wrap.innerHTML = list.map(l =>
+        '<div class="flex items-center justify-between text-xs" data-log="' + l.id + '">' +
+            '<span class="text-[#7A8E72]">' + l.label + ' · ' + l.data + '</span>' +
+            '<button type="button" onclick="careRemove(this, ' + l.id + ')" class="text-[#3A5E2D] hover:text-red-400 transition-colors text-[10px] uppercase tracking-wider disabled:opacity-50">remover</button>' +
+        '</div>'
+    ).join('');
+    if (section) section.style.display = list.length ? '' : 'none';
+}
+
+function renderCare(data) {
+    renderCareTipo('rega', data.rega);
+    renderCareTipo('adubacao', data.adubacao);
+    const poda = document.getElementById('care-last-poda');
+    if (poda) poda.textContent = data.ultima_poda ? 'Última: ' + data.ultima_poda : 'Sem registro de poda';
+    renderHistorico(data.historico);
+    if (data.message) showToast(data.message, '✓');
+}
+
+async function careAction(btn, plantId, tipo) {
+    if (btn.disabled) return;
+    btn.disabled = true;
+    const original = btn.textContent;
+    btn.textContent = '…';
+    try {
+        const r = await fetch('/planta/' + plantId + '/cuidado', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': FLORA_CSRF, 'Accept': 'application/json' },
+            body: JSON.stringify({ tipo }),
+        });
+        if (!r.ok) throw new Error('falhou');
+        renderCare(await r.json());
+    } catch (e) {
+        showToast('Algo deu errado. Tente novamente.', '!');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+    }
+}
+
+async function careRemove(btn, logId) {
+    if (btn.disabled) return;
+    btn.disabled = true;
+    try {
+        const r = await fetch('/cuidado/' + logId, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': FLORA_CSRF, 'Accept': 'application/json' },
+        });
+        if (!r.ok) throw new Error('falhou');
+        renderCare(await r.json());
+    } catch (e) {
+        showToast('Não foi possível remover.', '!');
+        btn.disabled = false;
+    }
 }
 </script>
 @endsection

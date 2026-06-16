@@ -1,177 +1,146 @@
-# 🌿 Plataforma Botânica Interativa
+# 🌿 Flora — Plataforma Botânica Interativa
 
-Um sistema web inteligente que funciona como catálogo de plantas, diário de cuidados ("Diário Verde") e motor de recomendação através de Quiz.
+Sistema web para descobrir, cultivar e cuidar de plantas: catálogo, diário de
+cuidados ("Diário Verde") com lembretes, motor de recomendação por quiz e
+notificações (push no celular + e-mail).
 
-## 📋 Características
+🌐 Produção: https://www.florabotanic.site
 
-✅ **Catálogo Inteligente** - Browse plantas com filtros dinâmicos
-✅ **Diário Verde** - Gerencie sua coleção pessoal de plantas  
-✅ **Quiz Interativo** - Descubra a planta perfeita para você
-✅ **Notificações** - Alertas automáticos de época de poda
-✅ **Busca Avançada** - Busque por nome, espécie ou família
-✅ **Responsivo** - Interface moderna com Tailwind CSS
+## 📋 Funcionalidades
 
-## 🛠️ Stack Técnico
+- **Catálogo** — busca e filtros (luz, porte, pet-friendly) com Livewire
+- **Quiz** — recomendação personalizada em poucos passos
+- **Diário Verde** — coleção pessoal de plantas favoritadas (sem reload, via AJAX)
+- **Cuidados por planta** — registro de rega, adubação e poda com histórico;
+  status calculado ("em dia / em breve / atrasada") e próxima data
+- **Lembretes automáticos** — push + e-mail quando rega/adubação atrasa, e na época de poda
+- **Notificações push** (Web Push) — no celular, com opt-in no cadastro, banner e perfil
+- **E-mails transacionais** com identidade visual da marca:
+  boas-vindas, alerta de segurança (novo dispositivo), recuperação de senha e alertas
+- **Segurança** — HTTPS forçado, alerta de login em dispositivo novo, rate limiting
 
-- **Backend**: Laravel 11
-- **Frontend**: Livewire 4 + Alpine.js
-- **Banco de Dados**: MySQL/SQLite
-- **UI**: Tailwind CSS
-- **Agendamento**: Laravel Task Scheduling
+## 🛠️ Stack
 
-## 📦 Instalação
+- **Backend**: Laravel 13 (PHP 8.3)
+- **Frontend**: Livewire 4 + Blade + Tailwind CSS (vanilla JS para interações)
+- **Banco**: PostgreSQL (produção) / SQLite (local)
+- **E-mail**: Resend (via API HTTP)
+- **Push**: `laravel-notification-channels/webpush` (VAPID)
+- **Deploy**: Railway (Nixpacks) + scheduler embutido
 
-### Pré-requisitos
-- PHP 8.2+
-- Composer
-- Node.js e npm
+## 📦 Instalação local
 
-### Passos
+Pré-requisitos: PHP 8.3+, Composer, Node.js/npm.
 
-1. **Navegue até o projeto**
-```bash
-cd plataforma-botanica-interativa
-```
-
-2. **Instale as dependências PHP**
 ```bash
 composer install
-```
-
-3. **Instale as dependências Node**
-```bash
 npm install
-```
 
-4. **Configure o banco de dados**
-Edite `.env`:
-```
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=plataforma_botanica
-DB_USERNAME=root
-DB_PASSWORD=
-```
+cp .env.example .env
+php artisan key:generate
 
-5. **Execute as migrations e seeders**
-```bash
-php artisan migrate
-php artisan db:seed
-```
+# Banco local em SQLite (simples):
+#   no .env: DB_CONNECTION=sqlite
+touch database/database.sqlite
 
-6. **Build dos assets**
-```bash
+php artisan migrate --seed
 npm run build
-```
-
-7. **Inicie o servidor**
-```bash
 php artisan serve
 ```
 
-Acesse em: http://localhost:8000
+Acesse http://localhost:8000
 
-## 🚀 Principais Funcionalidades
+> Dica local: use `SESSION_DRIVER=file`, `CACHE_STORE=file` e `MAIL_MAILER=log`
+> para rodar sem dependências externas.
 
-### Catálogo de Plantas
-- 100+ plantas cadastradas
-- Filtros dinâmicos (luz, tamanho, pet-friendly)
-- Busca por nome popular, científico ou família
-- Detalhes completos de cada planta
+## ⚙️ Configuração
 
-### Quiz Interativo
-- 4 passos para descobrir a planta perfeita
-- Sistema de pontuação inteligente
-- Recomendação personalizada
+### E-mail (Resend via API)
+O Railway bloqueia portas SMTP, por isso usamos a **API HTTP** do Resend:
 
-### Meu Diário Verde
-- Adicione plantas ao seu acervo pessoal
-- Gerencie suas plantas favoritas
-- Acompanhe épocas de poda
-
-### Alertas Inteligentes
-- Notificações automáticas de poda
-- Histórico de alertas
-- Sistema agendado (cron jobs)
-
-## ⚙️ Agendamento (Cron Jobs)
-
-Para ativar as verificações automáticas de poda:
-
-```bash
-php artisan plants:check-pruning-season
+```env
+MAIL_MAILER=resend
+RESEND_API_KEY=re_xxxxxxxx
+MAIL_FROM_ADDRESS=ola@florabotanic.site
+MAIL_FROM_NAME=Flora
 ```
 
-## 🔐 Autenticação
+Remetentes por finalidade (padrões em `config/flora.php`, sobrescreviveis por env):
+`seguranca@` (login), `acesso@` (senha), `alertas@` (poda/cuidados), `ola@` (boas-vindas).
+Exige o domínio verificado no Resend.
 
-Use Laravel Breeze:
-- Registre em `/register`
-- Faça login em `/login`
-- Gerencie sua conta em `/perfil`
+Teste rápido: `php artisan mail:test seu-email@exemplo.com`
 
-## 📝 Modelos e Relacionamentos
+### Web Push (notificações no celular)
+Gere as chaves VAPID e configure:
+
+```env
+VAPID_SUBJECT="mailto:seu-email@exemplo.com"
+VAPID_PUBLIC_KEY=...
+VAPID_PRIVATE_KEY=...
+```
+
+A chave **privada** nunca vai para o git — defina nas variáveis do servidor.
+
+## ⏰ Agendamento
+
+Comandos rodados pelo scheduler (`routes/console.php`):
+
+```bash
+php artisan plants:check-pruning-season   # alertas de poda (diário)
+php artisan plants:check-care             # lembretes de rega/adubação atrasadas (09:00)
+```
+
+Em produção o scheduler roda junto ao web via `php artisan schedule:work`
+(configurado no `nixpacks.toml`).
+
+## 🗂️ Modelos e relacionamentos
 
 ```
 User
-  ├─ plants() [belongsToMany Plant]
-  └─ notifications() [hasMany Notification]
+  ├─ plants()          belongsToMany(Plant) — Diário Verde (com timestamps)
+  ├─ careLogs()        hasMany(CareLog)      — histórico de cuidados
+  ├─ knownDevices()    hasMany(KnownDevice)  — dispositivos para alerta de segurança
+  ├─ pushSubscriptions() — Web Push
+  └─ notifications()   — notificações no banco
 
 Plant
-  ├─ users() [belongsToMany User]
-  └─ scopes:
-      - petFriendly()
-      - sunlight(level)
-      - bySize(cm)
-      - search(term)
+  ├─ users() / careLogs()
+  ├─ intervaloRega() / intervaloAdubacao()  — dias entre cuidados (com heurística)
+  └─ scopes: petFriendly(), sunlight(), bySize(), search()
 ```
 
-## 📚 Componentes Livewire
+## 🔔 Notificações & e-mails
 
-- `PlantCatalog` - Grid com filtros dinâmicos
-- `PlantQuiz` - Wizard interativo de 4 passos
+| Evento | Canal | Origem |
+|---|---|---|
+| Boas-vindas | e-mail | listener `Registered` |
+| Login em dispositivo novo | e-mail | listener `Login` + `known_devices` |
+| Recuperação de senha | e-mail | `ResetPassword` (rebrandizado) |
+| Época de poda | banco + e-mail + push | `PruningSeasonNotification` |
+| Rega/adubação atrasada | banco + e-mail + push | `CareReminderNotification` |
+
+Tema de e-mail: `resources/views/vendor/mail/html/themes/flora.css`.
+
+## 🚀 Deploy (Railway)
+
+- Build/Start em `nixpacks.toml` (composer install, npm build, migrate, seed,
+  storage:link, scheduler e `php artisan serve`).
+- Domínio customizado via CNAME (`www`) + HTTPS automático (Let's Encrypt).
+- Variáveis essenciais: `APP_KEY`, `APP_URL`, `DB_*` (Postgres), `MAIL_MAILER=resend`,
+  `RESEND_API_KEY`, `VAPID_*`.
 
 ## 🐛 Troubleshooting
 
-**Erro de conexão com banco**
-```bash
-php artisan migrate
-php artisan db:seed
-```
-
-**Assets não carregando**
-```bash
-npm run dev
-```
-
-**Composer sem memória**
-```bash
-php -d memory_limit=2G /usr/bin/composer install
-```
-
-## 👨‍💻 Comandos Úteis
-
-```bash
-# Criar migration
-php artisan make:migration nome_migration
-
-# Seed do banco
-php artisan db:seed
-
-# Componente Livewire
-php artisan make:livewire NomeComponente
-
-# Listar rotas
-php artisan route:list
-
-# Tinker (console interativo)
-php artisan tinker
-```
+- **E-mail não envia**: confirme `MAIL_MAILER=resend` e `RESEND_API_KEY`; rode `php artisan mail:test`.
+- **Push não chega**: confira as chaves `VAPID_*` e se o navegador concedeu permissão.
+- **Assets**: `npm run build` (ou `npm run dev` em desenvolvimento).
+- **Views/config desatualizadas**: `php artisan view:clear && php artisan config:clear`.
 
 ## 📄 Licença
 
-MIT License - Use livremente!
+MIT License.
 
 ---
 
-**Desenvolvido com ❤️ para amantes de plantas 🌱**
+**Desenvolvido com 🌱 para amantes de plantas.**
