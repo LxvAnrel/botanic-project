@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\View\View;
 
@@ -109,7 +108,7 @@ class ProfileController extends Controller
                 logger()->warning('Falha no upload do avatar (Cloudinary): ' . $e->getMessage());
 
                 return Redirect::route('profile.edit')->withErrors([
-                    'avatar' => 'Falha no envio (Cloudinary): ' . $e->getMessage(),
+                    'avatar' => 'Não foi possível enviar a imagem agora. Tente novamente.',
                 ]);
             }
         }
