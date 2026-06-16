@@ -14,7 +14,7 @@
     <div class="glass rounded-3xl p-6 md:p-10 mb-6 border border-[#C8A96E]/10">
         <p class="text-[9px] uppercase tracking-[0.4em] text-[#C8A96E] mb-3">Natureza do projeto</p>
         <p class="text-[#9AA88E] text-sm leading-relaxed">
-            A <strong class="text-[#EDE0CC]">Flora — Plataforma Botânica Interativa</strong> é um projeto <strong class="text-[#EDE0CC]">estritamente acadêmico</strong>, desenvolvido por um aluno do 3.º ano do curso técnico da <strong class="text-[#EDE0CC]">ETEC João Belarmino</strong>. Não há fins comerciais, publicitários ou lucrativos. Os dados coletados servem exclusivamente para o funcionamento das funcionalidades educativas da plataforma.
+            A <strong class="text-[#EDE0CC]">Flora — Plataforma Botânica Interativa</strong> é um projeto <strong class="text-[#EDE0CC]">estritamente acadêmico</strong>, desenvolvido como trabalho escolar de Biologia por um aluno do 3.º ano da <strong class="text-[#EDE0CC]">ETEC João Belarmino</strong>. Não há fins comerciais, publicitários ou lucrativos. Os dados coletados servem exclusivamente para o funcionamento das funcionalidades educativas da plataforma.
         </p>
     </div>
 
@@ -22,7 +22,7 @@
 
         <section>
             <h2 class="font-serif text-xl text-[#EDE0CC] mb-3">1. Quem somos</h2>
-            <p>O controlador dos dados é o aluno responsável pelo projeto, vinculado à ETEC João Belarmino. Para entrar em contato: <a href="mailto:{{ config('flora.mail.ola.address', 'contato@flora.app') }}" class="text-[#C8A96E] hover:underline">{{ config('flora.mail.ola.address', 'contato@flora.app') }}</a>.</p>
+            <p>O controlador dos dados é o aluno responsável pelo projeto, vinculado à ETEC João Belarmino. Para entrar em contato: <a href="mailto:{{ config('flora.mail.ola.address', 'contato@florabotanic.site') }}" class="text-[#C8A96E] hover:underline">{{ config('flora.mail.ola.address', 'contato@florabotanic.site') }}</a>.</p>
         </section>
 
         <section>
@@ -87,7 +87,7 @@
                 </div>
                 @endforeach
             </div>
-            <p class="mt-4">Para exercer qualquer direito, acesse <strong class="text-[#EDE0CC]">Perfil → Editar Perfil</strong> ou envie e-mail para <a href="mailto:{{ config('flora.mail.ola.address', 'contato@flora.app') }}" class="text-[#C8A96E] hover:underline">{{ config('flora.mail.ola.address', 'contato@flora.app') }}</a>. Respondemos em até <strong class="text-[#EDE0CC]">15 dias</strong>.</p>
+            <p class="mt-4">Para exercer qualquer direito, acesse <strong class="text-[#EDE0CC]">Perfil → Editar Perfil</strong> ou envie e-mail para <a href="mailto:{{ config('flora.mail.ola.address', 'contato@florabotanic.site') }}" class="text-[#C8A96E] hover:underline">{{ config('flora.mail.ola.address', 'contato@florabotanic.site') }}</a>. Respondemos em até <strong class="text-[#EDE0CC]">15 dias</strong>.</p>
         </section>
 
         <section>
@@ -126,8 +126,8 @@
 
         <section>
             <h2 class="font-serif text-xl text-[#EDE0CC] mb-3">10. Contato e DPO</h2>
-            <p>Encarregado de dados (DPO): aluno responsável pelo projeto — ETEC João Belarmino, 3.º ano do curso técnico.<br>
-            E-mail: <a href="mailto:{{ config('flora.mail.ola.address', 'contato@flora.app') }}" class="text-[#C8A96E] hover:underline">{{ config('flora.mail.ola.address', 'contato@flora.app') }}</a></p>
+            <p>Encarregado de dados (DPO): aluno responsável pelo projeto — ETEC João Belarmino, trabalho escolar de Biologia.<br>
+            E-mail: <a href="mailto:{{ config('flora.mail.ola.address', 'contato@florabotanic.site') }}" class="text-[#C8A96E] hover:underline">{{ config('flora.mail.ola.address', 'contato@florabotanic.site') }}</a></p>
             <p class="mt-3">Você também pode registrar uma reclamação junto à <strong class="text-[#EDE0CC]">ANPD</strong> (Autoridade Nacional de Proteção de Dados) em <a href="https://www.gov.br/anpd" target="_blank" class="text-[#C8A96E] hover:underline">gov.br/anpd</a>.</p>
         </section>
 

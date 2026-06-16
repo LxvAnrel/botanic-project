@@ -14,7 +14,7 @@
     <div class="glass rounded-3xl p-6 md:p-10 mb-6 border border-[#C8A96E]/10">
         <p class="text-[9px] uppercase tracking-[0.4em] text-[#C8A96E] mb-3">Leia antes de usar</p>
         <p class="text-[#9AA88E] text-sm leading-relaxed">
-            A <strong class="text-[#EDE0CC]">Flora — Plataforma Botânica Interativa</strong> é um projeto <strong class="text-[#EDE0CC]">exclusivamente acadêmico</strong>, sem fins lucrativos, desenvolvido como trabalho de conclusão de curso técnico na <strong class="text-[#EDE0CC]">ETEC João Belarmino</strong>. Ao criar uma conta, você concorda com estes termos.
+            A <strong class="text-[#EDE0CC]">Flora — Plataforma Botânica Interativa</strong> é um projeto <strong class="text-[#EDE0CC]">exclusivamente acadêmico</strong>, sem fins lucrativos, desenvolvido como trabalho escolar de Biologia na <strong class="text-[#EDE0CC]">ETEC João Belarmino</strong>. Ao criar uma conta, você concorda com estes termos.
         </p>
     </div>
 
@@ -110,7 +110,7 @@
 
         <section>
             <h2 class="font-serif text-xl text-[#EDE0CC] mb-3">12. Contato</h2>
-            <p>Dúvidas, solicitações ou reclamações: <a href="mailto:{{ config('flora.mail.ola.address', 'contato@flora.app') }}" class="text-[#C8A96E] hover:underline">{{ config('flora.mail.ola.address', 'contato@flora.app') }}</a></p>
+            <p>Dúvidas, solicitações ou reclamações: <a href="mailto:{{ config('flora.mail.ola.address', 'contato@florabotanic.site') }}" class="text-[#C8A96E] hover:underline">{{ config('flora.mail.ola.address', 'contato@florabotanic.site') }}</a></p>
         </section>
 
     </div>
