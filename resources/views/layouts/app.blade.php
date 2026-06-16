@@ -32,14 +32,14 @@
                     <div class="flex items-center gap-1">
                         {{-- Hamburguer (mobile apenas) --}}
                         <button id="nav-toggle" onclick="floraNavToggle()"
-                                class="md:hidden flex flex-col gap-1.5 p-2 rounded-xl hover:bg-white/5 transition-colors"
+                                class="xl:hidden flex flex-col gap-1.5 p-2 rounded-xl hover:bg-white/5 transition-colors"
                                 aria-label="Menu de navegação">
                             <span id="nav-bar1" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
                             <span id="nav-bar2" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
                             <span id="nav-bar3" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
                         </button>
                         {{-- Links (desktop) --}}
-                        <nav class="hidden md:flex items-center gap-1">
+                        <nav class="hidden xl:flex items-center gap-1">
                             <a href="{{ route('plants.index') }}"
                                class="text-xs uppercase tracking-widest font-medium hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200 {{ request()->routeIs('plants.*') ? 'text-[#C8A96E]' : 'text-[#DFD0B8]/70' }}">
                                 Catálogo
@@ -74,7 +74,7 @@
                     </div>
 
                     {{-- Logo centro --}}
-                    <a href="/" class="absolute left-1/2 -translate-x-1/2 text-center">
+                    <a href="/" class="shrink-0 text-center px-2">
                         <span class="font-serif text-2xl tracking-[0.2em] text-[#C8A96E] uppercase leading-none">Flora</span>
                         <span class="block text-[8px] uppercase tracking-[0.4em] text-[#7A8E72] mt-0.5">Botânica Interativa</span>
                     </a>
@@ -155,7 +155,7 @@
 
                         @else
                         {{-- Guest --}}
-                        <nav class="hidden md:flex items-center gap-1">
+                        <nav class="hidden xl:flex items-center gap-1">
                             <a href="{{ route('login') }}"
                                class="text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
                                 Entrar
@@ -172,7 +172,7 @@
 
             {{-- Mobile menu — apenas navegação (conta fica no dropdown do avatar) --}}
             <div id="mobile-menu"
-                 class="md:hidden glass rounded-2xl mt-2 overflow-hidden"
+                 class="xl:hidden glass rounded-2xl mt-2 overflow-hidden"
                  style="display:none;">
                 <div class="p-2 space-y-0.5">
                     <p class="px-4 pt-2 pb-1 text-[8px] uppercase tracking-[0.4em] text-[#3A5E2D]">Navegar</p>

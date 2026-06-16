@@ -47,11 +47,17 @@ window.Flora = window.Flora || {};
         const vapidPublic = meta('vapid-public-key');
         if (!vapidPublic) {
             console.error('VAPID public key ausente.');
+            alert('As notificações push ainda não foram configuradas no servidor. Tente novamente mais tarde.');
             return false;
         }
 
         const permission = await Notification.requestPermission();
-        if (permission !== 'granted') return false;
+        if (permission !== 'granted') {
+            if (permission === 'denied') {
+                alert('Notificações bloqueadas. Permita-as nas configurações do site para ativar.');
+            }
+            return false;
+        }
 
         const reg = await getRegistration();
         await navigator.serviceWorker.ready;
