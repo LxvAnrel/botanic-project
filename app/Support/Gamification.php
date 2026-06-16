@@ -2,8 +2,10 @@
 
 namespace App\Support;
 
+use App\Mail\BadgeEarnedMail;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class Gamification
 {
@@ -238,6 +240,12 @@ class Gamification
         $def = collect(self::BADGES)->firstWhere('slug', $slug);
         if ($def) {
             $user->increment('xp', $def['xp']);
+        }
+
+        if ($user->email_notifications) {
+            try {
+                Mail::to($user->email)->send(new BadgeEarnedMail($user->fresh(), $slug));
+            } catch (\Throwable) {}
         }
 
         return true;

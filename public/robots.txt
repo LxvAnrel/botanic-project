@@ -1,2 +1,21 @@
 User-agent: *
-Disallow:
+Disallow: /dashboard
+Disallow: /alertas
+Disallow: /conquistas
+Disallow: /perfil
+Disallow: /profile
+Disallow: /conta/
+Disallow: /push/
+Disallow: /planta/*/cuidado
+Disallow: /cuidado/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+
+Allow: /
+Allow: /catalogo
+Allow: /planta/
+Allow: /quiz
+Allow: /privacidade
+Allow: /termos

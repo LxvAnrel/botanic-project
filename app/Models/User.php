@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'email_notifications',
         'xp',
         'streak_days',
         'streak_last_date',

@@ -8,12 +8,16 @@ use App\Http\Controllers\CareController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    $plantas = \App\Models\Plant::whereNotNull('image_path')->inRandomOrder()->take(3)->get();
+    return view('welcome', compact('plantas'));
 });
 
 Route::get('/conta/reativar', [App\Http\Controllers\ProfileController::class, 'reactivate'])
     ->name('conta.reativar')
     ->middleware('signed');
+
+Route::get('/privacidade', fn() => view('legal.privacidade'))->name('privacidade');
+Route::get('/termos', fn() => view('legal.termos'))->name('termos');
 
 Route::get('/catalogo', [PlantController::class, 'index'])->name('plants.index');
 Route::get('/planta/{plant}', [PlantController::class, 'show'])->name('plants.show')->where('plant', '[a-z0-9-]+');
@@ -34,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::patch('/profile/email-notifications', [ProfileController::class, 'toggleEmailNotifications'])->name('profile.email-notifications');
 
     Route::post('/push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
     Route::post('/push/unsubscribe', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');

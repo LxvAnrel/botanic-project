@@ -10,4 +10,5 @@ Artisan::command('inspire', function () {
 
 Schedule::command('plants:check-pruning-season')->daily();
 Schedule::command('plants:check-care')->dailyAt('09:00');
+Schedule::command('streak:check-at-risk')->dailyAt('20:00');
 Schedule::command('accounts:purge')->dailyAt('03:00');

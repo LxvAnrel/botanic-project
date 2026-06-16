@@ -131,7 +131,36 @@
         </form>
     </div>
 
-    {{-- ③ Apagar conta --}}
+    {{-- ③ Notificações por e-mail --}}
+    <div class="glass rounded-2xl p-6">
+        <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E] mb-1">E-mails de alertas</p>
+        <p class="text-[#7A8E72] text-xs mb-5">Controle se deseja receber e-mails de cuidados de plantas, conquistas e avisos de sequência. E-mails essenciais de conta (exclusão, reativação) são sempre enviados.</p>
+
+        @if(session('status') && !in_array(session('status'), ['profile-updated','password-updated']))
+        <div class="flex items-center gap-2 glass-gold rounded-xl px-4 py-2.5 mb-5">
+            <span class="text-[#C8A96E] text-sm">✓</span>
+            <p class="text-[#C8A96E] text-xs">{{ session('status') }}</p>
+        </div>
+        @endif
+
+        <form method="POST" action="{{ route('profile.email-notifications') }}" class="flex items-center justify-between gap-4">
+            @csrf
+            @method('PATCH')
+            <div class="flex items-center gap-3">
+                <span class="text-xl">{{ auth()->user()->email_notifications ? '🔔' : '🔕' }}</span>
+                <div>
+                    <p class="text-[#EDE0CC] text-sm">{{ auth()->user()->email_notifications ? 'E-mails ativados' : 'E-mails desativados' }}</p>
+                    <p class="text-[#3A5E2D] text-[10px]">{{ auth()->user()->email_notifications ? 'Você recebe alertas de plantas e conquistas' : 'Você não recebe e-mails de alertas' }}</p>
+                </div>
+            </div>
+            <button type="submit"
+                    class="{{ auth()->user()->email_notifications ? 'glass border border-white/[0.07] text-[#7A8E72] hover:text-red-400' : 'glass-gold text-[#C8A96E]' }} text-[10px] uppercase tracking-widest px-5 py-2.5 rounded-full transition-all duration-200 shrink-0">
+                {{ auth()->user()->email_notifications ? 'Desativar' : 'Reativar' }}
+            </button>
+        </form>
+    </div>
+
+    {{-- ④ Apagar conta --}}
     <div class="glass rounded-2xl p-6 border border-red-900/10">
         <p class="text-[9px] uppercase tracking-[0.3em] text-red-400/60 mb-3">Zona de perigo</p>
 

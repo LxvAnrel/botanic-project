@@ -68,6 +68,19 @@ class ProfileController extends Controller
         return Redirect::to('/')->with('conta_agendada_exclusao', true);
     }
 
+    public function toggleEmailNotifications(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        $user->email_notifications = ! $user->email_notifications;
+        $user->save();
+
+        $status = $user->email_notifications
+            ? 'E-mails de alertas reativados.'
+            : 'E-mails de alertas desativados. Você ainda receberá e-mails essenciais de conta.';
+
+        return Redirect::route('profile.edit')->with('status', $status);
+    }
+
     public function reactivate(Request $request): RedirectResponse
     {
         $user = User::findOrFail($request->query('user'));

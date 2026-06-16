@@ -2,11 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\CareAlertMail;
 use App\Models\User;
 use App\Notifications\CareReminderNotification;
 use App\Support\PlantCare;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class CheckCareReminders extends Command
 {
@@ -41,7 +43,15 @@ class CheckCareReminders extends Command
                         continue;
                     }
 
-                    $user->notify(new CareReminderNotification($plant, $tipo, abs($status['dias'])));
+                    $diasAtraso = abs($status['dias']);
+                    $user->notify(new CareReminderNotification($plant, $tipo, $diasAtraso));
+
+                    if ($user->email_notifications) {
+                        try {
+                            Mail::to($user->email)->send(new CareAlertMail($user, $plant, $tipo, $diasAtraso));
+                        } catch (\Throwable) {}
+                    }
+
                     $this->info("Lembrete de {$tipo} enviado para {$user->name} sobre {$plant->nome_popular}");
                 }
             }

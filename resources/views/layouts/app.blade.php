@@ -28,24 +28,46 @@
             <div class="glass rounded-2xl px-4 md:px-6">
                 <div class="flex items-center justify-between h-14 relative">
 
-                    {{-- Nav esq (desktop) --}}
-                    <nav class="hidden md:flex items-center gap-1">
-                        <a href="{{ route('plants.index') }}"
-                           class="text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
-                            Catálogo
-                        </a>
-                        <a href="{{ route('quiz') }}"
-                           class="text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
-                            Quiz
-                        </a>
-                    </nav>
-
-                    {{-- Hamburguer (mobile) --}}
-                    <button id="nav-toggle" onclick="floraNavToggle()" class="md:hidden flex flex-col gap-1.5 p-2 rounded-xl hover:bg-white/5 transition-colors" aria-label="Menu">
-                        <span id="nav-bar1" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
-                        <span id="nav-bar2" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
-                        <span id="nav-bar3" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
-                    </button>
+                    {{-- Esq: hamburguer de navegação (mobile) + links (desktop) --}}
+                    <div class="flex items-center gap-1">
+                        {{-- Hamburguer (mobile apenas) --}}
+                        <button id="nav-toggle" onclick="floraNavToggle()"
+                                class="md:hidden flex flex-col gap-1.5 p-2 rounded-xl hover:bg-white/5 transition-colors"
+                                aria-label="Menu de navegação">
+                            <span id="nav-bar1" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
+                            <span id="nav-bar2" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
+                            <span id="nav-bar3" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
+                        </button>
+                        {{-- Links (desktop) --}}
+                        <nav class="hidden md:flex items-center gap-1">
+                            <a href="{{ route('plants.index') }}"
+                               class="text-xs uppercase tracking-widest font-medium hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200 {{ request()->routeIs('plants.*') ? 'text-[#C8A96E]' : 'text-[#DFD0B8]/70' }}">
+                                Catálogo
+                            </a>
+                            <a href="{{ route('quiz') }}"
+                               class="text-xs uppercase tracking-widest font-medium hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200 {{ request()->routeIs('quiz') ? 'text-[#C8A96E]' : 'text-[#DFD0B8]/70' }}">
+                                Quiz
+                            </a>
+                            @auth
+                            <a href="{{ route('dashboard') }}"
+                               class="text-xs uppercase tracking-widest font-medium hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200 {{ request()->routeIs('dashboard') ? 'text-[#C8A96E]' : 'text-[#DFD0B8]/70' }}">
+                                Diário
+                            </a>
+                            <a href="{{ route('alertas') }}"
+                               class="relative text-xs uppercase tracking-widest font-medium hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200 {{ request()->routeIs('alertas') ? 'text-[#C8A96E]' : 'text-[#DFD0B8]/70' }}">
+                                @php $unread = auth()->user()->unreadNotifications()->count(); @endphp
+                                Alertas
+                                @if($unread > 0)
+                                <span class="absolute -top-0.5 -right-0.5 w-4 h-4 text-[8px] bg-[#C8A96E] text-[#0E1A0B] rounded-full flex items-center justify-center font-bold">{{ $unread > 9 ? '9+' : $unread }}</span>
+                                @endif
+                            </a>
+                            <a href="{{ route('conquistas') }}"
+                               class="text-xs uppercase tracking-widest font-medium hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200 {{ request()->routeIs('conquistas') ? 'text-[#C8A96E]' : 'text-[#DFD0B8]/70' }}">
+                                Conquistas
+                            </a>
+                            @endauth
+                        </nav>
+                    </div>
 
                     {{-- Logo centro --}}
                     <a href="/" class="absolute left-1/2 -translate-x-1/2 text-center">
@@ -53,29 +75,83 @@
                         <span class="block text-[8px] uppercase tracking-[0.4em] text-[#7A8E72] mt-0.5">Botânica Interativa</span>
                     </a>
 
-                    {{-- Nav dir (desktop) --}}
-                    <nav class="hidden md:flex items-center gap-1">
+                    {{-- Dir: avatar de conta (auth) ou login/register (guest) --}}
+                    <div class="flex items-center gap-2">
                         @auth
-                            <a href="{{ route('dashboard') }}"
-                               class="text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
-                                Diário
-                            </a>
-                            <a href="{{ route('alertas') }}"
-                               class="relative text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
-                                Alertas
-                                @php $unread = auth()->user()->unreadNotifications()->count(); @endphp
-                                @if($unread > 0)
-                                <span class="absolute -top-0.5 -right-0.5 w-4 h-4 text-[8px] bg-[#C8A96E] text-[#0E1A0B] rounded-full flex items-center justify-center font-bold">{{ $unread > 9 ? '9+' : $unread }}</span>
+                        @php
+                            $navUser   = auth()->user();
+                            $initials  = collect(explode(' ', $navUser->name))->map(fn($p) => mb_strtoupper(mb_substr($p,0,1)))->take(2)->join('');
+                            $navUnread = $unread ?? $navUser->unreadNotifications()->count();
+                        @endphp
+
+                        {{-- Avatar → dropdown de conta --}}
+                        <div class="relative" id="profile-dropdown-wrap">
+                            <button onclick="floraProfileToggle()"
+                                    class="relative flex items-center gap-2 glass-gold rounded-full pl-1 pr-3 py-1 hover:bg-[#C8A96E]/10 transition-all duration-200 group"
+                                    aria-label="Conta">
+                                <span class="w-8 h-8 rounded-full bg-[#C8A96E]/15 border border-[#C8A96E]/30 flex items-center justify-center text-[11px] font-semibold text-[#C8A96E] group-hover:border-[#C8A96E]/60 transition-colors shrink-0">
+                                    {{ $initials }}
+                                </span>
+                                <span class="hidden md:block text-xs text-[#DFD0B8]/80 group-hover:text-[#C8A96E] transition-colors max-w-[80px] truncate">{{ $navUser->name }}</span>
+                                <svg class="hidden md:block w-2.5 h-2.5 text-[#7A8E72] group-hover:text-[#C8A96E] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                @if($navUnread > 0)
+                                <span class="absolute -top-1 -right-1 w-4 h-4 text-[8px] bg-[#C8A96E] text-[#0E1A0B] rounded-full flex items-center justify-center font-bold">{{ $navUnread > 9 ? '9+' : $navUnread }}</span>
                                 @endif
-                            </a>
-                            <form method="POST" action="{{ route('logout') }}" class="inline">
-                                @csrf
-                                <button type="submit"
-                                        class="text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
-                                    Sair
-                                </button>
-                            </form>
+                            </button>
+
+                            {{-- Dropdown de conta --}}
+                            <div id="profile-dropdown"
+                                 class="absolute right-0 top-[calc(100%+8px)] w-60 glass rounded-2xl p-2 shadow-[0_8px_40px_rgba(0,0,0,0.5)] border border-white/[0.06] z-50"
+                                 style="display:none;">
+
+                                {{-- Cabeçalho --}}
+                                <div class="px-3 py-3 border-b border-white/[0.06] mb-1">
+                                    <p class="text-[#EDE0CC] text-sm font-medium truncate">{{ $navUser->name }}</p>
+                                    <p class="text-[#3A5E2D] text-[10px] truncate">{{ $navUser->email }}</p>
+                                    @php $navLevel = \App\Support\Gamification::level($navUser->xp ?? 0); @endphp
+                                    <div class="flex items-center gap-1.5 mt-2">
+                                        <span class="text-sm">{{ $navLevel['icon'] }}</span>
+                                        <span class="text-[9px] uppercase tracking-wider text-[#C8A96E]">{{ $navLevel['label'] }}</span>
+                                        <span class="text-[#3A5E2D] text-[9px]">· {{ $navUser->xp ?? 0 }} XP</span>
+                                    </div>
+                                </div>
+
+                                {{-- Opções de conta --}}
+                                <a href="{{ route('perfil') }}"
+                                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/[0.05] transition-all duration-150 {{ request()->routeIs('perfil') ? 'text-[#C8A96E] bg-white/[0.04]' : '' }}">
+                                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                    <span class="uppercase tracking-widest">Meu perfil</span>
+                                </a>
+                                <a href="{{ route('profile.edit') }}"
+                                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/[0.05] transition-all duration-150 {{ request()->routeIs('profile.edit') ? 'text-[#C8A96E] bg-white/[0.04]' : '' }}">
+                                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                    <span class="uppercase tracking-widest">Editar perfil</span>
+                                </a>
+                                @if($navUnread > 0)
+                                <a href="{{ route('alertas') }}"
+                                   class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/[0.05] transition-all duration-150">
+                                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                                    <span class="uppercase tracking-widest">Alertas</span>
+                                    <span class="ml-auto text-[9px] bg-[#C8A96E]/20 text-[#C8A96E] px-1.5 py-0.5 rounded-full">{{ $navUnread }}</span>
+                                </a>
+                                @endif
+
+                                <div class="border-t border-white/[0.06] my-1"></div>
+
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit"
+                                            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-[#DFD0B8]/70 hover:text-red-400 hover:bg-white/[0.05] transition-all duration-150">
+                                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                                        <span class="uppercase tracking-widest">Sair</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
                         @else
+                        {{-- Guest --}}
+                        <nav class="hidden md:flex items-center gap-1">
                             <a href="{{ route('login') }}"
                                class="text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
                                 Entrar
@@ -84,44 +160,47 @@
                                class="glass-gold text-[#C8A96E] hover:bg-[#C8A96E]/15 text-xs uppercase tracking-widest font-medium px-5 py-2 rounded-full transition-all duration-200">
                                 Registrar
                             </a>
+                        </nav>
                         @endauth
-                    </nav>
+                    </div>
                 </div>
             </div>
 
-            {{-- Mobile menu --}}
+            {{-- Mobile menu — apenas navegação (conta fica no dropdown do avatar) --}}
             <div id="mobile-menu"
-                 class="md:hidden glass rounded-2xl mt-2 p-4 space-y-1 overflow-hidden transition-all duration-200 ease-out"
+                 class="md:hidden glass rounded-2xl mt-2 overflow-hidden"
                  style="display:none;">
-                <a href="{{ route('plants.index') }}"
-                   class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
-                    Catálogo
-                </a>
-                <a href="{{ route('quiz') }}"
-                   class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
-                    Quiz
-                </a>
-                <div class="border-t border-white/[0.06] my-2"></div>
-                @auth
+                <div class="p-2 space-y-0.5">
+                    <p class="px-4 pt-2 pb-1 text-[8px] uppercase tracking-[0.4em] text-[#3A5E2D]">Navegar</p>
+                    <a href="{{ route('plants.index') }}"
+                       class="flex items-center gap-3 text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('plants.*') ? 'text-[#C8A96E]' : '' }}">
+                        <span>◎</span> Catálogo
+                    </a>
+                    <a href="{{ route('quiz') }}"
+                       class="flex items-center gap-3 text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('quiz') ? 'text-[#C8A96E]' : '' }}">
+                        <span>✦</span> Quiz
+                    </a>
+                    @auth
+                    <div class="border-t border-white/[0.06] my-1.5 mx-2"></div>
+                    <p class="px-4 pb-1 text-[8px] uppercase tracking-[0.4em] text-[#3A5E2D]">Meu espaço</p>
                     <a href="{{ route('dashboard') }}"
-                       class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
-                        Meu Diário
+                       class="flex items-center gap-3 text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('dashboard') ? 'text-[#C8A96E]' : '' }}">
+                        <span>🪴</span> Diário Verde
                     </a>
                     <a href="{{ route('alertas') }}"
-                       class="flex items-center justify-between text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
-                        Alertas
-                        @php $unreadMobile = auth()->user()->unreadNotifications()->count(); @endphp
-                        @if($unreadMobile > 0)
-                        <span class="w-5 h-5 text-[9px] bg-[#C8A96E] text-[#0E1A0B] rounded-full flex items-center justify-center font-bold">{{ $unreadMobile > 9 ? '9+' : $unreadMobile }}</span>
+                       class="flex items-center gap-3 text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('alertas') ? 'text-[#C8A96E]' : '' }}">
+                        <span>🔔</span> Alertas
+                        @php $unreadMob = isset($navUnread) ? $navUnread : auth()->user()->unreadNotifications()->count(); @endphp
+                        @if($unreadMob > 0)
+                        <span class="ml-auto w-5 h-5 text-[9px] bg-[#C8A96E] text-[#0E1A0B] rounded-full flex items-center justify-center font-bold">{{ $unreadMob > 9 ? '9+' : $unreadMob }}</span>
                         @endif
                     </a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="w-full text-left text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-red-400 hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
-                            Sair
-                        </button>
-                    </form>
-                @else
+                    <a href="{{ route('conquistas') }}"
+                       class="flex items-center gap-3 text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200 {{ request()->routeIs('conquistas') ? 'text-[#C8A96E]' : '' }}">
+                        <span>🏆</span> Conquistas
+                    </a>
+                    @else
+                    <div class="border-t border-white/[0.06] my-1.5 mx-2"></div>
                     <a href="{{ route('login') }}"
                        class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
                         Entrar
@@ -130,7 +209,8 @@
                        class="block glass-gold text-[#C8A96E] text-sm uppercase tracking-widest font-medium px-4 py-3 rounded-xl transition-all duration-200 text-center mt-1">
                         Registrar
                     </a>
-                @endauth
+                    @endauth
+                </div>
             </div>
         </div>
     </header>
@@ -141,12 +221,37 @@
             var b1 = document.getElementById('nav-bar1');
             var b2 = document.getElementById('nav-bar2');
             var b3 = document.getElementById('nav-bar3');
+            if (!menu) return;
             var open = menu.style.display === 'block';
             menu.style.display = open ? 'none' : 'block';
-            b1.style.transform = open ? '' : 'rotate(45deg) translateY(8px)';
-            b2.style.opacity  = open ? '' : '0';
-            b3.style.transform = open ? '' : 'rotate(-45deg) translateY(-8px)';
+            if (b1) { b1.style.transform = open ? '' : 'rotate(45deg) translateY(8px)'; }
+            if (b2) { b2.style.opacity  = open ? '' : '0'; }
+            if (b3) { b3.style.transform = open ? '' : 'rotate(-45deg) translateY(-8px)'; }
+            // Fecha dropdown de perfil se abrir menu
+            var dd = document.getElementById('profile-dropdown');
+            if (dd && !open) dd.style.display = 'none';
         }
+
+        function floraProfileToggle() {
+            var dd = document.getElementById('profile-dropdown');
+            if (!dd) return;
+            var open = dd.style.display === 'block';
+            dd.style.display = open ? 'none' : 'block';
+            // Fecha menu mobile se abrir dropdown
+            if (!open) {
+                var menu = document.getElementById('mobile-menu');
+                if (menu) menu.style.display = 'none';
+            }
+        }
+
+        // Fecha dropdown ao clicar fora
+        document.addEventListener('click', function(e) {
+            var wrap = document.getElementById('profile-dropdown-wrap');
+            var dd   = document.getElementById('profile-dropdown');
+            if (wrap && dd && !wrap.contains(e.target)) {
+                dd.style.display = 'none';
+            }
+        });
     </script>
 
     {{-- Flash: conta agendada para exclusão --}}
@@ -217,12 +322,51 @@
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-white/[0.06] pt-6 flex items-center justify-between">
-                <p class="text-[#7A8E72] text-xs tracking-wide">© {{ date('Y') }} Flora · Plataforma Botânica</p>
-                <p class="text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D]">Organic · Botanical</p>
+            <div class="border-t border-white/[0.06] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-[#7A8E72] text-xs tracking-wide">© {{ date('Y') }} Flora · Projeto Acadêmico · ETEC João Belarmino</p>
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('privacidade') }}" class="text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] hover:text-[#C8A96E] transition-colors">Privacidade</a>
+                    <span class="text-[#3A5E2D]">·</span>
+                    <a href="{{ route('termos') }}" class="text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] hover:text-[#C8A96E] transition-colors">Termos</a>
+                </div>
             </div>
         </div>
     </footer>
+
+    {{-- Banner de cookies --}}
+    <div id="flora-cookie-banner"
+         class="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:max-w-sm z-[300] glass rounded-2xl p-5 border border-[#C8A96E]/15 shadow-[0_8px_40px_rgba(0,0,0,0.5)]"
+         style="display:none;">
+        <p class="text-[#EDE0CC] text-sm font-medium mb-1">Cookies essenciais 🍪</p>
+        <p class="text-[#7A8E72] text-xs leading-relaxed mb-4">
+            Usamos apenas cookies necessários para manter seu login e proteger o site (sem rastreamento ou publicidade).
+            <a href="{{ route('privacidade') }}#cookies" class="text-[#C8A96E] hover:underline">Saiba mais</a>
+        </p>
+        <div class="flex gap-2">
+            <button onclick="floraCookieAccept()"
+                    class="flex-1 bg-[#C8A96E] text-[#0B160A] text-[10px] uppercase tracking-widest font-bold py-2.5 rounded-full transition-all hover:bg-[#D4BA8A]">
+                Entendido
+            </button>
+            <a href="{{ route('privacidade') }}"
+               class="flex-1 glass text-[#7A8E72] hover:text-[#C8A96E] text-[10px] uppercase tracking-widest text-center py-2.5 rounded-full transition-all">
+                Ler política
+            </a>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            if (!localStorage.getItem('flora_cookie_consent')) {
+                var b = document.getElementById('flora-cookie-banner');
+                if (b) b.style.display = 'block';
+            }
+        })();
+        function floraCookieAccept() {
+            localStorage.setItem('flora_cookie_consent', '1');
+            var b = document.getElementById('flora-cookie-banner');
+            if (b) b.style.display = 'none';
+        }
+    </script>
 
     @livewireScripts
     @auth
