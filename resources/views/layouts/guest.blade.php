@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center py-12 px-4 relative overflow-hidden">
+<body class="min-h-screen flex flex-col items-center py-12 px-4 relative overflow-x-hidden">
 
     {{-- Ambient orbs --}}
     <div class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -18,7 +18,7 @@
     </div>
 
     {{-- Logo --}}
-    <a href="/" class="mb-10 text-center relative z-10">
+    <a href="/" class="mt-auto mb-10 text-center relative z-10">
         <span class="block font-serif text-3xl tracking-[0.2em] text-[#C8A96E] uppercase">Flora</span>
         <span class="block text-[9px] uppercase tracking-[0.4em] text-[#3A5E2D] mt-1">Botânica Interativa</span>
     </a>
@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <p class="mt-8 text-[#2D4A23] text-[10px] uppercase tracking-widest relative z-10">
+    <p class="mt-8 mb-auto text-[#2D4A23] text-[10px] uppercase tracking-widest relative z-10">
         © {{ date('Y') }} Flora · Plataforma Botânica
     </p>
 
