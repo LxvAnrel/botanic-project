@@ -11,6 +11,61 @@
         <p class="text-[#7A8E72] text-sm mt-3">Os jardineiros mais engajados da plataforma, por XP acumulado.</p>
     </div>
 
+    {{-- Busca de usuários --}}
+    <form method="GET" action="{{ route('comunidade') }}" class="mb-10">
+        <div class="relative">
+            <svg class="w-4 h-4 text-[#7A8E72] absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-5.2-5.2m2.2-5.3a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z"/>
+            </svg>
+            <input type="text" name="q" value="{{ $busca }}" autocomplete="off"
+                   placeholder="Buscar jardineiros pelo nome…"
+                   class="w-full glass border-white/[0.08] text-[#EDE0CC] placeholder-[#7A8E72]/60 text-sm pl-11 pr-28 py-3.5 rounded-full focus:outline-none focus:border-[#C8A96E]/50 transition-all duration-200">
+            <button type="submit"
+                    class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-[#C8A96E] hover:bg-[#D4BA8A] text-[#0E1A0B] text-[10px] uppercase tracking-widest font-semibold px-5 py-2.5 rounded-full transition-all duration-200">
+                Buscar
+            </button>
+        </div>
+        @if($busca !== '')
+        <p class="text-[#7A8E72] text-xs mt-3 pl-1">
+            Resultados para <span class="text-[#C8A96E]">"{{ $busca }}"</span>
+            · <a href="{{ route('comunidade') }}" class="text-[#7A8E72] hover:text-[#C8A96E] underline">limpar</a>
+        </p>
+        @endif
+    </form>
+
+    @if($busca !== '')
+        {{-- Resultados da busca --}}
+        @if($resultados->isEmpty())
+        <div class="glass rounded-3xl p-12 text-center">
+            <p class="text-4xl mb-4">🔍</p>
+            <p class="text-[#7A8E72] text-sm">Nenhum jardineiro público encontrado com esse nome.</p>
+        </div>
+        @else
+        <div class="space-y-2">
+            @foreach($resultados as $u)
+            <a href="{{ route('perfil.publico', $u) }}"
+               class="glass rounded-2xl px-5 py-4 flex items-center gap-4 hover:glass-gold transition-all duration-200 group">
+                @if($u->avatar_url)
+                    <img src="{{ $u->avatar_url }}" class="w-10 h-10 rounded-full object-cover shrink-0 border border-white/10">
+                @else
+                    <div class="w-10 h-10 rounded-full bg-[#C8A96E]/10 border border-white/10 flex items-center justify-center text-sm font-bold text-[#C8A96E] shrink-0">
+                        {{ mb_strtoupper(mb_substr($u->name, 0, 1)) }}
+                    </div>
+                @endif
+                <div class="flex-1 min-w-0">
+                    <p class="text-[#EDE0CC] text-sm font-medium group-hover:text-[#C8A96E] transition-colors truncate">{{ $u->name }}</p>
+                    <p class="text-[#7A8E72] text-[10px]">{{ $u->levelData['icon'] }} {{ $u->levelData['label'] }} · {{ $u->badgesEarned }} badge{{ $u->badgesEarned != 1 ? 's' : '' }}</p>
+                </div>
+                <div class="text-right shrink-0">
+                    <p class="text-[#C8A96E] text-sm font-semibold">{{ $u->xp ?? 0 }}</p>
+                    <p class="text-[#3A5E2D] text-[9px] uppercase tracking-wider">XP</p>
+                </div>
+            </a>
+            @endforeach
+        </div>
+        @endif
+    @else
+
     @if($top->isEmpty())
     <div class="glass rounded-3xl p-12 text-center">
         <p class="text-4xl mb-4">🌱</p>
@@ -96,6 +151,8 @@
         </a>
         @endforeach
     </div>
+    @endif
+
     @endif
 
     @endif
