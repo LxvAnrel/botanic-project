@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Notifications\CareReminderNotification;
 use App\Notifications\PruningSeasonNotification;
+use App\Support\Gamification;
 use App\Support\PlantCare;
 use Illuminate\Http\Request;
 
@@ -67,6 +68,14 @@ class DashboardController extends Controller
     {
         auth()->user()->notifications()->findOrFail($id)->delete();
         return back();
+    }
+
+    public function conquistas()
+    {
+        $user    = auth()->user();
+        $badges  = Gamification::allBadgesWithStatus($user);
+        $progress = Gamification::levelProgress((int) $user->xp);
+        return view('dashboard.conquistas', compact('badges', 'progress'));
     }
 
     public function perfil()

@@ -7,17 +7,21 @@
 {{-- Sub-nav do dashboard --}}
 <div class="sticky top-[72px] z-40 px-4 pb-2">
     <div class="max-w-7xl mx-auto">
-        <div class="glass rounded-2xl px-2 py-1.5 flex gap-1">
+        <div class="glass rounded-2xl px-2 py-1.5 flex gap-1 overflow-x-auto">
             <a href="{{ route('dashboard') }}"
-               class="flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 bg-white/[0.07] text-[#C8A96E]">
+               class="shrink-0 flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 bg-white/[0.07] text-[#C8A96E]">
                 Diário
             </a>
             <a href="{{ route('alertas') }}"
-               class="flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5">
+               class="shrink-0 flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5">
                 Alertas
             </a>
+            <a href="{{ route('conquistas') }}"
+               class="shrink-0 flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5">
+                Conquistas
+            </a>
             <a href="{{ route('perfil') }}"
-               class="flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5">
+               class="shrink-0 flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5">
                 Perfil
             </a>
         </div>
@@ -27,16 +31,43 @@
 <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-10 py-8">
 
     {{-- Header --}}
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 pb-6 border-b border-white/[0.06]">
+    @php
+        $userXp      = (int) auth()->user()->xp;
+        $userStreak  = (int) auth()->user()->streak_days;
+        $lvlProgress = \App\Support\Gamification::levelProgress($userXp);
+        $lvl         = $lvlProgress['level'];
+    @endphp
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 pb-6 border-b border-white/[0.06]">
         <div>
             <p class="text-[9px] uppercase tracking-[0.4em] text-[#7A8E72] mb-2">— Bem-vindo de volta</p>
             <h1 class="font-serif font-light text-3xl md:text-4xl text-[#EDE0CC]">{{ auth()->user()->name }}</h1>
+            <div class="flex items-center gap-3 mt-2">
+                <span class="text-[10px] uppercase tracking-wider text-[#C8A96E]">{{ $lvl['icon'] }} {{ $lvl['label'] }}</span>
+                <span class="text-[#3A5E2D] text-[10px]">{{ $userXp }} XP</span>
+                @if($userStreak > 0)
+                <span class="text-[10px] text-amber-400/80">🔥 {{ $userStreak }}d</span>
+                @endif
+            </div>
         </div>
         <a href="{{ route('plants.index') }}"
            class="self-start sm:self-auto glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-5 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap">
             + Adicionar plantas
         </a>
     </div>
+
+    {{-- XP bar --}}
+    @if($lvlProgress['nextLevel'])
+    <div class="glass rounded-2xl px-5 py-3 mb-6 flex items-center gap-4">
+        <span class="text-[9px] uppercase tracking-wider text-[#7A8E72] shrink-0">{{ $lvl['label'] }}</span>
+        <div class="flex-1 bg-white/[0.06] rounded-full h-1.5">
+            <div class="bg-[#C8A96E] h-1.5 rounded-full transition-all duration-700"
+                 style="width: {{ $lvlProgress['percent'] }}%"></div>
+        </div>
+        <a href="{{ route('conquistas') }}" class="text-[9px] uppercase tracking-wider text-[#7A8E72] hover:text-[#C8A96E] shrink-0 transition-colors">
+            {{ $lvlProgress['nextLevel']['label'] }} →
+        </a>
+    </div>
+    @endif
 
     {{-- Banner de notificações push --}}
     <div id="push-banner" class="glass-gold rounded-2xl p-4 md:p-5 mb-6 flex items-center gap-4" style="display:none;">

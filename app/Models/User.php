@@ -23,6 +23,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'xp',
+        'streak_days',
+        'streak_last_date',
+        'avatar_path',
     ];
 
     /**
@@ -45,6 +49,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'streak_last_date' => 'date',
         ];
     }
 
@@ -66,5 +71,10 @@ class User extends Authenticatable
     public function careLogs()
     {
         return $this->hasMany(CareLog::class);
+    }
+
+    public function badges()
+    {
+        return $this->hasMany(UserBadge::class);
     }
 }

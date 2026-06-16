@@ -7,17 +7,21 @@
 {{-- Sub-nav do dashboard --}}
 <div class="sticky top-[72px] z-40 px-4 pb-2">
     <div class="max-w-7xl mx-auto">
-        <div class="glass rounded-2xl px-2 py-1.5 flex gap-1">
+        <div class="glass rounded-2xl px-2 py-1.5 flex gap-1 overflow-x-auto">
             <a href="{{ route('dashboard') }}"
-               class="flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5">
+               class="shrink-0 flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5">
                 Diário
             </a>
             <a href="{{ route('alertas') }}"
-               class="flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5">
+               class="shrink-0 flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5">
                 Alertas
             </a>
+            <a href="{{ route('conquistas') }}"
+               class="shrink-0 flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5">
+                Conquistas
+            </a>
             <a href="{{ route('perfil') }}"
-               class="flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 bg-white/[0.07] text-[#C8A96E]">
+               class="shrink-0 flex-1 text-center text-[10px] uppercase tracking-widest font-medium px-4 py-2.5 rounded-xl transition-all duration-200 bg-white/[0.07] text-[#C8A96E]">
                 Perfil
             </a>
         </div>

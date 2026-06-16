@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Plant;
+use App\Support\Gamification;
 use App\Support\PlantCare;
 use Illuminate\Http\Request;
 
@@ -46,6 +47,8 @@ class PlantController extends Controller
         }
 
         $user->plants()->attach($plant);
+        Gamification::addXp($user, 'plant_add');
+        Gamification::checkAllBadges($user);
         return response()->json(['added' => true]);
     }
 }

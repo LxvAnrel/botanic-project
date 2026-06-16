@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/alertas/todas-lidas', [DashboardController::class, 'markAllAsRead'])->name('alertas.markAllRead');
     Route::post('/alertas/{id}/lida', [DashboardController::class, 'markAsRead'])->name('alertas.markRead');
     Route::delete('/alertas/{id}', [DashboardController::class, 'destroyNotification'])->name('alertas.destroy');
+    Route::get('/conquistas', [DashboardController::class, 'conquistas'])->name('conquistas');
     Route::get('/perfil', [DashboardController::class, 'perfil'])->name('perfil');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

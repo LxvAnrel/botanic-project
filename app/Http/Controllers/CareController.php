@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CareLog;
 use App\Models\Plant;
+use App\Support\Gamification;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -25,6 +26,10 @@ class CareController extends Controller
             'tipo' => $data['tipo'],
             'data' => now()->toDateString(),
         ]);
+
+        Gamification::addXp($user, 'care_' . $data['tipo']);
+        Gamification::updateStreak($user);
+        Gamification::checkAllBadges($user);
 
         return back()->with('care_ok', CareLog::rotulo($data['tipo']) . ' registrada!');
     }
