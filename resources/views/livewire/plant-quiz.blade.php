@@ -147,9 +147,9 @@
 
         <div class="glass rounded-3xl overflow-hidden">
             @if($result->image_path)
-                <img src="{{ asset('storage/' . $result->image_path) }}"
+                <img src="{{ asset($result->image_path) }}"
                      alt="{{ $result->nome_popular }}"
-                     class="w-full h-64 object-cover opacity-70">
+                     class="w-full h-64 object-cover opacity-80">
             @else
                 <div class="w-full h-64 bg-gradient-to-br from-[#1A3A1A] to-[#0D2010] flex items-center justify-center text-7xl opacity-30">🌿</div>
             @endif
