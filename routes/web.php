@@ -21,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/planta/{plant}/favorite', [PlantController::class, 'toggleFavorite'])->name('plants.favorite');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/alertas', [DashboardController::class, 'alertas'])->name('alertas');
+    Route::post('/alertas/todas-lidas', [DashboardController::class, 'markAllAsRead'])->name('alertas.markAllRead');
+    Route::post('/alertas/{id}/lida', [DashboardController::class, 'markAsRead'])->name('alertas.markRead');
+    Route::delete('/alertas/{id}', [DashboardController::class, 'destroyNotification'])->name('alertas.destroy');
     Route::get('/perfil', [DashboardController::class, 'perfil'])->name('perfil');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -45,8 +45,9 @@
             <p class="text-[9px] uppercase tracking-[0.25em] text-[#7A8E72] mt-1">Plantas no diário</p>
         </div>
         <div class="glass rounded-2xl p-5 text-center">
-            <p class="font-serif text-3xl text-[#C8A96E]">{{ auth()->user()->notifications()->count() }}</p>
-            <p class="text-[9px] uppercase tracking-[0.25em] text-[#7A8E72] mt-1">Notificações</p>
+            @php $naoLidas = auth()->user()->unreadNotifications()->count(); @endphp
+            <p class="font-serif text-3xl {{ $naoLidas > 0 ? 'text-[#C8A96E]' : 'text-[#3A5E2D]' }}">{{ $naoLidas }}</p>
+            <p class="text-[9px] uppercase tracking-[0.25em] text-[#7A8E72] mt-1">Não lidas</p>
         </div>
     </div>
 
@@ -65,23 +66,114 @@
         </div>
     </div>
 
-    {{-- Notificações push --}}
-    <div class="glass rounded-2xl p-6 mb-4" id="push-card">
-        <div class="flex items-start justify-between gap-4">
-            <div>
-                <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E] mb-1">Notificações</p>
-                <p class="text-[#EDE0CC] text-sm">Alertas de poda no celular</p>
-                <p class="text-[#7A8E72] text-xs mt-1" id="push-status">Verificando…</p>
+    {{-- Card de notificações --}}
+    <div class="glass rounded-2xl p-6 mb-4 space-y-5">
+        <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E]">Notificações</p>
+
+        {{-- Email --}}
+        <div class="border-t border-white/[0.06] pt-5">
+            <div class="flex items-start gap-3">
+                <div class="shrink-0 w-9 h-9 bg-[#C8A96E]/10 rounded-full flex items-center justify-center text-base mt-0.5">✉</div>
+                <div>
+                    <p class="text-[#EDE0CC] text-sm font-medium">Alertas por e-mail</p>
+                    <p class="text-[#7A8E72] text-xs leading-relaxed mt-1">
+                        Enviamos alertas automáticos para <span class="text-[#EDE0CC]">{{ auth()->user()->email }}</span> quando chega a época de poda ou quando suas plantas precisam de rega ou adubação.
+                    </p>
+                    <span class="inline-block mt-2 text-[9px] uppercase tracking-wider text-[#3A5E2D] border border-[#3A5E2D]/40 px-2 py-0.5 rounded-full">Ativo · automático</span>
+                </div>
             </div>
-            <button type="button" id="push-toggle"
-                    onclick="floraTogglePush()"
-                    class="shrink-0 glass-gold text-[#C8A96E] hover:text-[#D4BA8A] text-[10px] uppercase tracking-widest px-4 py-2.5 rounded-full transition-all duration-200 disabled:opacity-40">
-                …
-            </button>
         </div>
-        <p class="text-[#3A5E2D] text-[10px] mt-3 leading-relaxed" id="push-hint" style="display:none;">
-            Seu navegador bloqueou as notificações. Permita-as nas configurações do site para ativar.
-        </p>
+
+        {{-- Push --}}
+        <div class="border-t border-white/[0.06] pt-5">
+            <div class="flex items-start gap-3">
+                <div class="shrink-0 w-9 h-9 bg-[#C8A96E]/10 rounded-full flex items-center justify-center text-base mt-0.5">🔔</div>
+                <div class="flex-1">
+                    <div class="flex items-center justify-between gap-3 mb-1">
+                        <p class="text-[#EDE0CC] text-sm font-medium">Notificações push</p>
+                        <button id="push-toggle" type="button" onclick="floraTogglePush()"
+                                class="shrink-0 text-[9px] uppercase tracking-widest px-4 py-1.5 rounded-full border transition-all duration-200 glass border-white/[0.07] text-[#7A8E72] disabled:opacity-40">
+                            …
+                        </button>
+                    </div>
+                    <p id="push-status" class="text-[#7A8E72] text-xs leading-relaxed">Verificando…</p>
+                    <p id="push-denied" class="text-[10px] text-amber-400/70 mt-2 leading-relaxed" style="display:none;">
+                        Notificações bloqueadas pelo navegador. Siga o tutorial abaixo para habilitar manualmente.
+                    </p>
+                </div>
+            </div>
+
+            {{-- Tutorial --}}
+            <div class="glass rounded-xl p-4 mt-4 space-y-4">
+                <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E]">Como ativar no celular</p>
+
+                <div>
+                    <p class="text-[10px] uppercase tracking-wider text-[#7A8E72] mb-2 flex items-center gap-2">
+                        <span class="w-5 h-5 bg-[#7A8E72]/15 rounded-full flex items-center justify-center text-[9px] font-bold">A</span>
+                        Android · Chrome
+                    </p>
+                    <ol class="space-y-1.5 pl-7">
+                        <li class="text-[#EDE0CC] text-xs flex gap-2"><span class="text-[#3A5E2D] shrink-0">1.</span>Toque em <span class="text-[#C8A96E]">"Ativar"</span> acima</li>
+                        <li class="text-[#EDE0CC] text-xs flex gap-2"><span class="text-[#3A5E2D] shrink-0">2.</span>Toque em <span class="text-[#C8A96E]">"Permitir"</span> quando o Chrome perguntar</li>
+                        <li class="text-[#EDE0CC] text-xs flex gap-2"><span class="text-[#3A5E2D] shrink-0">3.</span>Pronto — alertas chegam mesmo com o app fechado</li>
+                    </ol>
+                    <p class="text-[#3A5E2D] text-[10px] mt-2 pl-7">Se recusou antes: Chrome ⋮ → Configurações do site → Notificações → Flora → Permitir</p>
+                </div>
+
+                <div class="border-t border-white/[0.06] pt-4">
+                    <p class="text-[10px] uppercase tracking-wider text-[#7A8E72] mb-2 flex items-center gap-2">
+                        <span class="w-5 h-5 bg-[#7A8E72]/15 rounded-full flex items-center justify-center text-[9px] font-bold">i</span>
+                        iPhone · Safari (iOS 16.4+)
+                    </p>
+                    <ol class="space-y-1.5 pl-7">
+                        <li class="text-[#EDE0CC] text-xs flex gap-2"><span class="text-[#3A5E2D] shrink-0">1.</span>No Safari, toque no ícone de compartilhar <span class="text-[#C8A96E]">⬆</span></li>
+                        <li class="text-[#EDE0CC] text-xs flex gap-2"><span class="text-[#3A5E2D] shrink-0">2.</span>Toque em <span class="text-[#C8A96E]">"Adicionar à Tela de Início"</span></li>
+                        <li class="text-[#EDE0CC] text-xs flex gap-2"><span class="text-[#3A5E2D] shrink-0">3.</span>Abra o app instalado e toque em <span class="text-[#C8A96E]">"Ativar"</span></li>
+                        <li class="text-[#EDE0CC] text-xs flex gap-2"><span class="text-[#3A5E2D] shrink-0">4.</span>Toque em <span class="text-[#C8A96E]">"Permitir"</span> quando o Safari perguntar</li>
+                    </ol>
+                    <p class="text-[#3A5E2D] text-[10px] mt-2 pl-7">No iOS, push só funciona quando o site é adicionado à Tela de Início (PWA).</p>
+                </div>
+
+                <div class="border-t border-white/[0.06] pt-4">
+                    <p class="text-[10px] uppercase tracking-wider text-[#7A8E72] mb-2 flex items-center gap-2">
+                        <span class="w-5 h-5 bg-[#7A8E72]/15 rounded-full flex items-center justify-center text-[9px] font-bold">D</span>
+                        Desktop · Chrome / Firefox / Edge
+                    </p>
+                    <ol class="space-y-1.5 pl-7">
+                        <li class="text-[#EDE0CC] text-xs flex gap-2"><span class="text-[#3A5E2D] shrink-0">1.</span>Toque em <span class="text-[#C8A96E]">"Ativar"</span> acima</li>
+                        <li class="text-[#EDE0CC] text-xs flex gap-2"><span class="text-[#3A5E2D] shrink-0">2.</span>Clique em <span class="text-[#C8A96E]">"Permitir"</span> na janela do navegador</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        {{-- Tipos de alerta --}}
+        <div class="border-t border-white/[0.06] pt-5">
+            <p class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72] mb-4">Você recebe alertas de</p>
+            <div class="space-y-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-base w-6 text-center">✂</span>
+                    <div>
+                        <p class="text-[#EDE0CC] text-xs">Época de poda</p>
+                        <p class="text-[#3A5E2D] text-[10px]">Uma vez por estação, quando sua planta deve ser podada</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-base w-6 text-center">💧</span>
+                    <div>
+                        <p class="text-[#EDE0CC] text-xs">Rega atrasada</p>
+                        <p class="text-[#3A5E2D] text-[10px]">Quando passa do intervalo ideal sem rega registrada no Diário</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-base w-6 text-center">🌱</span>
+                    <div>
+                        <p class="text-[#EDE0CC] text-xs">Adubação atrasada</p>
+                        <p class="text-[#3A5E2D] text-[10px]">Quando passa mais de 30 dias sem adubação registrada no Diário</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     {{-- Ações --}}
@@ -102,54 +194,63 @@
 </div>
 
 <script>
-function floraRenderPush(state) {
-    var status = document.getElementById('push-status');
-    var btn = document.getElementById('push-toggle');
-    var hint = document.getElementById('push-hint');
-    btn.disabled = false;
-    hint.style.display = 'none';
+(function () {
+    function renderPush(state) {
+        var btn    = document.getElementById('push-toggle');
+        var status = document.getElementById('push-status');
+        var denied = document.getElementById('push-denied');
+        btn.disabled = false;
+        denied.style.display = 'none';
 
-    if (!window.Flora || !window.Flora.push || !window.Flora.push.supported()) {
-        status.textContent = 'Não suportado neste navegador';
-        btn.style.display = 'none';
-        return;
+        if (!window.Flora || !window.Flora.push || !window.Flora.push.supported()) {
+            status.textContent = 'Não suportado neste navegador';
+            btn.style.display = 'none';
+            return;
+        }
+        if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
+            status.textContent = 'Bloqueadas pelo navegador';
+            btn.style.display = 'none';
+            denied.style.display = 'block';
+            return;
+        }
+        if (state === 'on') {
+            status.textContent = 'Ativas neste dispositivo';
+            btn.textContent = 'Desativar';
+            btn.classList.add('text-[#C8A96E]', 'border-[#C8A96E]/40', 'bg-[#C8A96E]/10');
+            btn.classList.remove('text-[#7A8E72]', 'border-white/[0.07]');
+        } else {
+            status.textContent = 'Inativas — toque para receber alertas no dispositivo';
+            btn.textContent = 'Ativar';
+            btn.classList.remove('text-[#C8A96E]', 'border-[#C8A96E]/40', 'bg-[#C8A96E]/10');
+            btn.classList.add('text-[#7A8E72]', 'border-white/[0.07]');
+        }
+        btn.dataset.state = state;
     }
-    if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
-        status.textContent = 'Bloqueadas pelo navegador';
-        btn.style.display = 'none';
-        hint.style.display = 'block';
-        return;
-    }
-    if (state === 'on') {
-        status.textContent = 'Ativadas neste dispositivo';
-        btn.textContent = 'Desativar';
-    } else {
-        status.textContent = 'Desativadas';
-        btn.textContent = 'Ativar';
-    }
-    btn.dataset.state = state;
-}
 
-async function floraTogglePush() {
-    var btn = document.getElementById('push-toggle');
-    btn.disabled = true;
-    btn.textContent = '…';
-    if (btn.dataset.state === 'on') {
-        await window.Flora.push.unsubscribe();
-        floraRenderPush('off');
-    } else {
-        var ok = await window.Flora.push.subscribe();
-        floraRenderPush(ok ? 'on' : 'off');
-    }
-}
+    window.floraTogglePush = async function () {
+        var btn = document.getElementById('push-toggle');
+        btn.disabled = true;
+        btn.textContent = '…';
+        if (btn.dataset.state === 'on') {
+            await window.Flora.push.unsubscribe();
+            renderPush('off');
+        } else {
+            var ok = await window.Flora.push.subscribe();
+            renderPush(ok ? 'on' : 'off');
+        }
+    };
 
-document.addEventListener('DOMContentLoaded', async function () {
-    if (window.Flora && window.Flora.push && window.Flora.push.supported()) {
-        var on = await window.Flora.push.isSubscribed();
-        floraRenderPush(on ? 'on' : 'off');
-    } else {
-        floraRenderPush('off');
-    }
-});
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(async function () {
+            if (window.Flora && window.Flora.push && window.Flora.push.supported()) {
+                var on = await window.Flora.push.isSubscribed();
+                renderPush(on ? 'on' : 'off');
+            } else {
+                renderPush('off');
+            }
+        }, 300);
+    });
+})();
 </script>
+
 @endsection

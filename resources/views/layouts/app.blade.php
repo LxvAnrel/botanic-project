@@ -61,8 +61,12 @@
                                 Diário
                             </a>
                             <a href="{{ route('alertas') }}"
-                               class="text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
+                               class="relative text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
                                 Alertas
+                                @php $unread = auth()->user()->unreadNotifications()->count(); @endphp
+                                @if($unread > 0)
+                                <span class="absolute -top-0.5 -right-0.5 w-4 h-4 text-[8px] bg-[#C8A96E] text-[#0E1A0B] rounded-full flex items-center justify-center font-bold">{{ $unread > 9 ? '9+' : $unread }}</span>
+                                @endif
                             </a>
                             <form method="POST" action="{{ route('logout') }}" class="inline">
                                 @csrf
@@ -104,8 +108,12 @@
                         Meu Diário
                     </a>
                     <a href="{{ route('alertas') }}"
-                       class="block text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
+                       class="flex items-center justify-between text-sm uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-3 rounded-xl transition-all duration-200">
                         Alertas
+                        @php $unreadMobile = auth()->user()->unreadNotifications()->count(); @endphp
+                        @if($unreadMobile > 0)
+                        <span class="w-5 h-5 text-[9px] bg-[#C8A96E] text-[#0E1A0B] rounded-full flex items-center justify-center font-bold">{{ $unreadMobile > 9 ? '9+' : $unreadMobile }}</span>
+                        @endif
                     </a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

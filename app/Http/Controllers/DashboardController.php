@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\CareReminderNotification;
+use App\Notifications\PruningSeasonNotification;
 use App\Support\PlantCare;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,6 @@ class DashboardController extends Controller
         $user = auth()->user();
         $plantas = $user->diarioVerde()->paginate(12);
 
-        // Status de rega por planta (ultima rega de cada planta desta pagina).
         $plantIds = $plantas->pluck('id');
         $ultimasRegas = $user->careLogs()
             ->where('tipo', 'rega')
@@ -30,11 +31,42 @@ class DashboardController extends Controller
         return view('dashboard.index', compact('plantas', 'regaStatus'));
     }
 
-    public function alertas()
+    public function alertas(Request $request)
     {
         $user = auth()->user();
-        $notificacoes = $user->notifications()->paginate(10);
-        return view('dashboard.alertas', compact('notificacoes'));
+        $filtro = $request->get('filtro', 'todas');
+
+        $query = $user->notifications()->latest();
+
+        if ($filtro === 'poda') {
+            $query->where('type', PruningSeasonNotification::class);
+        } elseif ($filtro === 'cuidados') {
+            $query->where('type', CareReminderNotification::class);
+        }
+
+        $notificacoes = $query->paginate(15)->appends(['filtro' => $filtro]);
+        $totalNaoLidas = $user->unreadNotifications()->count();
+
+        return view('dashboard.alertas', compact('notificacoes', 'filtro', 'totalNaoLidas'));
+    }
+
+    public function markAsRead(string $id)
+    {
+        $notification = auth()->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return back();
+    }
+
+    public function markAllAsRead()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back();
+    }
+
+    public function destroyNotification(string $id)
+    {
+        auth()->user()->notifications()->findOrFail($id)->delete();
+        return back();
     }
 
     public function perfil()
