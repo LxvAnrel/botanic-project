@@ -87,13 +87,13 @@
                         {{-- Avatar → dropdown de conta --}}
                         <div class="relative" id="profile-dropdown-wrap">
                             <button onclick="floraProfileToggle()"
-                                    class="relative flex items-center gap-2 bg-[#0E1A0B]/80 backdrop-blur-md border border-[#C8A96E]/30 hover:border-[#C8A96E]/60 rounded-full pl-1 pr-3 py-1 hover:bg-[#0E1A0B] transition-all duration-200 group shadow-sm"
+                                    class="relative flex items-center gap-2 bg-[#131F11] border border-[#C8A96E]/40 hover:border-[#C8A96E]/80 rounded-full pl-1 pr-3 py-1 hover:bg-[#1A2E17] transition-all duration-200 group"
                                     aria-label="Conta">
-                                <span class="w-8 h-8 rounded-full bg-[#C8A96E]/20 border border-[#C8A96E]/50 flex items-center justify-center text-[11px] font-semibold text-[#C8A96E] group-hover:border-[#C8A96E]/80 transition-colors shrink-0">
+                                <span class="w-8 h-8 rounded-full bg-[#C8A96E] flex items-center justify-center text-[11px] font-bold text-[#0B160A] shrink-0">
                                     {{ $initials }}
                                 </span>
-                                <span class="hidden md:block text-xs text-[#DFD0B8] group-hover:text-[#C8A96E] transition-colors max-w-[80px] truncate">{{ $navUser->name }}</span>
-                                <svg class="hidden md:block w-2.5 h-2.5 text-[#C8A96E]/60 group-hover:text-[#C8A96E] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                <span class="hidden md:block text-xs text-[#EDE0CC] group-hover:text-[#C8A96E] transition-colors max-w-[80px] truncate font-medium">{{ $navUser->name }}</span>
+                                <svg class="hidden md:block w-2.5 h-2.5 text-[#C8A96E]/70 group-hover:text-[#C8A96E] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 @if($navUnread > 0)
                                 <span class="absolute -top-1 -right-1 w-4 h-4 text-[8px] bg-[#C8A96E] text-[#0E1A0B] rounded-full flex items-center justify-center font-bold">{{ $navUnread > 9 ? '9+' : $navUnread }}</span>
                                 @endif
