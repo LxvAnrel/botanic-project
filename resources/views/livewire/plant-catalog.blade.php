@@ -104,7 +104,9 @@
                 {{-- Badge topo --}}
                 <div class="absolute top-4 left-4 flex gap-2">
                     @if(!$planta->toxica_pets)
-                        <span class="text-[9px] uppercase tracking-wider bg-[#C8A96E]/15 text-[#C8A96E] border border-[#C8A96E]/25 px-3 py-1 rounded-full backdrop-blur-sm">Pet-safe</span>
+                        <span class="text-[9px] uppercase tracking-wider bg-[#0A1408]/75 text-[#C8A96E] border border-[#C8A96E]/40 px-3 py-1 rounded-full backdrop-blur-md">🐾 Pet-safe</span>
+                    @else
+                        <span class="text-[9px] uppercase tracking-wider bg-[#0A1408]/75 text-red-400 border border-red-900/50 px-3 py-1 rounded-full backdrop-blur-md">⚠ Tóxica</span>
                     @endif
                 </div>
 
@@ -115,17 +117,17 @@
                             <p class="font-serif text-xl text-[#EDE0CC] leading-tight group-hover:text-[#C8A96E] transition-colors duration-300">
                                 {{ $planta->nome_popular }}
                             </p>
-                            <p class="text-[#7A8E72] text-xs italic mt-0.5">{{ $planta->nome_cientifico }}</p>
+                            <p class="text-[#9AA88E] text-xs italic mt-0.5">{{ $planta->nome_cientifico }}</p>
                         </div>
                         <div class="flex flex-col items-end gap-1.5">
-                            <span class="text-[9px] uppercase tracking-wider text-[#7A8E72]">
+                            <span class="text-[9px] uppercase tracking-wider text-[#9AA88E]">
                                 @switch($planta->habitat_luz)
                                     @case('sol_pleno') ☀ Sol @break
                                     @case('meia_sombra') ◑ Meia @break
                                     @case('sombra') ● Sombra @break
                                 @endswitch
                             </span>
-                            <span class="text-[9px] uppercase tracking-wider text-[#7A8E72]">{{ $planta->porte_max_cm }}cm</span>
+                            <span class="text-[9px] uppercase tracking-wider text-[#9AA88E]">{{ $planta->porte_max_cm }}cm</span>
                         </div>
                     </div>
                 </div>
