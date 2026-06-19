@@ -20,11 +20,21 @@ window.Flora = window.Flora || {};
         return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
     }
 
+    // Detecta se é mobile ou desktop para mostrar na UI
+    function deviceType() {
+        const ua = navigator.userAgent;
+        if (/Android|iPhone|iPad|iPod|Mobile/i.test(ua)) return 'mobile';
+        return 'desktop';
+    }
+
+    function deviceLabel() {
+        return deviceType() === 'mobile' ? '📱 Celular' : '💻 PC';
+    }
+
     async function getRegistration() {
         return navigator.serviceWorker.register('/sw.js');
     }
 
-    // Verifica se o usuário já está inscrito neste dispositivo
     async function isSubscribed() {
         if (!pushSupported() || Notification.permission !== 'granted') return false;
         try {
@@ -37,58 +47,65 @@ window.Flora = window.Flora || {};
         }
     }
 
-    // Solicita permissão, inscreve e envia ao backend. Retorna true/false.
+    // Retorna { ok: bool, error: string|null }
     async function subscribe() {
         if (!pushSupported()) {
-            alert('Seu navegador não suporta notificações push.');
-            return false;
+            return { ok: false, error: 'Navegador não suporta notificações push.' };
         }
 
         const vapidPublic = meta('vapid-public-key');
         if (!vapidPublic) {
-            console.error('VAPID public key ausente.');
-            alert('As notificações push ainda não foram configuradas no servidor. Tente novamente mais tarde.');
-            return false;
+            return { ok: false, error: 'Servidor sem chave VAPID configurada.' };
         }
 
         const permission = await Notification.requestPermission();
+        if (permission === 'denied') {
+            return { ok: false, error: 'denied' };
+        }
         if (permission !== 'granted') {
-            if (permission === 'denied') {
-                alert('Notificações bloqueadas. Permita-as nas configurações do site para ativar.');
+            return { ok: false, error: null };
+        }
+
+        try {
+            const reg = await getRegistration();
+            await navigator.serviceWorker.ready;
+
+            let sub = await reg.pushManager.getSubscription();
+            if (!sub) {
+                sub = await reg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(vapidPublic),
+                });
             }
-            return false;
-        }
 
-        const reg = await getRegistration();
-        await navigator.serviceWorker.ready;
+            const key   = sub.getKey('p256dh');
+            const token = sub.getKey('auth');
 
-        let sub = await reg.pushManager.getSubscription();
-        if (!sub) {
-            sub = await reg.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(vapidPublic),
+            const res = await fetch('/push/subscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': meta('csrf-token'),
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    endpoint:         sub.endpoint,
+                    public_key:       key   ? btoa(String.fromCharCode.apply(null, new Uint8Array(key)))   : null,
+                    auth_token:       token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
+                    content_encoding: (PushManager.supportedContentEncodings || ['aesgcm'])[0],
+                }),
             });
+
+            if (!res.ok) {
+                const body = await res.text();
+                return { ok: false, error: 'Erro do servidor: ' + res.status };
+            }
+
+            return { ok: true, error: null };
+        } catch (e) {
+            console.error('[Flora Push]', e);
+            return { ok: false, error: e.message || 'Erro desconhecido.' };
         }
-
-        const key = sub.getKey('p256dh');
-        const token = sub.getKey('auth');
-
-        const res = await fetch('/push/subscribe', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': meta('csrf-token'),
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({
-                endpoint: sub.endpoint,
-                public_key: key ? btoa(String.fromCharCode.apply(null, new Uint8Array(key))) : null,
-                auth_token: token ? btoa(String.fromCharCode.apply(null, new Uint8Array(token))) : null,
-                content_encoding: (PushManager.supportedContentEncodings || ['aesgcm'])[0],
-            }),
-        });
-
-        return res.ok;
     }
 
     async function unsubscribe() {
@@ -110,9 +127,10 @@ window.Flora = window.Flora || {};
             }
             return true;
         } catch (e) {
+            console.error('[Flora Push unsubscribe]', e);
             return false;
         }
     }
 
-    window.Flora.push = { supported: pushSupported, isSubscribed, subscribe, unsubscribe };
+    window.Flora.push = { supported: pushSupported, isSubscribed, subscribe, unsubscribe, deviceLabel };
 })();

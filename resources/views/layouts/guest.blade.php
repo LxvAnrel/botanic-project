@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="relative overflow-x-hidden" style="background:#0B160A;">
+<body style="background:#0B160A; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:2rem 1rem;">
 
     {{-- Ambient orbs --}}
     <div class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -17,24 +17,24 @@
         <div class="absolute -bottom-32 -left-32 w-[450px] h-[450px] rounded-full bg-[#2D6A2D]/14 blur-[100px]"></div>
     </div>
 
-    {{-- Wrapper centralizado: sempre pelo menos 100vh, rola se precisar --}}
-    <div style="min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2.5rem 1rem; gap:2rem; position:relative; z-index:10;">
+    {{-- margin:auto num flex-column com min-height:100vh = centralização vertical garantida --}}
+    <div style="margin:auto; width:100%; max-width:30rem; display:flex; flex-direction:column; align-items:center; gap:2rem; position:relative; z-index:10;">
 
         {{-- Logo --}}
-        <a href="/" class="text-center">
-            <span class="block font-serif text-3xl tracking-[0.2em] text-[#C8A96E] uppercase">Flora</span>
-            <span class="block text-[9px] uppercase tracking-[0.4em] text-[#3A5E2D] mt-1">Botânica Interativa</span>
+        <a href="/" style="text-align:center; text-decoration:none;">
+            <span style="display:block; font-family:'Cormorant Garamond',serif; font-size:1.875rem; letter-spacing:.2em; color:#C8A96E; text-transform:uppercase;">Flora</span>
+            <span style="display:block; font-size:9px; text-transform:uppercase; letter-spacing:.4em; color:#3A5E2D; margin-top:4px;">Botânica Interativa</span>
         </a>
 
         {{-- Glass card --}}
-        <div class="w-full max-w-md">
+        <div style="width:100%;">
             <div class="glass rounded-3xl p-8">
                 {{ $slot }}
             </div>
         </div>
 
-        {{-- Footer dentro do wrapper --}}
-        <p class="text-[#2D4A23] text-[10px] uppercase tracking-widest">
+        {{-- Footer --}}
+        <p style="color:#2D4A23; font-size:10px; text-transform:uppercase; letter-spacing:.15em; text-align:center;">
             © {{ date('Y') }} Flora · Plataforma Botânica
         </p>
 

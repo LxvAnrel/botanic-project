@@ -104,6 +104,7 @@
                     <p id="push-denied" class="text-[10px] text-amber-400/70 mt-2 leading-relaxed" style="display:none;">
                         Notificações bloqueadas pelo navegador. Siga o tutorial abaixo para habilitar manualmente.
                     </p>
+                    <p id="push-error" class="text-[10px] text-red-400/80 mt-2 leading-relaxed" style="display:none;"></p>
                 </div>
             </div>
 
@@ -199,12 +200,18 @@
 
 <script>
 (function () {
-    function renderPush(state) {
+    function deviceLabel() {
+        return window.Flora && window.Flora.push ? window.Flora.push.deviceLabel() : 'dispositivo';
+    }
+
+    function renderPush(state, errorMsg) {
         var btn    = document.getElementById('push-toggle');
         var status = document.getElementById('push-status');
         var denied = document.getElementById('push-denied');
+        var errBox = document.getElementById('push-error');
         btn.disabled = false;
         denied.style.display = 'none';
+        if (errBox) errBox.style.display = 'none';
 
         if (!window.Flora || !window.Flora.push || !window.Flora.push.supported()) {
             status.textContent = 'Não suportado neste navegador';
@@ -217,13 +224,19 @@
             denied.style.display = 'block';
             return;
         }
+
+        if (errorMsg && errBox) {
+            errBox.textContent = 'Erro: ' + errorMsg;
+            errBox.style.display = 'block';
+        }
+
         if (state === 'on') {
-            status.textContent = 'Ativas neste dispositivo';
+            status.textContent = 'Ativas neste ' + deviceLabel();
             btn.textContent = 'Desativar';
             btn.classList.add('text-[#C8A96E]', 'border-[#C8A96E]/40', 'bg-[#C8A96E]/10');
             btn.classList.remove('text-[#7A8E72]', 'border-white/[0.07]');
         } else {
-            status.textContent = 'Inativas — toque para receber alertas no dispositivo';
+            status.textContent = 'Inativas neste ' + deviceLabel() + ' — clique para ativar';
             btn.textContent = 'Ativar';
             btn.classList.remove('text-[#C8A96E]', 'border-[#C8A96E]/40', 'bg-[#C8A96E]/10');
             btn.classList.add('text-[#7A8E72]', 'border-white/[0.07]');
@@ -239,8 +252,14 @@
             await window.Flora.push.unsubscribe();
             renderPush('off');
         } else {
-            var ok = await window.Flora.push.subscribe();
-            renderPush(ok ? 'on' : 'off');
+            var result = await window.Flora.push.subscribe();
+            if (result.error === 'denied') {
+                var denied = document.getElementById('push-denied');
+                if (denied) denied.style.display = 'block';
+                renderPush('off');
+            } else {
+                renderPush(result.ok ? 'on' : 'off', result.ok ? null : result.error);
+            }
         }
     };
 
