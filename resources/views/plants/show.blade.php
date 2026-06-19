@@ -42,23 +42,23 @@
             <div class="flex flex-wrap gap-2">
                 @switch($plant->habitat_luz)
                     @case('sol_pleno')
-                        <span class="text-[9px] uppercase tracking-widest glass px-4 py-2 rounded-full text-[#7A8E72]">☀ Sol Pleno</span>
+                        <span class="text-[9px] uppercase tracking-widest bg-[#1A2E17] border border-white/10 px-4 py-2 rounded-full text-[#9AA88E]">☀ Sol Pleno</span>
                         @break
                     @case('meia_sombra')
-                        <span class="text-[9px] uppercase tracking-widest glass px-4 py-2 rounded-full text-[#7A8E72]">◑ Meia Sombra</span>
+                        <span class="text-[9px] uppercase tracking-widest bg-[#1A2E17] border border-white/10 px-4 py-2 rounded-full text-[#9AA88E]">◑ Meia Sombra</span>
                         @break
                     @case('sombra')
-                        <span class="text-[9px] uppercase tracking-widest glass px-4 py-2 rounded-full text-[#7A8E72]">● Sombra</span>
+                        <span class="text-[9px] uppercase tracking-widest bg-[#1A2E17] border border-white/10 px-4 py-2 rounded-full text-[#9AA88E]">● Sombra</span>
                         @break
                 @endswitch
 
                 @if($plant->toxica_pets)
-                    <span class="text-[9px] uppercase tracking-widest px-4 py-2 rounded-full bg-red-900/20 border border-red-900/30 text-red-400/80">⚠ Tóxica para pets</span>
+                    <span class="text-[9px] uppercase tracking-widest px-4 py-2 rounded-full bg-red-950 border border-red-900/40 text-red-400">⚠ Tóxica para pets</span>
                 @else
-                    <span class="text-[9px] uppercase tracking-widest glass-gold px-4 py-2 rounded-full text-[#C8A96E]">🐾 Pet-friendly</span>
+                    <span class="text-[9px] uppercase tracking-widest bg-[#C8A96E]/15 border border-[#C8A96E]/30 px-4 py-2 rounded-full text-[#C8A96E]">🐾 Pet-friendly</span>
                 @endif
 
-                <span class="text-[9px] uppercase tracking-widest glass px-4 py-2 rounded-full text-[#7A8E72]">Até {{ $plant->porte_max_cm }}cm</span>
+                <span class="text-[9px] uppercase tracking-widest bg-[#1A2E17] border border-white/10 px-4 py-2 rounded-full text-[#9AA88E]">Até {{ $plant->porte_max_cm }}cm</span>
             </div>
 
             {{-- Ficha --}}

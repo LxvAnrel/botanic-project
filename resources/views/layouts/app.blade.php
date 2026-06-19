@@ -93,9 +93,14 @@
                             <button onclick="floraProfileToggle()"
                                     class="relative flex items-center gap-2 bg-[#131F11] border border-[#C8A96E]/40 hover:border-[#C8A96E]/80 rounded-full pl-1 pr-3 py-1 hover:bg-[#1A2E17] transition-all duration-200 group"
                                     aria-label="Conta">
-                                <span class="w-8 h-8 rounded-full bg-[#C8A96E] flex items-center justify-center text-[11px] font-bold text-[#0B160A] shrink-0">
-                                    {{ $initials }}
-                                </span>
+                                @if($navUser->avatar_url)
+                                    <img src="{{ $navUser->avatar_url }}" alt="{{ $navUser->name }}"
+                                         class="w-8 h-8 rounded-full object-cover shrink-0 border border-[#C8A96E]/30">
+                                @else
+                                    <span class="w-8 h-8 rounded-full bg-[#C8A96E] flex items-center justify-center text-[11px] font-bold text-[#0B160A] shrink-0">
+                                        {{ $initials }}
+                                    </span>
+                                @endif
                                 <span class="hidden md:block text-xs text-[#EDE0CC] group-hover:text-[#C8A96E] transition-colors max-w-[80px] truncate font-medium">{{ $navUser->name }}</span>
                                 <svg class="hidden md:block w-2.5 h-2.5 text-[#C8A96E]/70 group-hover:text-[#C8A96E] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 @if($navUnread > 0)
