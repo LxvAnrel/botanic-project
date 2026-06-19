@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body style="background:#0B160A; min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:2rem 1rem;">
+<body style="background:#0B160A; min-height:100vh; display:grid; place-items:center; padding:2rem 1rem; box-sizing:border-box;">
 
     {{-- Ambient orbs --}}
     <div class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -17,8 +17,8 @@
         <div class="absolute -bottom-32 -left-32 w-[450px] h-[450px] rounded-full bg-[#2D6A2D]/14 blur-[100px]"></div>
     </div>
 
-    {{-- margin:auto num flex-column com min-height:100vh = centralização vertical garantida --}}
-    <div style="margin:auto; width:100%; max-width:30rem; display:flex; flex-direction:column; align-items:center; gap:2rem; position:relative; z-index:10;">
+    {{-- grid + place-items:center centraliza vertical e horizontalmente sem depender de height fixo --}}
+    <div style="width:100%; max-width:30rem; display:flex; flex-direction:column; align-items:center; gap:2rem; position:relative; z-index:10;">
 
         {{-- Logo --}}
         <a href="/" style="text-align:center; text-decoration:none;">
