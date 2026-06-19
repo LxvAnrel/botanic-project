@@ -22,4 +22,8 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    # Redirect Non-WWW to WWW
+    RewriteCond %{HTTP_HOST} ^florabotanic\.site$ [NC]
+    RewriteRule ^(.*)$ https://www.florabotanic.site/$1 [R=301,L]
 </IfModule>
