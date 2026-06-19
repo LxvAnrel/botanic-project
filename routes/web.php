@@ -9,6 +9,9 @@ use App\Http\Controllers\CareController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
     $plantas = \App\Models\Plant::whereNotNull('image_path')->inRandomOrder()->take(3)->get();
     return view('welcome', compact('plantas'));
 });
