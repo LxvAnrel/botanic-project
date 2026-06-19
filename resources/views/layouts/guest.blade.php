@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex flex-col items-center px-4 relative overflow-x-hidden">
+<body class="relative overflow-x-hidden" style="background:#0B160A;">
 
     {{-- Ambient orbs --}}
     <div class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -17,8 +17,8 @@
         <div class="absolute -bottom-32 -left-32 w-[450px] h-[450px] rounded-full bg-[#2D6A2D]/14 blur-[100px]"></div>
     </div>
 
-    {{-- Área central: logo + card verticalmente centrados --}}
-    <div class="flex-1 flex flex-col items-center justify-center w-full py-10 gap-8 relative z-10">
+    {{-- Wrapper centralizado: sempre pelo menos 100vh, rola se precisar --}}
+    <div style="min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2.5rem 1rem; gap:2rem; position:relative; z-index:10;">
 
         {{-- Logo --}}
         <a href="/" class="text-center">
@@ -33,12 +33,12 @@
             </div>
         </div>
 
-    </div>
+        {{-- Footer dentro do wrapper --}}
+        <p class="text-[#2D4A23] text-[10px] uppercase tracking-widest">
+            © {{ date('Y') }} Flora · Plataforma Botânica
+        </p>
 
-    {{-- Footer pregado ao fundo --}}
-    <p class="py-5 text-[#2D4A23] text-[10px] uppercase tracking-widest relative z-10">
-        © {{ date('Y') }} Flora · Plataforma Botânica
-    </p>
+    </div>
 
     <script>
         function floraTogglePassword(btn, inputId) {
