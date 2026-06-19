@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex flex-col items-center py-12 px-4 relative overflow-x-hidden">
+<body class="min-h-screen flex flex-col items-center px-4 relative overflow-x-hidden">
 
     {{-- Ambient orbs --}}
     <div class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -17,20 +17,26 @@
         <div class="absolute -bottom-32 -left-32 w-[450px] h-[450px] rounded-full bg-[#2D6A2D]/14 blur-[100px]"></div>
     </div>
 
-    {{-- Logo --}}
-    <a href="/" class="mt-auto mb-10 text-center relative z-10">
-        <span class="block font-serif text-3xl tracking-[0.2em] text-[#C8A96E] uppercase">Flora</span>
-        <span class="block text-[9px] uppercase tracking-[0.4em] text-[#3A5E2D] mt-1">Botânica Interativa</span>
-    </a>
+    {{-- Área central: logo + card verticalmente centrados --}}
+    <div class="flex-1 flex flex-col items-center justify-center w-full py-10 gap-8 relative z-10">
 
-    {{-- Glass card --}}
-    <div class="w-full max-w-md relative z-10">
-        <div class="glass rounded-3xl p-8">
-            {{ $slot }}
+        {{-- Logo --}}
+        <a href="/" class="text-center">
+            <span class="block font-serif text-3xl tracking-[0.2em] text-[#C8A96E] uppercase">Flora</span>
+            <span class="block text-[9px] uppercase tracking-[0.4em] text-[#3A5E2D] mt-1">Botânica Interativa</span>
+        </a>
+
+        {{-- Glass card --}}
+        <div class="w-full max-w-md">
+            <div class="glass rounded-3xl p-8">
+                {{ $slot }}
+            </div>
         </div>
+
     </div>
 
-    <p class="mt-8 mb-auto text-[#2D4A23] text-[10px] uppercase tracking-widest relative z-10">
+    {{-- Footer pregado ao fundo --}}
+    <p class="py-5 text-[#2D4A23] text-[10px] uppercase tracking-widest relative z-10">
         © {{ date('Y') }} Flora · Plataforma Botânica
     </p>
 
