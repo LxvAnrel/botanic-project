@@ -1,0 +1,335 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Mail\FirstAnnotationMail;
+use App\Models\Plant;
+use App\Models\User;
+use App\Notifications\CareReminderNotification;
+use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Symfony\Component\Console\Output\BufferedOutput;
+
+class AdminController extends Controller
+{
+    // ── Dashboard ────────────────────────────────────────────────────────────
+
+    public function dashboard()
+    {
+        $stats = [
+            'usuarios'            => User::count(),
+            'usuarios_hoje'       => User::whereDate('created_at', today())->count(),
+            'usuarios_7d'         => User::where('created_at', '>=', now()->subDays(7))->count(),
+            'plantas_catalogo'    => Plant::count(),
+            'diarios_ativos'      => User::whereHas('plants')->count(),
+            'notificacoes_hoje'   => DatabaseNotification::whereDate('created_at', today())->count(),
+            'notificacoes_nao_lidas' => DatabaseNotification::whereNull('read_at')->count(),
+            'ativos_7d'           => User::whereHas('careLogs', fn($q) => $q->where('data', '>=', now()->subDays(7)))->count(),
+            'ativos_30d'          => User::whereHas('careLogs', fn($q) => $q->where('data', '>=', now()->subDays(30)))->count(),
+        ];
+
+        $recentes = User::latest()->take(5)->get();
+
+        return view('admin.dashboard', compact('stats', 'recentes'));
+    }
+
+    // ── Usuários ─────────────────────────────────────────────────────────────
+
+    public function usuarios(Request $request)
+    {
+        $busca = $request->get('q');
+
+        $usuarios = User::withCount('plants')
+            ->when($busca, fn($q) => $q->where('name', 'ilike', "%{$busca}%")
+                ->orWhere('email', 'ilike', "%{$busca}%"))
+            ->latest()
+            ->paginate(25);
+
+        return view('admin.usuarios.index', compact('usuarios', 'busca'));
+    }
+
+    public function usuario(User $user)
+    {
+        $user->load('plants');
+        $notificacoes = $user->notifications()->latest()->take(10)->get();
+        $careLogs     = $user->careLogs()->with('plant')->latest('data')->take(20)->get();
+        $badges       = $user->notifications()
+            ->where('type', \App\Notifications\BadgeNotification::class ?? '')
+            ->latest()->take(10)->get();
+
+        return view('admin.usuarios.show', compact('user', 'notificacoes', 'careLogs'));
+    }
+
+    public function impersonar(User $user)
+    {
+        session(['admin_impersonating' => auth()->id()]);
+        auth()->login($user);
+        return redirect('/dashboard')->with('success', "Você está como {$user->name}.");
+    }
+
+    public function sairImpersonacao()
+    {
+        $adminId = session()->pull('admin_impersonating');
+        if ($adminId) {
+            auth()->loginUsingId($adminId);
+        }
+        return redirect('/admin');
+    }
+
+    public function banirUsuario(User $user)
+    {
+        if (in_array($user->email, array_filter(array_map('trim', explode(',', env('ADMIN_EMAIL', '')))))) {
+            return back()->with('error', 'Não é possível banir um admin.');
+        }
+        $user->delete();
+        return redirect('/admin/usuarios')->with('success', "Conta de {$user->name} removida.");
+    }
+
+    // ── Plantas ──────────────────────────────────────────────────────────────
+
+    public function plantas(Request $request)
+    {
+        $plantas = Plant::withCount('users')
+            ->when($request->q, fn($q) => $q->where('nome_popular', 'ilike', "%{$request->q}%"))
+            ->latest()
+            ->paginate(20);
+
+        return view('admin.plantas.index', compact('plantas'));
+    }
+
+    public function criarPlanta()
+    {
+        return view('admin.plantas.form', ['planta' => new Plant()]);
+    }
+
+    public function salvarPlanta(Request $request)
+    {
+        $data = $request->validate([
+            'nome_popular'         => 'required|string|max:255',
+            'nome_cientifico'      => 'required|string|max:255|unique:plants,nome_cientifico',
+            'familia'              => 'nullable|string|max:255',
+            'origem'               => 'nullable|string|max:255',
+            'habitat_luz'          => 'required|in:sol_pleno,meia_sombra,sombra',
+            'porte_max_cm'         => 'nullable|integer|min:1',
+            'dias_entre_regas'     => 'nullable|integer|min:1',
+            'dias_entre_adubacoes' => 'nullable|integer|min:1',
+            'toxica_pets'          => 'boolean',
+            'epoca_poda'           => 'nullable|string|max:255',
+            'curiosidades'         => 'nullable|string',
+            'image'                => 'nullable|image|max:4096',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image_path'] = 'storage/' . $request->file('image')->store('plants', 'public');
+        }
+
+        $data['toxica_pets'] = $request->boolean('toxica_pets');
+        $data['slug']        = Str::slug($data['nome_popular']);
+        unset($data['image']);
+
+        Plant::create($data);
+        return redirect('/admin/plantas')->with('success', 'Planta criada com sucesso.');
+    }
+
+    public function editarPlanta(Plant $plant)
+    {
+        return view('admin.plantas.form', ['planta' => $plant]);
+    }
+
+    public function atualizarPlanta(Request $request, Plant $plant)
+    {
+        $data = $request->validate([
+            'nome_popular'         => 'required|string|max:255',
+            'nome_cientifico'      => "required|string|max:255|unique:plants,nome_cientifico,{$plant->id}",
+            'familia'              => 'nullable|string|max:255',
+            'origem'               => 'nullable|string|max:255',
+            'habitat_luz'          => 'required|in:sol_pleno,meia_sombra,sombra',
+            'porte_max_cm'         => 'nullable|integer|min:1',
+            'dias_entre_regas'     => 'nullable|integer|min:1',
+            'dias_entre_adubacoes' => 'nullable|integer|min:1',
+            'toxica_pets'          => 'boolean',
+            'epoca_poda'           => 'nullable|string|max:255',
+            'curiosidades'         => 'nullable|string',
+            'image'                => 'nullable|image|max:4096',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $data['image_path'] = 'storage/' . $request->file('image')->store('plants', 'public');
+        }
+
+        $data['toxica_pets'] = $request->boolean('toxica_pets');
+        unset($data['image']);
+
+        $plant->update($data);
+        return redirect('/admin/plantas')->with('success', 'Planta atualizada.');
+    }
+
+    public function deletarPlanta(Plant $plant)
+    {
+        $plant->delete();
+        return redirect('/admin/plantas')->with('success', 'Planta removida.');
+    }
+
+    // ── Emails ───────────────────────────────────────────────────────────────
+
+    public function emails()
+    {
+        return view('admin.emails');
+    }
+
+    public function enviarTeste(Request $request)
+    {
+        $request->validate(['email' => 'required|email', 'versao' => 'required|integer|between:1,3']);
+        $user = auth()->user();
+        try {
+            Mail::to($request->email)->send(new FirstAnnotationMail($user, (int) $request->versao));
+            return back()->with('success', "Email V{$request->versao} enviado para {$request->email}.");
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Falha: ' . $e->getMessage());
+        }
+    }
+
+    public function enviarMassa(Request $request)
+    {
+        $request->validate([
+            'assunto'   => 'required|string|max:255',
+            'mensagem'  => 'required|string',
+            'segmento'  => 'required|in:todos,com_plantas,sem_plantas',
+        ]);
+
+        $query = User::where('email_notifications', true);
+
+        if ($request->segmento === 'com_plantas') {
+            $query->whereHas('plants');
+        } elseif ($request->segmento === 'sem_plantas') {
+            $query->whereDoesntHave('plants');
+        }
+
+        $usuarios = $query->get();
+        $enviados = 0;
+
+        foreach ($usuarios as $user) {
+            try {
+                Mail::to($user->email)->send(new \App\Mail\MassEmailMail($user, $request->assunto, $request->mensagem));
+                $enviados++;
+            } catch (\Throwable) {}
+        }
+
+        return back()->with('success', "Email enviado para {$enviados} usuários.");
+    }
+
+    public function broadcast(Request $request)
+    {
+        $request->validate([
+            'titulo'   => 'required|string|max:255',
+            'mensagem' => 'required|string',
+        ]);
+
+        $usuarios = User::all();
+        foreach ($usuarios as $user) {
+            DatabaseNotification::create([
+                'id'              => Str::uuid(),
+                'type'            => 'admin_broadcast',
+                'notifiable_type' => User::class,
+                'notifiable_id'   => $user->id,
+                'data'            => [
+                    'titulo'   => $request->titulo,
+                    'mensagem' => $request->mensagem,
+                ],
+            ]);
+        }
+
+        return back()->with('success', "Notificação enviada para {$usuarios->count()} usuários.");
+    }
+
+    // ── Sistema ──────────────────────────────────────────────────────────────
+
+    public function sistema()
+    {
+        $comandos = [
+            'plants:check-care'              => 'Verificar cuidados atrasados',
+            'plants:check-pruning-season'    => 'Verificar época de poda',
+            'streak:check-at-risk'           => 'Verificar streaks em risco',
+            'flora:first-annotation-emails'  => 'Emails de primeira anotação',
+            'accounts:purge'                 => 'Purgar contas deletadas',
+        ];
+
+        $ultimasExecucoes = [];
+        foreach (array_keys($comandos) as $cmd) {
+            $ultimasExecucoes[$cmd] = Cache::get("admin_last_run_{$cmd}");
+        }
+
+        return view('admin.sistema', compact('comandos', 'ultimasExecucoes'));
+    }
+
+    public function rodarComando(Request $request, string $cmd)
+    {
+        $permitidos = [
+            'plants:check-care',
+            'plants:check-pruning-season',
+            'streak:check-at-risk',
+            'flora:first-annotation-emails',
+            'accounts:purge',
+        ];
+
+        if (! in_array($cmd, $permitidos)) {
+            return back()->with('error', 'Comando não permitido.');
+        }
+
+        $output = new BufferedOutput();
+        Artisan::call($cmd, [], $output);
+        $resultado = $output->fetch();
+
+        Cache::put("admin_last_run_{$cmd}", [
+            'at'     => now()->toDateTimeString(),
+            'output' => $resultado,
+        ], now()->addDays(7));
+
+        return back()->with('cmd_output', $resultado ?: 'Concluído sem saída.');
+    }
+
+    // ── Analytics ────────────────────────────────────────────────────────────
+
+    public function analytics()
+    {
+        // Funil de onboarding
+        $totalUsuarios     = User::count();
+        $comPlanta         = User::whereHas('plants')->count();
+        $comCuidado        = User::whereHas('careLogs')->count();
+
+        // Retenção
+        $ativos7d  = User::whereHas('careLogs', fn($q) => $q->where('data', '>=', now()->subDays(7)))->count();
+        $ativos30d = User::whereHas('careLogs', fn($q) => $q->where('data', '>=', now()->subDays(30)))->count();
+
+        // Plantas mais populares
+        $plantasPopulares = Plant::withCount('users')->orderByDesc('users_count')->take(10)->get();
+
+        // Novos usuários por dia (últimos 14 dias)
+        $novosPorDia = User::where('created_at', '>=', now()->subDays(14))
+            ->selectRaw('DATE(created_at) as dia, COUNT(*) as total')
+            ->groupBy('dia')
+            ->orderBy('dia')
+            ->get();
+
+        // Cuidados registrados por dia (últimos 14 dias)
+        $cuidadosPorDia = \DB::table('care_logs')
+            ->where('data', '>=', now()->subDays(14))
+            ->selectRaw('data::date as dia, COUNT(*) as total')
+            ->groupBy('dia')
+            ->orderBy('dia')
+            ->get();
+
+        return view('admin.analytics', compact(
+            'totalUsuarios', 'comPlanta', 'comCuidado',
+            'ativos7d', 'ativos30d',
+            'plantasPopulares',
+            'novosPorDia', 'cuidadosPorDia'
+        ));
+    }
+}
