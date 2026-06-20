@@ -68,9 +68,32 @@ class AdminController extends Controller
 
     public function impersonar(User $user)
     {
-        session(['admin_impersonating' => auth()->id()]);
+        $adminId = auth()->id();
+        // Flag antes do login() para o CheckLoginDevice ignorar o evento
+        session([
+            'admin_impersonating'  => $adminId,
+            '_skip_device_check'   => true,
+        ]);
         auth()->login($user);
-        return redirect('/dashboard')->with('success', "Você está como {$user->name}.");
+        return redirect('/dashboard');
+    }
+
+    public function gerarPreviewToken(User $user)
+    {
+        $token     = \Illuminate\Support\Str::random(48);
+        $expiresAt = now()->addMinutes(30);
+
+        \Illuminate\Support\Facades\Cache::put("adm_preview_{$token}", [
+            'admin_id'   => auth()->id(),
+            'user_id'    => $user->id,
+            'user_name'  => $user->nickname ?? $user->name,
+            'expires_at' => $expiresAt->toISOString(),
+        ], $expiresAt);
+
+        return response()->json([
+            'url'        => url('/dashboard') . '?_adm_preview=' . $token,
+            'expires_at' => $expiresAt->toISOString(),
+        ]);
     }
 
     public function sairImpersonacao()

@@ -84,6 +84,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/plantas/{plant}',               [AdminController::class, 'atualizarPlanta'])->name('admin.plantas.atualizar');
     Route::delete('/plantas/{plant}',            [AdminController::class, 'deletarPlanta'])->name('admin.plantas.deletar');
 
+    // Preview token
+    Route::post('/usuarios/{user}/preview-token', [AdminController::class, 'gerarPreviewToken'])->name('admin.preview-token');
+
     // Emails
     Route::get('/emails',                        [AdminController::class, 'emails'])->name('admin.emails');
     Route::post('/emails/teste',                 [AdminController::class, 'enviarTeste'])->name('admin.emails.teste');

@@ -289,6 +289,129 @@
         });
     </script>
 
+    {{-- ── Barra de admin (impersonação ou preview por token) ──────────────── --}}
+    @if(session('admin_impersonating'))
+    @php $impUser = auth()->user(); @endphp
+    <div class="fixed bottom-0 inset-x-0 z-[500] flex justify-center pb-3 px-4 pointer-events-none">
+        <div class="pointer-events-auto flex items-center gap-3 bg-[#0A0F09]/95 border border-[#C8A96E]/30
+                    rounded-2xl px-4 py-2.5 shadow-[0_8px_40px_rgba(0,0,0,0.7)] backdrop-blur-sm
+                    max-w-[min(100%,560px)] w-full">
+            {{-- Indicador --}}
+            <span class="shrink-0 w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            {{-- Texto --}}
+            <div class="flex-1 min-w-0">
+                <p class="text-[10px] uppercase tracking-widest text-amber-400/80">Modo impersonação</p>
+                <p class="text-[#EDE0CC] text-xs font-medium truncate">
+                    Você está como <strong>{{ $impUser->nickname ?? $impUser->name }}</strong>
+                </p>
+            </div>
+            {{-- Ações --}}
+            <a href="/admin/usuarios/{{ $impUser->id }}"
+               class="shrink-0 text-[10px] uppercase tracking-widest text-[#7A8E72] hover:text-[#C8A96E] transition-colors whitespace-nowrap">
+                Ver no admin
+            </a>
+            <form method="POST" action="{{ route('admin.sair-impersonacao') }}" class="shrink-0">
+                @csrf
+                <button type="submit"
+                        class="flex items-center gap-1.5 bg-[#C8A96E] hover:bg-[#D4BA8A] text-[#0B160A]
+                               text-[10px] uppercase tracking-widest font-semibold px-3 py-1.5 rounded-xl transition-all">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Sair
+                </button>
+            </form>
+        </div>
+    </div>
+    @elseif(isset($adminPreview))
+    <div id="adm-preview-bar"
+         class="fixed bottom-0 inset-x-0 z-[500] flex justify-center pb-3 px-4 pointer-events-none">
+        <div class="pointer-events-auto flex items-center gap-3 bg-[#0A0F09]/95 border border-violet-500/30
+                    rounded-2xl px-4 py-2.5 shadow-[0_8px_40px_rgba(0,0,0,0.7)] backdrop-blur-sm
+                    max-w-[min(100%,580px)] w-full">
+            {{-- Indicador --}}
+            <span class="shrink-0 w-2 h-2 rounded-full bg-violet-400 animate-pulse"></span>
+            {{-- Texto --}}
+            <div class="flex-1 min-w-0">
+                <p class="text-[10px] uppercase tracking-widest text-violet-400/80">Preview isolado</p>
+                <p class="text-[#EDE0CC] text-xs font-medium truncate">
+                    Visualizando como <strong>{{ $adminPreview['user_name'] }}</strong>
+                    @if($adminPreview['expires_at'])
+                    <span id="adm-preview-timer" class="text-[#7A8E72] font-normal ml-1"></span>
+                    @endif
+                </p>
+            </div>
+            {{-- Link para o perfil no admin --}}
+            <a href="/admin/usuarios/{{ $adminPreview['user_id'] }}"
+               target="_blank"
+               class="shrink-0 text-[10px] uppercase tracking-widest text-[#7A8E72] hover:text-violet-400 transition-colors whitespace-nowrap">
+                Admin ↗
+            </a>
+            {{-- Fechar aba --}}
+            <button type="button" onclick="window.close()"
+                    class="shrink-0 flex items-center gap-1.5 bg-violet-600 hover:bg-violet-500 text-white
+                           text-[10px] uppercase tracking-widest font-semibold px-3 py-1.5 rounded-xl transition-all">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                Fechar
+            </button>
+        </div>
+    </div>
+    <script>
+    (function () {
+        var token    = {{ json_encode($adminPreview['token']) }};
+        var expiresAt = {{ json_encode($adminPreview['expires_at']) }};
+        var timerEl  = document.getElementById('adm-preview-timer');
+
+        // Contador regressivo
+        if (timerEl && expiresAt) {
+            function tick() {
+                var diff = Math.max(0, Math.floor((new Date(expiresAt) - Date.now()) / 1000));
+                if (diff === 0) { timerEl.textContent = '· expirado'; return; }
+                var m = Math.floor(diff / 60), s = diff % 60;
+                timerEl.textContent = '· expira em ' + m + ':' + (s < 10 ? '0' : '') + s;
+                setTimeout(tick, 1000);
+            }
+            tick();
+        }
+
+        // Injeta token em todos os links e forms para manter a sessão de preview
+        function injetarToken(url) {
+            try {
+                var u = new URL(url, location.origin);
+                if (u.hostname !== location.hostname) return url;
+                u.searchParams.set('_adm_preview', token);
+                return u.toString();
+            } catch (e) { return url; }
+        }
+
+        document.addEventListener('click', function (e) {
+            var a = e.target.closest('a[href]');
+            if (!a) return;
+            var href = a.getAttribute('href');
+            if (!href || href.startsWith('#') || href.startsWith('mailto:') || a.target === '_blank') return;
+            var newHref = injetarToken(a.href);
+            if (newHref !== a.href) {
+                e.preventDefault();
+                location.href = newHref;
+            }
+        }, true);
+
+        document.addEventListener('submit', function (e) {
+            var form = e.target;
+            if (!form.querySelector('input[name="_adm_preview"]')) {
+                var inp = document.createElement('input');
+                inp.type = 'hidden';
+                inp.name = '_adm_preview';
+                inp.value = token;
+                form.appendChild(inp);
+            }
+        }, true);
+    })();
+    </script>
+    @endif
+
     {{-- Flash: conta agendada para exclusão --}}
     @if(session('conta_agendada_exclusao'))
     <div id="flora-flash-exclusao"

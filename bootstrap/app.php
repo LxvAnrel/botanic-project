@@ -13,6 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->trustProxies(at: '*');
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+        // Roda em todo request web — interpreta token _adm_preview antes do auth
+        $middleware->web(append: [
+            \App\Http\Middleware\AdminPreviewMiddleware::class,
+        ]);
         $middleware->alias([
             'admin'    => \App\Http\Middleware\AdminMiddleware::class,
             'nickname' => \App\Http\Middleware\RequireNickname::class,

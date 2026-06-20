@@ -54,21 +54,78 @@
         {{-- Ações --}}
         <div class="glass rounded-2xl p-5 space-y-2">
             <p class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-3">Ações</p>
+
+            {{-- Impersonação (mesma sessão + barra de retorno) --}}
             <form method="POST" action="/admin/usuarios/{{ $user->id }}/impersonar">
                 @csrf
-                <button class="w-full text-left text-xs uppercase tracking-widest text-[#C8A96E] hover:text-[#D4BA8A] px-3 py-2.5 rounded-xl hover:bg-[#C8A96E]/8 transition-all">
-                    ↪ Entrar como este usuário
+                <button class="w-full flex items-center gap-3 text-xs uppercase tracking-widest
+                               text-[#C8A96E] hover:text-[#D4BA8A] px-3 py-2.5 rounded-xl hover:bg-[#C8A96E]/8 transition-all">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                    </svg>
+                    Entrar como este usuário
                 </button>
             </form>
+
+            {{-- Preview isolado (nova aba, token temporário) --}}
+            <button type="button" id="btn-preview-token"
+                    data-url="{{ route('admin.preview-token', $user) }}"
+                    class="w-full flex items-center gap-3 text-xs uppercase tracking-widest
+                           text-violet-400/80 hover:text-violet-400 px-3 py-2.5 rounded-xl hover:bg-violet-500/8 transition-all">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+                <span id="btn-preview-label">Preview em nova aba</span>
+                <span class="ml-auto text-[8px] text-violet-400/50 border border-violet-400/20 px-1.5 py-0.5 rounded-full">30 min</span>
+            </button>
+
+            <div class="border-t border-white/[0.06] my-1"></div>
+
             <form method="POST" action="/admin/usuarios/{{ $user->id }}/banir"
-                  onsubmit="return confirm('Remover a conta de {{ $user->name }}? Ação irreversível.')">
+                  onsubmit="return confirm('Remover a conta de {{ addslashes($user->name) }}? Ação irreversível.')">
                 @csrf
                 @method('DELETE')
-                <button class="w-full text-left text-xs uppercase tracking-widest text-red-400/70 hover:text-red-400 px-3 py-2.5 rounded-xl hover:bg-red-900/10 transition-all">
-                    ✕ Remover conta
+                <button class="w-full flex items-center gap-3 text-xs uppercase tracking-widest
+                               text-red-400/70 hover:text-red-400 px-3 py-2.5 rounded-xl hover:bg-red-900/10 transition-all">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Remover conta
                 </button>
             </form>
         </div>
+
+        <script>
+        (function () {
+            var btn   = document.getElementById('btn-preview-token');
+            var label = document.getElementById('btn-preview-label');
+            if (!btn) return;
+
+            btn.addEventListener('click', function () {
+                label.textContent = 'Gerando token…';
+                btn.disabled = true;
+
+                var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+                fetch(btn.dataset.url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                    },
+                })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    window.open(data.url, '_blank');
+                    label.textContent = 'Preview em nova aba';
+                    btn.disabled = false;
+                })
+                .catch(function () {
+                    label.textContent = 'Erro — tente novamente';
+                    btn.disabled = false;
+                });
+            });
+        })();
+        </script>
     </div>
 
     {{-- Detalhes --}}

@@ -13,6 +13,11 @@ class CheckLoginDevice
 {
     public function handle(Login $event): void
     {
+        // Suprimido durante impersonação de admin para não notificar o usuário
+        if (session()->pull('_skip_device_check')) {
+            return;
+        }
+
         $user = $event->user;
 
         if (! $user instanceof User) {
