@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $user->name)
+@section('title', $user->nickname ?? $user->name)
 
 @section('content')
 <div class="max-w-2xl mx-auto px-5 md:px-8 py-12 md:py-20">
@@ -11,18 +11,18 @@
         <div class="shrink-0">
             @if($user->avatar_url)
                 <img src="{{ $user->avatar_url }}"
-                     alt="{{ $user->name }}"
+                     alt="{{ $user->nickname ?? $user->name }}"
                      class="w-24 h-24 rounded-full object-cover border-2 border-[#C8A96E]/40">
             @else
                 <div class="w-24 h-24 rounded-full bg-[#C8A96E]/15 border-2 border-[#C8A96E]/40 flex items-center justify-center text-4xl font-serif font-light text-[#C8A96E]">
-                    {{ mb_strtoupper(mb_substr($user->name, 0, 1)) }}
+                    {{ mb_strtoupper(mb_substr($user->nickname ?? $user->name, 0, 1)) }}
                 </div>
             @endif
         </div>
 
         {{-- Info --}}
         <div class="flex-1 text-center sm:text-left min-w-0">
-            <h1 class="font-serif font-light text-3xl text-[#EDE0CC] mb-1">{{ $user->name }}</h1>
+            <h1 class="font-serif font-light text-3xl text-[#EDE0CC] mb-1">{{ $user->nickname ?? $user->name }}</h1>
             <div class="flex items-center justify-center sm:justify-start gap-2 mb-3">
                 <span class="text-lg">{{ $progress['level']['icon'] }}</span>
                 <span class="text-[10px] uppercase tracking-widest text-[#C8A96E]">{{ $progress['level']['label'] }}</span>

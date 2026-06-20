@@ -34,9 +34,9 @@
     <div class="text-center mb-8">
         <div class="w-20 h-20 glass-gold rounded-full flex items-center justify-center mx-auto mb-4"
              style="box-shadow: 0 0 40px rgba(200,169,110,0.25);">
-            <span class="font-serif text-3xl text-[#C8A96E]">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+            <span class="font-serif text-3xl text-[#C8A96E]">{{ strtoupper(substr(auth()->user()->nickname ?? auth()->user()->name, 0, 1)) }}</span>
         </div>
-        <h1 class="font-serif font-light text-2xl text-[#EDE0CC]">{{ auth()->user()->name }}</h1>
+        <h1 class="font-serif font-light text-2xl text-[#EDE0CC]">{{ auth()->user()->nickname ?? auth()->user()->name }}</h1>
         <p class="text-[#3A5E2D] text-xs uppercase tracking-wider mt-1">Membro desde {{ auth()->user()->created_at->format('M Y') }}</p>
     </div>
 
@@ -60,8 +60,8 @@
         <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E]">Informações</p>
         <div class="border-t border-white/[0.06] pt-4 space-y-4">
             <div class="flex items-center justify-between">
-                <p class="text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D]">Nome</p>
-                <p class="text-[#EDE0CC] text-sm">{{ auth()->user()->name }}</p>
+                <p class="text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D]">Apelido</p>
+                <p class="text-[#EDE0CC] text-sm">{{ auth()->user()->nickname ?? auth()->user()->name }}</p>
             </div>
             <div class="flex items-center justify-between gap-4">
                 <p class="text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] shrink-0">Email</p>

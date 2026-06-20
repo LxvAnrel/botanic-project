@@ -84,7 +84,8 @@
                         @auth
                         @php
                             $navUser   = auth()->user();
-                            $initials  = collect(explode(' ', $navUser->name))->map(fn($p) => mb_strtoupper(mb_substr($p,0,1)))->take(2)->join('');
+                            $navDisplay = $navUser->nickname ?? $navUser->name;
+                            $initials  = collect(explode(' ', $navDisplay))->map(fn($p) => mb_strtoupper(mb_substr($p,0,1)))->take(2)->join('');
                             $navUnread = $unread ?? $navUser->unreadNotifications()->count();
                         @endphp
 
@@ -94,14 +95,14 @@
                                     class="relative flex items-center gap-2 bg-[#131F11] border border-[#C8A96E]/40 hover:border-[#C8A96E]/80 rounded-full pl-1 pr-3 py-1 hover:bg-[#1A2E17] transition-all duration-200 group"
                                     aria-label="Conta">
                                 @if($navUser->avatar_url)
-                                    <img src="{{ $navUser->avatar_url }}" alt="{{ $navUser->name }}"
+                                    <img src="{{ $navUser->avatar_url }}" alt="{{ $navDisplay }}"
                                          class="w-8 h-8 rounded-full object-cover shrink-0 border border-[#C8A96E]/30">
                                 @else
                                     <span class="w-8 h-8 rounded-full bg-[#C8A96E] flex items-center justify-center text-[11px] font-bold text-[#0B160A] shrink-0">
                                         {{ $initials }}
                                     </span>
                                 @endif
-                                <span class="hidden md:block text-xs text-[#EDE0CC] group-hover:text-[#C8A96E] transition-colors max-w-[80px] truncate font-medium">{{ $navUser->name }}</span>
+                                <span class="hidden md:block text-xs text-[#EDE0CC] group-hover:text-[#C8A96E] transition-colors max-w-[80px] truncate font-medium">{{ $navDisplay }}</span>
                                 <svg class="hidden md:block w-2.5 h-2.5 text-[#C8A96E]/70 group-hover:text-[#C8A96E] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                                 @if($navUnread > 0)
                                 <span class="absolute -top-1 -right-1 w-4 h-4 text-[8px] bg-[#C8A96E] text-[#0E1A0B] rounded-full flex items-center justify-center font-bold">{{ $navUnread > 9 ? '9+' : $navUnread }}</span>
@@ -115,7 +116,7 @@
 
                                 {{-- Cabeçalho --}}
                                 <div class="px-3 py-3 border-b border-[#C8A96E]/10 mb-1">
-                                    <p class="text-[#EDE0CC] text-sm font-medium truncate">{{ $navUser->name }}</p>
+                                    <p class="text-[#EDE0CC] text-sm font-medium truncate">{{ $navDisplay }}</p>
                                     <p class="text-[#3A5E2D] text-[10px] truncate">{{ $navUser->email }}</p>
                                     @php $navLevel = \App\Support\Gamification::level($navUser->xp ?? 0); @endphp
                                     <div class="flex items-center gap-1.5 mt-2">

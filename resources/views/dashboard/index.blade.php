@@ -40,7 +40,7 @@
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 pb-6 border-b border-white/[0.06]">
         <div>
             <p class="text-[9px] uppercase tracking-[0.4em] text-[#7A8E72] mb-2">— Bem-vindo de volta</p>
-            <h1 class="font-serif font-light text-3xl md:text-4xl text-[#EDE0CC]">{{ auth()->user()->name }}</h1>
+            <h1 class="font-serif font-light text-3xl md:text-4xl text-[#EDE0CC]">{{ auth()->user()->nickname ?? auth()->user()->name }}</h1>
             <div class="flex items-center gap-3 mt-2">
                 <span class="text-[10px] uppercase tracking-wider text-[#C8A96E]">{{ $lvl['icon'] }} {{ $lvl['label'] }}</span>
                 <span class="text-[#3A5E2D] text-[10px]">{{ $userXp }} XP</span>

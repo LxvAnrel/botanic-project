@@ -49,11 +49,11 @@
                     <img src="{{ $u->avatar_url }}" class="w-10 h-10 rounded-full object-cover shrink-0 border border-white/10">
                 @else
                     <div class="w-10 h-10 rounded-full bg-[#C8A96E]/10 border border-white/10 flex items-center justify-center text-sm font-bold text-[#C8A96E] shrink-0">
-                        {{ mb_strtoupper(mb_substr($u->name, 0, 1)) }}
+                        {{ mb_strtoupper(mb_substr($u->nickname ?? $u->name, 0, 1)) }}
                     </div>
                 @endif
                 <div class="flex-1 min-w-0">
-                    <p class="text-[#EDE0CC] text-sm font-medium group-hover:text-[#C8A96E] transition-colors truncate">{{ $u->name }}</p>
+                    <p class="text-[#EDE0CC] text-sm font-medium group-hover:text-[#C8A96E] transition-colors truncate">{{ $u->nickname ?? $u->name }}</p>
                     <p class="text-[#7A8E72] text-[10px]">{{ $u->levelData['icon'] }} {{ $u->levelData['label'] }} · {{ $u->badgesEarned }} badge{{ $u->badgesEarned != 1 ? 's' : '' }}</p>
                 </div>
                 <div class="text-right shrink-0">
@@ -83,10 +83,10 @@
                 <img src="{{ $top[1]->avatar_url }}" class="w-14 h-14 rounded-full object-cover mx-auto mb-2 border-2 border-white/20">
             @else
                 <div class="w-14 h-14 rounded-full bg-[#C8A96E]/10 border-2 border-white/20 flex items-center justify-center text-lg font-bold text-[#C8A96E] mx-auto mb-2">
-                    {{ mb_strtoupper(mb_substr($top[1]->name, 0, 1)) }}
+                    {{ mb_strtoupper(mb_substr($top[1]->nickname ?? $top[1]->name, 0, 1)) }}
                 </div>
             @endif
-            <a href="{{ route('perfil.publico', $top[1]) }}" class="block font-serif text-[#EDE0CC] hover:text-[#C8A96E] transition-colors truncate text-sm">{{ $top[1]->name }}</a>
+            <a href="{{ route('perfil.publico', $top[1]) }}" class="block font-serif text-[#EDE0CC] hover:text-[#C8A96E] transition-colors truncate text-sm">{{ $top[1]->nickname ?? $top[1]->name }}</a>
             <p class="text-[9px] text-[#7A8E72] mt-1">{{ $top[1]->levelData['icon'] }} {{ $top[1]->levelData['label'] }}</p>
             <p class="text-[#C8A96E] text-xs font-medium mt-1">{{ $top[1]->xp ?? 0 }} XP</p>
         </div>
@@ -98,10 +98,10 @@
                 <img src="{{ $top[0]->avatar_url }}" class="w-16 h-16 rounded-full object-cover mx-auto mb-2 border-2 border-[#C8A96E]/50">
             @else
                 <div class="w-16 h-16 rounded-full bg-[#C8A96E]/20 border-2 border-[#C8A96E]/50 flex items-center justify-center text-xl font-bold text-[#C8A96E] mx-auto mb-2">
-                    {{ mb_strtoupper(mb_substr($top[0]->name, 0, 1)) }}
+                    {{ mb_strtoupper(mb_substr($top[0]->nickname ?? $top[0]->name, 0, 1)) }}
                 </div>
             @endif
-            <a href="{{ route('perfil.publico', $top[0]) }}" class="block font-serif text-[#EDE0CC] hover:text-[#C8A96E] transition-colors truncate">{{ $top[0]->name }}</a>
+            <a href="{{ route('perfil.publico', $top[0]) }}" class="block font-serif text-[#EDE0CC] hover:text-[#C8A96E] transition-colors truncate">{{ $top[0]->nickname ?? $top[0]->name }}</a>
             <p class="text-[9px] text-[#7A8E72] mt-1">{{ $top[0]->levelData['icon'] }} {{ $top[0]->levelData['label'] }}</p>
             <p class="text-[#C8A96E] text-sm font-semibold mt-1">{{ $top[0]->xp ?? 0 }} XP</p>
         </div>
@@ -113,10 +113,10 @@
                 <img src="{{ $top[2]->avatar_url }}" class="w-14 h-14 rounded-full object-cover mx-auto mb-2 border-2 border-white/20">
             @else
                 <div class="w-14 h-14 rounded-full bg-[#C8A96E]/10 border-2 border-white/20 flex items-center justify-center text-lg font-bold text-[#C8A96E] mx-auto mb-2">
-                    {{ mb_strtoupper(mb_substr($top[2]->name, 0, 1)) }}
+                    {{ mb_strtoupper(mb_substr($top[2]->nickname ?? $top[2]->name, 0, 1)) }}
                 </div>
             @endif
-            <a href="{{ route('perfil.publico', $top[2]) }}" class="block font-serif text-[#EDE0CC] hover:text-[#C8A96E] transition-colors truncate text-sm">{{ $top[2]->name }}</a>
+            <a href="{{ route('perfil.publico', $top[2]) }}" class="block font-serif text-[#EDE0CC] hover:text-[#C8A96E] transition-colors truncate text-sm">{{ $top[2]->nickname ?? $top[2]->name }}</a>
             <p class="text-[9px] text-[#7A8E72] mt-1">{{ $top[2]->levelData['icon'] }} {{ $top[2]->levelData['label'] }}</p>
             <p class="text-[#C8A96E] text-xs font-medium mt-1">{{ $top[2]->xp ?? 0 }} XP</p>
         </div>
@@ -135,12 +135,12 @@
                 <img src="{{ $u->avatar_url }}" class="w-10 h-10 rounded-full object-cover shrink-0 border border-white/10">
             @else
                 <div class="w-10 h-10 rounded-full bg-[#C8A96E]/10 border border-white/10 flex items-center justify-center text-sm font-bold text-[#C8A96E] shrink-0">
-                    {{ mb_strtoupper(mb_substr($u->name, 0, 1)) }}
+                    {{ mb_strtoupper(mb_substr($u->nickname ?? $u->name, 0, 1)) }}
                 </div>
             @endif
 
             <div class="flex-1 min-w-0">
-                <p class="text-[#EDE0CC] text-sm font-medium group-hover:text-[#C8A96E] transition-colors truncate">{{ $u->name }}</p>
+                <p class="text-[#EDE0CC] text-sm font-medium group-hover:text-[#C8A96E] transition-colors truncate">{{ $u->nickname ?? $u->name }}</p>
                 <p class="text-[#7A8E72] text-[10px]">{{ $u->levelData['icon'] }} {{ $u->levelData['label'] }} · {{ $u->badgesEarned }} badge{{ $u->badgesEarned != 1 ? 's' : '' }}</p>
             </div>
 

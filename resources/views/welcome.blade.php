@@ -380,7 +380,7 @@
 <section class="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-8 md:py-16 mb-4">
     <div class="glass-gold rounded-3xl px-8 md:px-14 py-12 flex flex-col md:flex-row items-center justify-between gap-8">
         <div>
-            <p class="text-[9px] uppercase tracking-[0.5em] text-[#7A8E72] mb-2">— Olá, {{ auth()->user()->name }}</p>
+            <p class="text-[9px] uppercase tracking-[0.5em] text-[#7A8E72] mb-2">— Olá, {{ auth()->user()->nickname ?? auth()->user()->name }}</p>
             <h2 class="font-serif font-light text-3xl text-[#EDE0CC]">Continue cultivando <em class="text-[#C8A96E]">seu verde</em></h2>
         </div>
         <div class="flex flex-wrap gap-3">

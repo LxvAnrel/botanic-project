@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CareController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NicknameController;
 use App\Http\Controllers\PlantController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicProfileController;
@@ -32,8 +33,15 @@ Route::get('/catalogo', [PlantController::class, 'index'])->name('plants.index')
 Route::get('/planta/{plant}', [PlantController::class, 'show'])->name('plants.show')->where('plant', '[a-z0-9-]+');
 Route::get('/quiz', fn() => view('quiz'))->name('quiz');
 
-// ── Área autenticada ──────────────────────────────────────────────────────────
+// ── Nickname (auth obrigatório, sem middleware nickname para não criar loop) ──
 Route::middleware('auth')->group(function () {
+    Route::get('/escolher-nick',  [NicknameController::class, 'escolher'])->name('nickname.escolher');
+    Route::post('/escolher-nick', [NicknameController::class, 'salvar'])->name('nickname.salvar');
+    Route::get('/nickname/gerar', [NicknameController::class, 'gerar'])->name('nickname.gerar');
+});
+
+// ── Área autenticada ──────────────────────────────────────────────────────────
+Route::middleware(['auth', 'nickname'])->group(function () {
     Route::post('/planta/{plant}/favorite', [PlantController::class, 'toggleFavorite'])->name('plants.favorite');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/alertas', [DashboardController::class, 'alertas'])->name('alertas');
