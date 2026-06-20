@@ -55,7 +55,7 @@
                             </a>
                             <a href="{{ route('alertas') }}"
                                class="relative text-xs uppercase tracking-widest font-medium hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200 {{ request()->routeIs('alertas') ? 'text-[#C8A96E]' : 'text-[#DFD0B8]/70' }}">
-                                @php $unread = auth()->user()->unreadNotifications()->count(); @endphp
+                                @php try { $unread = auth()->user()->unreadNotifications()->count(); } catch (\Exception $e) { $unread = 0; } @endphp
                                 Alertas
                                 @if($unread > 0)
                                 <span class="absolute -top-0.5 -right-0.5 w-4 h-4 text-[8px] bg-[#C8A96E] text-[#0E1A0B] rounded-full flex items-center justify-center font-bold">{{ $unread > 9 ? '9+' : $unread }}</span>
