@@ -102,12 +102,20 @@ class AdminController extends Controller
 
     public function plantas(Request $request)
     {
-        $plantas = Plant::withCount('users')
-            ->when($request->q, fn($q) => $q->where('nome_popular', 'ilike', "%{$request->q}%"))
-            ->latest()
-            ->paginate(20);
+        $familias = Plant::whereNotNull('familia')->distinct()->orderBy('familia')->pluck('familia');
 
-        return view('admin.plantas.index', compact('plantas'));
+        $plantas = Plant::withCount('users')
+            ->when($request->q,       fn($q) => $q->where(fn($s) => $s
+                ->where('nome_popular',    'ilike', "%{$request->q}%")
+                ->orWhere('nome_cientifico', 'ilike', "%{$request->q}%")))
+            ->when($request->familia,  fn($q) => $q->where('familia', $request->familia))
+            ->when($request->luz,      fn($q) => $q->where('habitat_luz', $request->luz))
+            ->when($request->pet !== null && $request->pet !== '', fn($q) => $q->where('toxica_pets', (bool) $request->pet))
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('admin.plantas.index', compact('plantas', 'familias'));
     }
 
     public function criarPlanta()

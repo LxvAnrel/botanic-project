@@ -24,11 +24,17 @@
     @foreach($usuarios as $u)
     <a href="/admin/usuarios/{{ $u->id }}"
        class="glass rounded-2xl p-4 flex items-center gap-4 hover:bg-white/[0.03] transition-colors">
-        <div class="w-10 h-10 rounded-full bg-[#C8A96E]/15 border border-[#C8A96E]/20 flex items-center justify-center text-sm font-bold text-[#C8A96E] shrink-0">
-            {{ mb_strtoupper(mb_substr($u->nickname ?? $u->name, 0, 1)) }}
-        </div>
+        @if($u->avatar_url)
+            <img src="{{ $u->avatar_url }}" alt="{{ $u->name }}"
+                 class="w-10 h-10 rounded-full object-cover border border-[#C8A96E]/20 shrink-0">
+        @else
+            <div class="w-10 h-10 rounded-full bg-[#C8A96E]/15 border border-[#C8A96E]/20 flex items-center justify-center text-sm font-bold text-[#C8A96E] shrink-0">
+                {{ mb_strtoupper(mb_substr($u->name, 0, 1)) }}
+            </div>
+        @endif
         <div class="flex-1 min-w-0">
-            <p class="text-[#EDE0CC] text-sm font-medium truncate">{{ $u->nickname ?? $u->name }}</p>
+            <p class="text-[#EDE0CC] text-sm font-medium truncate">{{ $u->name }}</p>
+            @if($u->nickname)<p class="text-[#C8A96E]/50 text-[10px] truncate">{{ '@' . $u->nickname }}</p>@endif
             <p class="text-[#3A5E2D] text-xs truncate">{{ $u->email }}</p>
         </div>
         <div class="text-right shrink-0">
@@ -55,15 +61,30 @@
         <tbody class="divide-y divide-white/[0.04]">
             @foreach($usuarios as $u)
             <tr class="hover:bg-white/[0.02] transition-colors">
-                <td class="px-5 py-4">
-                    <p class="text-[#EDE0CC] font-medium">{{ $u->nickname ?? $u->name }}</p>
-                    <p class="text-[#3A5E2D] text-xs">{{ $u->email }}</p>
+                <td class="px-5 py-3.5">
+                    <div class="flex items-center gap-3">
+                        @if($u->avatar_url)
+                            <img src="{{ $u->avatar_url }}" alt="{{ $u->name }}"
+                                 class="w-8 h-8 rounded-full object-cover border border-[#C8A96E]/20 shrink-0">
+                        @else
+                            <div class="w-8 h-8 rounded-full bg-[#C8A96E]/15 border border-[#C8A96E]/20 flex items-center justify-center text-xs font-bold text-[#C8A96E] shrink-0">
+                                {{ mb_strtoupper(mb_substr($u->name, 0, 1)) }}
+                            </div>
+                        @endif
+                        <div class="min-w-0">
+                            <p class="text-[#EDE0CC] font-medium truncate">{{ $u->name }}</p>
+                            <p class="text-[#3A5E2D] text-xs truncate">
+                                @if($u->nickname)<span class="text-[#C8A96E]/50 mr-1">{{ '@' . $u->nickname }}</span>@endif
+                                {{ $u->email }}
+                            </p>
+                        </div>
+                    </div>
                 </td>
-                <td class="px-5 py-4 text-[#7A8E72] text-xs hidden md:table-cell">{{ $u->created_at->format('d/m/Y') }}</td>
-                <td class="px-5 py-4 text-center text-[#C8A96E] text-sm">{{ $u->plants_count }}</td>
-                <td class="px-5 py-4 text-center text-[#7A8E72] text-xs hidden lg:table-cell">{{ $u->xp ?? 0 }}</td>
-                <td class="px-5 py-4 text-center text-[#7A8E72] text-xs hidden lg:table-cell">{{ $u->streak_days ?? 0 }}d</td>
-                <td class="px-5 py-4 text-right">
+                <td class="px-5 py-3.5 text-[#7A8E72] text-xs hidden md:table-cell">{{ $u->created_at->format('d/m/Y') }}</td>
+                <td class="px-5 py-3.5 text-center text-[#C8A96E] text-sm">{{ $u->plants_count }}</td>
+                <td class="px-5 py-3.5 text-center text-[#7A8E72] text-xs hidden lg:table-cell">{{ $u->xp ?? 0 }}</td>
+                <td class="px-5 py-3.5 text-center text-[#7A8E72] text-xs hidden lg:table-cell">{{ $u->streak_days ?? 0 }}d</td>
+                <td class="px-5 py-3.5 text-right">
                     <a href="/admin/usuarios/{{ $u->id }}" class="text-[9px] uppercase tracking-widest text-[#C8A96E] hover:underline">Ver</a>
                 </td>
             </tr>
