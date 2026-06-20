@@ -27,7 +27,7 @@
     <div class="glass rounded-2xl p-6 space-y-5">
         <p class="text-[9px] uppercase tracking-widest text-[#7A8E72]">Identificação</p>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label class="block text-[10px] uppercase tracking-widest text-[#7A8E72] mb-1.5">Nome popular *</label>
                 <input type="text" name="nome_popular" value="{{ old('nome_popular', $planta->nome_popular) }}" required
@@ -54,7 +54,7 @@
     <div class="glass rounded-2xl p-6 space-y-5">
         <p class="text-[9px] uppercase tracking-widest text-[#7A8E72]">Cuidados</p>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <label class="block text-[10px] uppercase tracking-widest text-[#7A8E72] mb-1.5">Luminosidade *</label>
                 <select name="habitat_luz" required

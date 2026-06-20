@@ -10,17 +10,13 @@
 
 @section('content')
 
-<div class="flex items-center justify-between mb-6">
-    <form method="GET" class="flex gap-3 flex-1 mr-4">
+<div class="mb-6">
+    <form method="GET" class="flex gap-3">
         <input type="text" name="q" value="{{ request('q') }}"
                placeholder="Buscar planta..."
                class="flex-1 glass border-white/[0.08] text-[#EDE0CC] placeholder-[#3A5E2D]/60 text-sm px-4 py-2.5 rounded-xl focus:outline-none focus:border-[#C8A96E]/40">
         <button class="glass border border-white/[0.08] text-[#C8A96E] text-xs uppercase tracking-widest px-5 py-2.5 rounded-xl hover:border-[#C8A96E]/40 transition-all">Buscar</button>
     </form>
-    <a href="/admin/plantas/criar"
-       class="shrink-0 bg-[#C8A96E] text-[#0B160A] text-xs uppercase tracking-widest font-semibold px-5 py-2.5 rounded-xl hover:bg-[#D4BA8A] transition-all">
-        + Adicionar
-    </a>
 </div>
 
 <div class="glass rounded-2xl overflow-hidden">

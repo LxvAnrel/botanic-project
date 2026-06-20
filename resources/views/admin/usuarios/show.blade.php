@@ -104,6 +104,9 @@
             if (!btn) return;
 
             btn.addEventListener('click', function () {
+                // Abrir janela em branco SINCRONAMENTE (evento de clique direto)
+                // window.open dentro de .then() é bloqueado pelo browser como popup
+                var previewWin = window.open('', '_blank');
                 label.textContent = 'Gerando token…';
                 btn.disabled = true;
 
@@ -117,11 +120,12 @@
                 })
                 .then(function (r) { return r.json(); })
                 .then(function (data) {
-                    window.open(data.url, '_blank');
+                    previewWin.location.href = data.url;
                     label.textContent = 'Preview em nova aba';
                     btn.disabled = false;
                 })
                 .catch(function () {
+                    previewWin.close();
                     label.textContent = 'Erro — tente novamente';
                     btn.disabled = false;
                 });

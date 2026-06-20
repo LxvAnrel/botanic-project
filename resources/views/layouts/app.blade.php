@@ -83,10 +83,10 @@
                     <div class="flex items-center gap-2">
                         @auth
                         @php
-                            $navUser   = auth()->user();
-                            $navDisplay = $navUser->nickname ?? $navUser->name;
-                            $initials  = collect(explode(' ', $navDisplay))->map(fn($p) => mb_strtoupper(mb_substr($p,0,1)))->take(2)->join('');
-                            $navUnread = $unread ?? $navUser->unreadNotifications()->count();
+                            $navUser    = auth()->user();
+                            $navDisplay = $navUser->name;
+                            $initials   = collect(explode(' ', $navDisplay))->map(fn($p) => mb_strtoupper(mb_substr($p,0,1)))->take(2)->join('');
+                            $navUnread  = $unread ?? $navUser->unreadNotifications()->count();
                         @endphp
 
                         {{-- Avatar → dropdown de conta --}}
@@ -117,6 +117,9 @@
                                 {{-- Cabeçalho --}}
                                 <div class="px-3 py-3 border-b border-[#C8A96E]/10 mb-1">
                                     <p class="text-[#EDE0CC] text-sm font-medium truncate">{{ $navDisplay }}</p>
+                                    @if($navUser->nickname)
+                                    <p class="text-[#C8A96E]/60 text-[10px] truncate">@{{ $navUser->nickname }}</p>
+                                    @endif
                                     <p class="text-[#3A5E2D] text-[10px] truncate">{{ $navUser->email }}</p>
                                     @php $navLevel = \App\Support\Gamification::level($navUser->xp ?? 0); @endphp
                                     <div class="flex items-center gap-1.5 mt-2">
@@ -302,14 +305,9 @@
             <div class="flex-1 min-w-0">
                 <p class="text-[10px] uppercase tracking-widest text-amber-400/80">Modo impersonação</p>
                 <p class="text-[#EDE0CC] text-xs font-medium truncate">
-                    Você está como <strong>{{ $impUser->nickname ?? $impUser->name }}</strong>
+                    Você está como <strong>{{ $impUser->name }}</strong>@if($impUser->nickname) <span class="text-[#7A8E72] font-normal">@{{ $impUser->nickname }}</span>@endif
                 </p>
             </div>
-            {{-- Ações --}}
-            <a href="/admin/usuarios/{{ $impUser->id }}"
-               class="shrink-0 text-[10px] uppercase tracking-widest text-[#7A8E72] hover:text-[#C8A96E] transition-colors whitespace-nowrap">
-                Ver no admin
-            </a>
             <form method="POST" action="{{ route('admin.sair-impersonacao') }}" class="shrink-0">
                 @csrf
                 <button type="submit"

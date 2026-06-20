@@ -22,7 +22,10 @@
 
         {{-- Info --}}
         <div class="flex-1 text-center sm:text-left min-w-0">
-            <h1 class="font-serif font-light text-3xl text-[#EDE0CC] mb-1">{{ $user->nickname ?? $user->name }}</h1>
+            <h1 class="font-serif font-light text-3xl text-[#EDE0CC] mb-0.5">{{ $user->name }}</h1>
+            @if($user->nickname)
+            <p class="text-[#C8A96E]/60 text-sm mb-1">@{{ $user->nickname }}</p>
+            @endif
             <div class="flex items-center justify-center sm:justify-start gap-2 mb-3">
                 <span class="text-lg">{{ $progress['level']['icon'] }}</span>
                 <span class="text-[10px] uppercase tracking-widest text-[#C8A96E]">{{ $progress['level']['label'] }}</span>

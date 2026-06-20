@@ -105,6 +105,23 @@
             </div>
 
             <div>
+                <label for="nickname" class="block text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-2">
+                    Nome de usuário <span class="text-[#3A5E2D]/50 normal-case tracking-normal">(3–20 caracteres · letras, números e _)</span>
+                </label>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#C8A96E]/50 text-sm select-none">@</span>
+                    <input id="nickname" name="nickname" type="text"
+                           value="{{ old('nickname', $user->nickname) }}"
+                           maxlength="20" autocomplete="off"
+                           placeholder="{{ $user->nickname ?? 'seu_usuario' }}"
+                           class="w-full glass border border-white/[0.08] focus:border-[#C8A96E]/50 text-[#EDE0CC] placeholder-[#3A5E2D]/50 text-sm rounded-xl pl-8 pr-4 py-3 focus:outline-none transition-all duration-200">
+                </div>
+                @error('nickname')
+                <p class="mt-1.5 text-xs text-red-400/80">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
                 <label for="email" class="block text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-2">E-mail</label>
                 <input id="email" name="email" type="email"
                        value="{{ old('email', $user->email) }}"
