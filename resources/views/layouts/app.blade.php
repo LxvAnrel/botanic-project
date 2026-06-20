@@ -15,6 +15,15 @@
 </head>
 <body class="min-h-screen flex flex-col relative">
 
+    {{-- Pular para conteúdo (acessibilidade / teclado) --}}
+    <a href="#main-content"
+       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[999]
+              focus:bg-[#C8A96E] focus:text-[#0B160A] focus:text-xs focus:font-semibold
+              focus:uppercase focus:tracking-widest focus:px-5 focus:py-3 focus:rounded-full
+              focus:shadow-lg focus:outline-none">
+        Pular para o conteúdo
+    </a>
+
     {{-- Ambient colour orbs (give glass something to blur against) --}}
     <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
         <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-[#C8A96E]/8 blur-[120px]"></div>

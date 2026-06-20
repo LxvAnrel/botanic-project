@@ -73,10 +73,10 @@
     <div id="push-banner" class="glass-gold rounded-2xl p-4 md:p-5 mb-6 flex items-center gap-4" style="display:none;">
         <div class="shrink-0 w-10 h-10 glass rounded-full flex items-center justify-center text-lg">🔔</div>
         <div class="flex-1 min-w-0">
-            <p class="text-[#EDE0CC] text-sm">Receba alertas de poda no seu celular</p>
-            <p class="text-[#7A8E72] text-xs mt-0.5">Avisamos na hora certa de cuidar de cada planta.</p>
+            <p class="text-[#EDE0CC] text-sm">Receba alertas de poda no seu <span id="push-banner-device">dispositivo</span></p>
+            <p id="push-banner-sub" class="text-[#7A8E72] text-xs mt-0.5">Avisamos na hora certa de cuidar de cada planta.</p>
         </div>
-        <button type="button" onclick="floraBannerEnable()"
+        <button type="button" onclick="floraBannerEnable()" id="push-banner-btn"
                 class="shrink-0 bg-[#C8A96E] hover:bg-[#D4BA8A] text-[#0E1A0B] text-[10px] uppercase tracking-widest font-semibold px-4 py-2.5 rounded-full transition-all duration-200">
             Ativar
         </button>
@@ -199,7 +199,7 @@
         <div class="w-16 h-16 glass-gold rounded-full flex items-center justify-center mx-auto mb-5 text-3xl">🔔</div>
         <h2 class="font-serif font-light text-2xl text-[#EDE0CC] mb-2">Quer receber alertas?</h2>
         <p class="text-[#7A8E72] text-sm mb-7 leading-relaxed">
-            Podemos avisar no seu celular quando for a época ideal de poda das suas plantas. Você pode mudar isso depois no perfil.
+            Podemos avisar no seu <span class="push-device-label">dispositivo</span> quando for a época ideal de poda das suas plantas. Você pode mudar isso depois no perfil.
         </p>
         <div class="space-y-2">
             <button type="button" onclick="floraOnboardingEnable()"
@@ -226,8 +226,21 @@ function floraBannerDismiss() {
 
 async function floraBannerEnable() {
     if (!window.Flora || !window.Flora.push) return;
-    var ok = await window.Flora.push.subscribe();
-    if (ok) floraBannerDismiss();
+    var btn = document.getElementById('push-banner-btn');
+    var sub = document.getElementById('push-banner-sub');
+    if (btn) { btn.disabled = true; btn.textContent = 'Aguarde…'; }
+    var result = await window.Flora.push.subscribe();
+    if (result.ok) {
+        floraBannerDismiss();
+    } else if (result.error === 'denied') {
+        // Permissão negada no navegador — dispensa o banner e mostra aviso
+        floraBannerDismiss();
+        if (sub) { sub.textContent = 'Permissão negada. Ative nas configurações do navegador.'; sub.classList.add('text-red-400/70'); }
+    } else {
+        // Erro ou fechou o diálogo sem decidir — mantém o banner
+        if (btn) { btn.disabled = false; btn.textContent = 'Ativar'; }
+        if (result.error && sub) { sub.textContent = result.error; }
+    }
 }
 
 function floraOnboardingClose() {
@@ -238,16 +251,25 @@ function floraOnboardingClose() {
 async function floraOnboardingEnable() {
     floraOnboardingClose();
     if (window.Flora && window.Flora.push) {
-        var ok = await window.Flora.push.subscribe();
-        if (ok) localStorage.setItem(FLORA_PUSH_DISMISS, '1');
+        var result = await window.Flora.push.subscribe();
+        if (result.ok) localStorage.setItem(FLORA_PUSH_DISMISS, '1');
     }
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
-    var supported = window.Flora && window.Flora.push && window.Flora.push.supported();
+    var fp = window.Flora && window.Flora.push;
+    var supported = fp && fp.supported();
+
+    // Atualiza textos com o label do dispositivo (celular / PC)
+    if (fp) {
+        var label = fp.deviceLabel();
+        var deviceSpans = document.querySelectorAll('#push-banner-device, .push-device-label');
+        deviceSpans.forEach(function (el) { el.textContent = label; });
+    }
+
     var onboarding = document.getElementById('push-onboarding');
 
-    // Mostra o modal de onboarding (pós-cadastro) se push é suportado e ainda não foi decidido.
+    // Modal de onboarding (pós-cadastro): mostra só se push é suportado e nunca foi decidido.
     if (onboarding && supported && Notification.permission === 'default') {
         onboarding.style.display = 'flex';
         return; // não mostra o banner junto com o modal
@@ -255,7 +277,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Banner persistente para quem ainda não ativou nem dispensou.
     if (supported && Notification.permission !== 'denied' && !localStorage.getItem(FLORA_PUSH_DISMISS)) {
-        var on = await window.Flora.push.isSubscribed();
+        var on = await fp.isSubscribed();
         if (!on) {
             var b = document.getElementById('push-banner');
             if (b) b.style.display = 'flex';
