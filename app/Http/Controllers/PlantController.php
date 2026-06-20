@@ -34,7 +34,16 @@ class PlantController extends Controller
             ];
         }
 
-        return view('plants.show', compact('plant', 'care'));
+        // Recomendações: mesma família ou mesma luz, excluindo a planta atual
+        $relacionadas = Plant::where('id', '!=', $plant->id)
+            ->where(fn($q) => $q
+                ->where('familia', $plant->familia)
+                ->orWhere('habitat_luz', $plant->habitat_luz))
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
+        return view('plants.show', compact('plant', 'care', 'relacionadas'));
     }
 
     public function toggleFavorite(Plant $plant)

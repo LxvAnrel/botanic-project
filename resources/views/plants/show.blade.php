@@ -5,12 +5,20 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-10 py-8 md:py-10">
 
-    {{-- Breadcrumb --}}
-    <nav class="flex items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-[#3A5E2D] mb-6 md:mb-12">
-        <a href="{{ route('plants.index') }}" class="hover:text-[#C8A96E] transition-colors">Catálogo</a>
-        <span>—</span>
-        <span class="text-[#7A8E72] truncate max-w-[160px]">{{ $plant->nome_popular }}</span>
-    </nav>
+    {{-- Navegação de volta --}}
+    <div class="flex items-center gap-3 mb-6 md:mb-12">
+        <a href="{{ route('plants.index') }}"
+           class="flex items-center gap-2 glass border border-white/[0.08] hover:border-[#C8A96E]/40
+                  text-[#7A8E72] hover:text-[#C8A96E] text-[10px] uppercase tracking-widest
+                  px-4 py-2 rounded-full transition-all duration-200 group shrink-0">
+            <svg class="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Catálogo
+        </a>
+        <span class="text-white/10">—</span>
+        <span class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72]/60 truncate">{{ $plant->nome_popular }}</span>
+    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
 
@@ -203,6 +211,59 @@
             <p class="text-[#7A8E72] text-sm leading-relaxed">{{ $plant->curiosidades }}</p>
         </div>
     </div>
+
+    {{-- Recomendações ──────────────────────────────────────────────────────── --}}
+    @if($relacionadas->isNotEmpty())
+    <div class="mt-24">
+        <div class="flex items-end justify-between gap-4 mb-8">
+            <div>
+                <p class="text-[9px] uppercase tracking-[0.4em] text-[#7A8E72] mb-2">— Você também pode gostar</p>
+                <h2 class="font-serif font-light text-2xl md:text-3xl text-[#EDE0CC]">Plantas <em class="text-[#C8A96E]">relacionadas</em></h2>
+            </div>
+            <a href="{{ route('plants.index') }}"
+               class="shrink-0 text-[9px] uppercase tracking-widest text-[#7A8E72] hover:text-[#C8A96E] transition-colors">
+                Ver catálogo →
+            </a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            @foreach($relacionadas as $rel)
+            <a href="{{ route('plants.show', $rel) }}"
+               class="group glass rounded-2xl overflow-hidden hover:glass-gold transition-all duration-300">
+
+                {{-- Imagem --}}
+                @if($rel->image_path)
+                    <img src="{{ asset($rel->image_path) }}" alt="{{ $rel->nome_popular }}"
+                         class="w-full h-40 object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300">
+                @else
+                    <div class="w-full h-40 bg-gradient-to-br from-[#1A3A1A] to-[#0D2010] flex items-center justify-center text-5xl opacity-20">
+                        🌿
+                    </div>
+                @endif
+
+                {{-- Info --}}
+                <div class="p-4 space-y-1">
+                    <p class="text-[#EDE0CC] text-sm font-medium leading-snug group-hover:text-[#C8A96E] transition-colors">
+                        {{ $rel->nome_popular }}
+                    </p>
+                    <p class="text-[#7A8E72] text-[10px] italic truncate">{{ $rel->nome_cientifico }}</p>
+                    <div class="flex items-center gap-2 pt-1">
+                        <span class="text-[8px] uppercase tracking-wider text-[#3A5E2D]">
+                            {{ ['sol_pleno' => '☀ Sol', 'meia_sombra' => '◑ Meia', 'sombra' => '● Sombra'][$rel->habitat_luz] ?? '' }}
+                        </span>
+                        @if($rel->toxica_pets)
+                            <span class="text-[8px] text-red-400/60">⚠</span>
+                        @else
+                            <span class="text-[8px] text-[#C8A96E]/50">🐾</span>
+                        @endif
+                    </div>
+                </div>
+            </a>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
 </div>
 
 {{-- Toast --}}
