@@ -9,7 +9,7 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next)
     {
-        $adminEmails = array_filter(array_map('trim', explode(',', env('ADMIN_EMAIL', ''))));
+        $adminEmails = config('flora.admin_emails', []);
 
         if (! auth()->check() || ! in_array(auth()->user()->email, $adminEmails)) {
             abort(403, 'Acesso restrito.');

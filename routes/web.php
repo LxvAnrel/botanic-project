@@ -25,7 +25,7 @@ Route::get('/conta/reativar', [ProfileController::class, 'reactivate'])
 Route::get('/privacidade', fn() => view('legal.privacidade'))->name('privacidade');
 Route::get('/termos', fn() => view('legal.termos'))->name('termos');
 
-Route::get('/comunidade', [PublicProfileController::class, 'community'])->name('comunidade');
+Route::get('/comunidade', [PublicProfileController::class, 'community'])->name('comunidade')->middleware('throttle:40,1');
 Route::get('/u/{user}', [PublicProfileController::class, 'show'])->name('perfil.publico');
 Route::get('/avatar/{user}', [ProfileController::class, 'showAvatar'])->name('avatar.show');
 

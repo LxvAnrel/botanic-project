@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\Mail\FirstAnnotationMail;
 use App\Models\Plant;
 use App\Models\User;
-use App\Notifications\CareReminderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Output\BufferedOutput;
 
@@ -69,12 +67,19 @@ class AdminController extends Controller
     public function impersonar(User $user)
     {
         $adminId = auth()->id();
-        // Flag antes do login() para o CheckLoginDevice ignorar o evento
+        Log::info('admin.impersonation.start', [
+            'admin_id'    => $adminId,
+            'admin_email' => auth()->user()->email,
+            'target_id'   => $user->id,
+            'target_email'=> $user->email,
+            'ip'          => request()->ip(),
+        ]);
         session([
-            'admin_impersonating'  => $adminId,
-            '_skip_device_check'   => true,
+            'admin_impersonating' => $adminId,
+            '_skip_device_check'  => true,
         ]);
         auth()->login($user);
+        session()->regenerate();
         return redirect('/dashboard');
     }
 
@@ -101,17 +106,29 @@ class AdminController extends Controller
         $adminId = session()->pull('admin_impersonating');
         if ($adminId) {
             auth()->loginUsingId($adminId);
+            session()->regenerate(true);
+            Log::info('admin.impersonation.end', [
+                'admin_id' => $adminId,
+                'ip'       => request()->ip(),
+            ]);
         }
         return redirect('/admin');
     }
 
     public function banirUsuario(User $user)
     {
-        if (in_array($user->email, array_filter(array_map('trim', explode(',', env('ADMIN_EMAIL', '')))))) {
-            return back()->with('error', 'Não é possível banir um admin.');
+        if (in_array($user->email, config('flora.admin_emails', []))) {
+            return back()->with('error', 'Não é possível remover um admin.');
         }
+        Log::warning('admin.user.banned', [
+            'admin_id'    => auth()->id(),
+            'admin_email' => auth()->user()->email,
+            'banned_id'   => $user->id,
+            'banned_email'=> $user->email,
+            'ip'          => request()->ip(),
+        ]);
         $user->delete();
-        return redirect('/admin/usuarios')->with('success', "Conta de {$user->name} removida.");
+        return redirect('/admin/usuarios')->with('success', "Conta removida.");
     }
 
     // ── Plantas ──────────────────────────────────────────────────────────────
@@ -244,6 +261,13 @@ class AdminController extends Controller
             } catch (\Throwable) {}
         }
 
+        Log::info('admin.email.mass_sent', [
+            'admin_id'  => auth()->id(),
+            'segmento'  => $request->segmento,
+            'assunto'   => $request->assunto,
+            'enviados'  => $enviados,
+            'ip'        => request()->ip(),
+        ]);
         return back()->with('success', "Email enviado para {$enviados} usuários.");
     }
 
@@ -268,6 +292,12 @@ class AdminController extends Controller
             ]);
         }
 
+        Log::info('admin.broadcast.sent', [
+            'admin_id' => auth()->id(),
+            'titulo'   => $request->titulo,
+            'total'    => $usuarios->count(),
+            'ip'       => request()->ip(),
+        ]);
         return back()->with('success', "Notificação enviada para {$usuarios->count()} usuários.");
     }
 
@@ -304,6 +334,12 @@ class AdminController extends Controller
         if (! in_array($cmd, $permitidos)) {
             return back()->with('error', 'Comando não permitido.');
         }
+
+        Log::info('admin.command.run', [
+            'admin_id' => auth()->id(),
+            'command'  => $cmd,
+            'ip'       => request()->ip(),
+        ]);
 
         $output = new BufferedOutput();
         Artisan::call($cmd, [], $output);

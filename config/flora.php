@@ -4,6 +4,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Emails de administração
+    |--------------------------------------------------------------------------
+    | Lista separada por vírgula em ADMIN_EMAIL. Usar config() em vez de env()
+    | para que funcione corretamente com config:cache em produção.
+    */
+    'admin_emails' => array_filter(array_map('trim', explode(',', env('ADMIN_EMAIL', '')))),
+
+    /*
+    |--------------------------------------------------------------------------
     | Remetentes de email por finalidade
     |--------------------------------------------------------------------------
     |

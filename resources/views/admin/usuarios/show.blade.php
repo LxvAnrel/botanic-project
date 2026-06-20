@@ -83,7 +83,8 @@
             <div class="border-t border-white/[0.06] my-1"></div>
 
             <form method="POST" action="/admin/usuarios/{{ $user->id }}/banir"
-                  onsubmit="return confirm('Remover a conta de {{ addslashes($user->name) }}? Ação irreversível.')">
+                  data-name="{{ $user->nickname ?? $user->name }}"
+                  onsubmit="return confirm('Remover a conta de ' + this.dataset.name + '? Ação irreversível.')">
                 @csrf
                 @method('DELETE')
                 <button class="w-full flex items-center gap-3 text-xs uppercase tracking-widest

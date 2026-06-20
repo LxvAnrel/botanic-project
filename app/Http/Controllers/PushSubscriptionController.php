@@ -9,9 +9,34 @@ class PushSubscriptionController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'endpoint' => ['required', 'string'],
-            'public_key' => ['nullable', 'string'],
-            'auth_token' => ['nullable', 'string'],
+            'endpoint' => [
+                'required',
+                'string',
+                'url',
+                function ($attribute, $value, $fail) {
+                    $parsed = parse_url($value);
+                    if (($parsed['scheme'] ?? '') !== 'https') {
+                        $fail('O endpoint de push deve usar HTTPS.');
+                        return;
+                    }
+                    $allowed = [
+                        'fcm.googleapis.com',
+                        'updates.push.services.mozilla.com',
+                        'notify.windows.com',
+                        'push.apple.com',
+                        'web.push.apple.com',
+                    ];
+                    $host = $parsed['host'] ?? '';
+                    $ok = collect($allowed)->some(
+                        fn($h) => $host === $h || str_ends_with($host, '.' . $h)
+                    );
+                    if (! $ok) {
+                        $fail('Endpoint de push não autorizado.');
+                    }
+                },
+            ],
+            'public_key'       => ['nullable', 'string'],
+            'auth_token'       => ['nullable', 'string'],
             'content_encoding' => ['nullable', 'string'],
         ]);
 

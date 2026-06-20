@@ -127,8 +127,19 @@ class ProfileController extends Controller
     {
         abort_unless($user->avatar_data, 404);
 
-        return response(base64_decode($user->avatar_data))
-            ->header('Content-Type', $user->avatar_mime ?: 'image/jpeg')
+        $data = base64_decode($user->avatar_data, strict: true);
+        abort_if($data === false, 422);
+
+        // Detecta o MIME real dos bytes — não confia no valor armazenado no banco
+        $finfo    = new \finfo(FILEINFO_MIME_TYPE);
+        $realMime = $finfo->buffer($data);
+        $allowed  = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+        abort_unless(in_array($realMime, $allowed), 415);
+
+        return response($data)
+            ->header('Content-Type', $realMime)
+            ->header('X-Content-Type-Options', 'nosniff')
             ->header('Cache-Control', 'public, max-age=86400');
     }
 
