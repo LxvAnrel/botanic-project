@@ -8,8 +8,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        /* Compensa o zoom do body (app.css) para que o body não ultrapasse o viewport */
+        body { min-height: 100vh; }
+        @media (min-width: 1536px) { body { min-height: calc(100vh / 1.15); } }
+        @media (min-width: 1728px) { body { min-height: calc(100vh / 1.28); } }
+        @media (min-width: 1920px) { body { min-height: calc(100vh / 1.4);  } }
+    </style>
 </head>
-<body style="background:#0B160A; zoom:1; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem 1rem; box-sizing:border-box;">
+<body style="background:#0B160A; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem 1rem; box-sizing:border-box;">
 
     {{-- Ambient orbs --}}
     <div class="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
