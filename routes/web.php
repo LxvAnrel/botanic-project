@@ -56,11 +56,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/planta/{plant}/cuidado', [CareController::class, 'store'])->name('care.store');
     Route::delete('/cuidado/{careLog}', [CareController::class, 'destroy'])->name('care.destroy');
 
-    // Rota de diagnóstico — só acessível com variável de ambiente ativa
+    // Rota de diagnóstico — protegida pelo middleware auth
     Route::get('/debug/check-care', function () {
-        if (! config('app.debug') && env('FLORA_DEBUG_ROUTES') !== 'true') {
-            abort(404);
-        }
         $output = new \Symfony\Component\Console\Output\BufferedOutput();
         \Illuminate\Support\Facades\Artisan::call('plants:check-care', [], $output);
         return response('<pre style="background:#0B160A;color:#9AA88E;padding:2rem;font-size:13px;line-height:1.7">'
