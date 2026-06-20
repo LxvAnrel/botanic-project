@@ -8,8 +8,14 @@
 </a>
 
 <div class="px-3 pt-1 pb-0.5 flex items-center gap-2">
-    <div class="w-5 h-5 rounded-full bg-[#C8A96E]/20 border border-[#C8A96E]/30 flex items-center justify-center text-[9px] font-bold text-[#C8A96E] shrink-0">
-        {{ mb_strtoupper(mb_substr(auth()->user()->nickname ?? auth()->user()->name, 0, 1)) }}
-    </div>
-    <p class="text-[9px] text-[#2A3A28] truncate">{{ auth()->user()->nickname ?? auth()->user()->name }}</p>
+    @php $adminUser = auth()->user(); @endphp
+    @if($adminUser->avatar_url)
+        <img src="{{ $adminUser->avatar_url }}" alt="{{ $adminUser->name }}"
+             class="w-6 h-6 rounded-full object-cover border border-[#C8A96E]/30 shrink-0">
+    @else
+        <div class="w-6 h-6 rounded-full bg-[#C8A96E]/20 border border-[#C8A96E]/30 flex items-center justify-center text-[9px] font-bold text-[#C8A96E] shrink-0">
+            {{ mb_strtoupper(mb_substr($adminUser->name, 0, 1)) }}
+        </div>
+    @endif
+    <p class="text-[9px] text-[#2A3A28] truncate">{{ $adminUser->name }}</p>
 </div>
