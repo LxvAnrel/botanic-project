@@ -65,9 +65,6 @@ Route::middleware(['auth', 'nickname'])->group(function () {
     Route::delete('/cuidado/{careLog}', [CareController::class, 'destroy'])->name('care.destroy');
 });
 
-// ── Sair impersonação — só auth (durante impersonação o usuário já não é admin) ──
-Route::middleware('auth')->post('/admin/sair-impersonacao', [AdminController::class, 'sairImpersonacao'])->name('admin.sair-impersonacao');
-
 // ── Painel admin ──────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/',                              [AdminController::class, 'dashboard'])->name('admin.dashboard');
@@ -75,7 +72,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // Usuários
     Route::get('/usuarios',                      [AdminController::class, 'usuarios'])->name('admin.usuarios');
     Route::get('/usuarios/{user}',               [AdminController::class, 'usuario'])->name('admin.usuario');
-    Route::post('/usuarios/{user}/impersonar',   [AdminController::class, 'impersonar'])->name('admin.impersonar');
     Route::delete('/usuarios/{user}/banir',      [AdminController::class, 'banirUsuario'])->name('admin.banir');
 
     // Plantas

@@ -1,16 +1,3 @@
-@if(session('admin_impersonating'))
-<form method="POST" action="/admin/sair-impersonacao">
-    @csrf
-    <button class="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs uppercase tracking-widest
-                   text-red-400 hover:text-red-300 hover:bg-red-400/8 transition-all duration-150">
-        <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9l-6 6m0 0l6 6m-6-6h16"/>
-        </svg>
-        Sair impersonação
-    </button>
-</form>
-@endif
-
 <a href="/dashboard"
    class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs uppercase tracking-widest
           text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5 transition-all duration-150">

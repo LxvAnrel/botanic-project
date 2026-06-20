@@ -292,36 +292,8 @@
         });
     </script>
 
-    {{-- ── Barra de admin (impersonação ou preview por token) ──────────────── --}}
-    @if(session('admin_impersonating'))
-    @php $impUser = auth()->user(); @endphp
-    <div class="fixed bottom-0 inset-x-0 z-[500] flex justify-center pb-3 px-4 pointer-events-none">
-        <div class="pointer-events-auto flex items-center gap-3 bg-[#0A0F09]/95 border border-[#C8A96E]/30
-                    rounded-2xl px-4 py-2.5 shadow-[0_8px_40px_rgba(0,0,0,0.7)] backdrop-blur-sm
-                    max-w-[min(100%,560px)] w-full">
-            {{-- Indicador --}}
-            <span class="shrink-0 w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-            {{-- Texto --}}
-            <div class="flex-1 min-w-0">
-                <p class="text-[10px] uppercase tracking-widest text-amber-400/80">Modo impersonação</p>
-                <p class="text-[#EDE0CC] text-xs font-medium truncate">
-                    Você está como <strong>{{ $impUser->name }}</strong>@if($impUser->nickname) <span class="text-[#7A8E72] font-normal">@{{ $impUser->nickname }}</span>@endif
-                </p>
-            </div>
-            <form method="POST" action="{{ route('admin.sair-impersonacao') }}" class="shrink-0">
-                @csrf
-                <button type="submit"
-                        class="flex items-center gap-1.5 bg-[#C8A96E] hover:bg-[#D4BA8A] text-[#0B160A]
-                               text-[10px] uppercase tracking-widest font-semibold px-3 py-1.5 rounded-xl transition-all">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                    </svg>
-                    Sair
-                </button>
-            </form>
-        </div>
-    </div>
-    @elseif(isset($adminPreview))
+    {{-- ── Barra de preview por token ──────────────────────────────────────── --}}
+    @if(isset($adminPreview))
     <div id="adm-preview-bar"
          class="fixed bottom-0 inset-x-0 z-[500] flex justify-center pb-3 px-4 pointer-events-none">
         <div class="pointer-events-auto flex items-center gap-3 bg-[#0A0F09]/95 border border-violet-500/30

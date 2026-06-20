@@ -56,18 +56,6 @@
         <div class="glass rounded-2xl p-5 space-y-2">
             <p class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-3">Ações</p>
 
-            {{-- Impersonação (mesma sessão + barra de retorno) --}}
-            <form method="POST" action="/admin/usuarios/{{ $user->id }}/impersonar">
-                @csrf
-                <button class="w-full flex items-center gap-3 text-xs uppercase tracking-widest
-                               text-[#C8A96E] hover:text-[#D4BA8A] px-3 py-2.5 rounded-xl hover:bg-[#C8A96E]/8 transition-all">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
-                    </svg>
-                    Entrar como este usuário
-                </button>
-            </form>
-
             {{-- Preview isolado (nova aba, token temporário) --}}
             <button type="button" id="btn-preview-token"
                     data-url="{{ route('admin.preview-token', $user) }}"

@@ -64,29 +64,6 @@ class AdminController extends Controller
         return view('admin.usuarios.show', compact('user', 'notificacoes', 'careLogs'));
     }
 
-    public function impersonar(User $user)
-    {
-        if (in_array($user->email, config('flora.admin_emails', []))) {
-            return back()->with('error', 'Não é possível impersonar outro administrador.');
-        }
-
-        $adminId = auth()->id();
-        Log::info('admin.impersonation.start', [
-            'admin_id'    => $adminId,
-            'admin_email' => auth()->user()->email,
-            'target_id'   => $user->id,
-            'target_email'=> $user->email,
-            'ip'          => request()->ip(),
-        ]);
-        session([
-            'admin_impersonating' => $adminId,
-            '_skip_device_check'  => true,
-        ]);
-        auth()->login($user);
-        session()->regenerate();
-        return redirect('/dashboard');
-    }
-
     public function gerarPreviewToken(User $user)
     {
         $token     = \Illuminate\Support\Str::random(48);
@@ -103,32 +80,6 @@ class AdminController extends Controller
             'url'        => url('/dashboard') . '?_adm_preview=' . $token,
             'expires_at' => $expiresAt->toISOString(),
         ]);
-    }
-
-    public function sairImpersonacao()
-    {
-        $adminId = session()->pull('admin_impersonating');
-
-        if (! $adminId) {
-            abort(403, 'Nenhuma impersonação ativa.');
-        }
-
-        $admin = User::find($adminId);
-
-        // Garante que só voltamos para um email que realmente é admin
-        if (! $admin || ! in_array($admin->email, config('flora.admin_emails', []))) {
-            abort(403, 'Sessão de impersonação inválida.');
-        }
-
-        auth()->login($admin);
-        session()->regenerate(true);
-
-        Log::info('admin.impersonation.end', [
-            'admin_id' => $adminId,
-            'ip'       => request()->ip(),
-        ]);
-
-        return redirect('/admin');
     }
 
     public function banirUsuario(User $user)

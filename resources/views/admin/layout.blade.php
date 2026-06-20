@@ -118,11 +118,6 @@
 
         {{-- Ações --}}
         <div class="flex items-center gap-2 shrink-0">
-            @if(session('admin_impersonating'))
-            <span class="text-[9px] uppercase tracking-widest bg-red-900/30 text-red-400 border border-red-900/40 px-2 py-1 rounded-full hidden sm:inline">
-                Impersonando
-            </span>
-            @endif
             @yield('header_actions')
             <span class="text-[10px] text-[#2A3A28] uppercase tracking-widest hidden lg:block">{{ now()->format('d/m/Y') }}</span>
         </div>
