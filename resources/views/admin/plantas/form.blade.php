@@ -1,5 +1,8 @@
 @extends('admin.layout')
 @section('title', $planta->id ? 'Editar · ' . $planta->nome_popular : 'Nova Planta')
+@section('breadcrumb', 'Plantas')
+@section('back_url', '/admin/plantas')
+@section('back_label', 'Plantas')
 
 @section('content')
 

@@ -1,5 +1,8 @@
 @extends('admin.layout')
 @section('title', 'Usuários')
+@section('header_actions')
+    <span class="text-[10px] text-[#3A5E2D] uppercase tracking-widest">{{ $usuarios->total() }} registros</span>
+@endsection
 
 @section('content')
 

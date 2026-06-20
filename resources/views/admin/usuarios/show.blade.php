@@ -1,5 +1,8 @@
 @extends('admin.layout')
-@section('title', $user->name)
+@section('title', $user->nickname ?? $user->name)
+@section('breadcrumb', 'Usuários')
+@section('back_url', '/admin/usuarios')
+@section('back_label', 'Usuários')
 
 @section('content')
 

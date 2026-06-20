@@ -1,5 +1,12 @@
 @extends('admin.layout')
 @section('title', 'Plantas')
+@section('header_actions')
+    <a href="/admin/plantas/criar"
+       class="flex items-center gap-2 bg-[#C8A96E] text-[#0B160A] text-[10px] uppercase tracking-widest font-semibold px-4 py-2 rounded-xl hover:bg-[#D4BA8A] transition-all">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+        Nova planta
+    </a>
+@endsection
 
 @section('content')
 
