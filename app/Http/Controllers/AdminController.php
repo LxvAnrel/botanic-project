@@ -66,6 +66,10 @@ class AdminController extends Controller
 
     public function impersonar(User $user)
     {
+        if (in_array($user->email, config('flora.admin_emails', []))) {
+            return back()->with('error', 'Não é possível impersonar outro administrador.');
+        }
+
         $adminId = auth()->id();
         Log::info('admin.impersonation.start', [
             'admin_id'    => $adminId,
@@ -104,14 +108,26 @@ class AdminController extends Controller
     public function sairImpersonacao()
     {
         $adminId = session()->pull('admin_impersonating');
-        if ($adminId) {
-            auth()->loginUsingId($adminId);
-            session()->regenerate(true);
-            Log::info('admin.impersonation.end', [
-                'admin_id' => $adminId,
-                'ip'       => request()->ip(),
-            ]);
+
+        if (! $adminId) {
+            abort(403, 'Nenhuma impersonação ativa.');
         }
+
+        $admin = User::find($adminId);
+
+        // Garante que só voltamos para um email que realmente é admin
+        if (! $admin || ! in_array($admin->email, config('flora.admin_emails', []))) {
+            abort(403, 'Sessão de impersonação inválida.');
+        }
+
+        auth()->login($admin);
+        session()->regenerate(true);
+
+        Log::info('admin.impersonation.end', [
+            'admin_id' => $adminId,
+            'ip'       => request()->ip(),
+        ]);
+
         return redirect('/admin');
     }
 
@@ -161,7 +177,7 @@ class AdminController extends Controller
             'dias_entre_adubacoes' => 'nullable|integer|min:1',
             'toxica_pets'          => 'boolean',
             'epoca_poda'           => 'nullable|string|max:255',
-            'curiosidades'         => 'nullable|string',
+            'curiosidades'         => 'nullable|string|max:10000',
             'image'                => 'nullable|image|max:4096',
         ]);
 
@@ -195,7 +211,7 @@ class AdminController extends Controller
             'dias_entre_adubacoes' => 'nullable|integer|min:1',
             'toxica_pets'          => 'boolean',
             'epoca_poda'           => 'nullable|string|max:255',
-            'curiosidades'         => 'nullable|string',
+            'curiosidades'         => 'nullable|string|max:10000',
             'image'                => 'nullable|image|max:4096',
         ]);
 
@@ -239,7 +255,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'assunto'   => 'required|string|max:255',
-            'mensagem'  => 'required|string',
+            'mensagem'  => 'required|string|max:20000',
             'segmento'  => 'required|in:todos,com_plantas,sem_plantas',
         ]);
 
@@ -275,7 +291,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'titulo'   => 'required|string|max:255',
-            'mensagem' => 'required|string',
+            'mensagem' => 'required|string|max:5000',
         ]);
 
         $usuarios = User::all();
