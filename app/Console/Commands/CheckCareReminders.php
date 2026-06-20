@@ -27,9 +27,13 @@ class CheckCareReminders extends Command
                         ->where('tipo', $tipo)
                         ->max('data');
 
-                    // Sem registro inicial: nao ha como saber se esta atrasado.
+                    // Sem registro: usa a data em que a planta foi adicionada ao diário
                     if (! $ultima) {
-                        continue;
+                        $pivotPlant = $user->plants()->wherePivot('plant_id', $plant->id)->first();
+                        $ultima = $pivotPlant?->pivot?->created_at?->toDateString();
+                        if (! $ultima) {
+                            continue;
+                        }
                     }
 
                     $ultimaData = Carbon::parse($ultima);

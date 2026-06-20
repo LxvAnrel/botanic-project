@@ -21,14 +21,14 @@ class SendFirstAnnotationEmails extends Command
     {
         $now = Carbon::now();
 
-        // V1: 24h após cadastro (janela de 4h centrada em 24h)
-        $this->sendTo(1, $now->copy()->subHours(26), $now->copy()->subHours(22));
+        // V1: 24h após cadastro — janela de 8h para cobrir disparos a cada 6h sem lacunas
+        $this->sendTo(1, $now->copy()->subHours(28), $now->copy()->subHours(20));
 
         // V2: 7 dias após cadastro
-        $this->sendTo(2, $now->copy()->subDays(7)->subHours(2), $now->copy()->subDays(6)->subHours(22));
+        $this->sendTo(2, $now->copy()->subDays(7)->subHours(4), $now->copy()->subDays(6)->subHours(20));
 
         // V3: 30 dias após cadastro
-        $this->sendTo(3, $now->copy()->subDays(30)->subHours(2), $now->copy()->subDays(29)->subHours(22));
+        $this->sendTo(3, $now->copy()->subDays(30)->subHours(4), $now->copy()->subDays(29)->subHours(20));
 
         $this->info('Concluído.');
     }

@@ -6,6 +6,7 @@ use App\Mail\StreakAtRiskMail;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 
 class CheckStreakAtRisk extends Command
@@ -34,8 +35,14 @@ class CheckStreakAtRisk extends Command
                     return;
                 }
 
+                $cacheKey = 'streak_at_risk_' . $user->id . '_' . Carbon::today()->format('Ymd');
+                if (Cache::has($cacheKey)) {
+                    return;
+                }
+
                 try {
                     Mail::to($user->email)->send(new StreakAtRiskMail($user));
+                    Cache::put($cacheKey, true, Carbon::tomorrow());
                     $this->info("Streak at risk sent to {$user->email}");
                 } catch (\Throwable $e) {
                     $this->warn("Failed for {$user->email}: " . $e->getMessage());
