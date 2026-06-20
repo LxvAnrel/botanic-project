@@ -128,6 +128,8 @@ class AdminController extends Controller
             'dias_entre_adubacoes' => 'nullable|integer|min:1',
             'toxica_pets'          => 'boolean',
             'epoca_poda'           => 'nullable|string|max:255',
+            'beneficios'           => 'nullable|string|max:5000',
+            'maleficios'           => 'nullable|string|max:5000',
             'curiosidades'         => 'nullable|string|max:10000',
             'image'                => 'nullable|image|max:4096',
         ]);
@@ -138,6 +140,9 @@ class AdminController extends Controller
 
         $data['toxica_pets'] = $request->boolean('toxica_pets');
         $data['slug']        = Str::slug($data['nome_popular']);
+        $data['epoca_poda']  = $data['epoca_poda']
+            ? array_values(array_filter(array_map('trim', explode(',', $data['epoca_poda']))))
+            : null;
         unset($data['image']);
 
         Plant::create($data);
@@ -162,6 +167,8 @@ class AdminController extends Controller
             'dias_entre_adubacoes' => 'nullable|integer|min:1',
             'toxica_pets'          => 'boolean',
             'epoca_poda'           => 'nullable|string|max:255',
+            'beneficios'           => 'nullable|string|max:5000',
+            'maleficios'           => 'nullable|string|max:5000',
             'curiosidades'         => 'nullable|string|max:10000',
             'image'                => 'nullable|image|max:4096',
         ]);
@@ -171,6 +178,9 @@ class AdminController extends Controller
         }
 
         $data['toxica_pets'] = $request->boolean('toxica_pets');
+        $data['epoca_poda']  = $data['epoca_poda']
+            ? array_values(array_filter(array_map('trim', explode(',', $data['epoca_poda']))))
+            : null;
         unset($data['image']);
 
         $plant->update($data);
