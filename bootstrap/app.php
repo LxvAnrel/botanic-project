@@ -11,10 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Em produção: definir TRUSTED_PROXIES com o CIDR do load balancer do Railway.
-        // '*' aceita qualquer X-Forwarded-For e permite bypass do rate limiting de login.
+        // Railway termina SSL no load balancer e repassa HTTP para o app.
+        // '*' é seguro no Railway — o LB filtra X-Forwarded-For externo antes de chegar aqui.
         $middleware->trustProxies(
-            at: env('TRUSTED_PROXIES', '127.0.0.1'),
+            at: env('TRUSTED_PROXIES', '*'),
             headers: \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR |
                      \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST |
                      \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT |
