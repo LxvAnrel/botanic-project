@@ -19,7 +19,8 @@
                         {{ mb_strtoupper(mb_substr($user->name,0,1)) }}
                     </div>
                 @endif
-                <h2 class="text-[#EDE0CC] font-medium">{{ $user->name }}</h2>
+                <h2 class="text-[#EDE0CC] font-medium">{{ $user->nickname ?? $user->name }}</h2>
+                @if($user->nickname)<p class="text-[#3A5E2D] text-[10px]">{{ $user->name }}</p>@endif
                 <p class="text-[#3A5E2D] text-xs mt-0.5">{{ $user->email }}</p>
             </div>
 

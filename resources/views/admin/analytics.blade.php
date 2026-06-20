@@ -6,7 +6,7 @@
 {{-- Funil de onboarding --}}
 <div class="glass rounded-2xl p-6 mb-6">
     <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-6">Funil de onboarding</h2>
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-3 gap-2 md:gap-4">
         @php
         $funil = [
             ['label' => 'Cadastrou', 'value' => $totalUsuarios, 'pct' => 100, 'cor' => '#C8A96E'],
@@ -16,8 +16,8 @@
         @endphp
         @foreach($funil as $f)
         <div class="text-center">
-            <p class="font-serif text-4xl mb-1" style="color:{{ $f['cor'] }}">{{ $f['value'] }}</p>
-            <p class="text-sm text-[#EDE0CC] mb-1">{{ $f['label'] }}</p>
+            <p class="font-serif text-2xl md:text-4xl mb-1" style="color:{{ $f['cor'] }}">{{ $f['value'] }}</p>
+            <p class="text-xs md:text-sm text-[#EDE0CC] mb-1">{{ $f['label'] }}</p>
             <div class="h-1.5 bg-white/[0.06] rounded-full overflow-hidden mx-auto max-w-[120px]">
                 <div class="h-full rounded-full" style="width:{{ $f['pct'] }}%; background:{{ $f['cor'] }};"></div>
             </div>

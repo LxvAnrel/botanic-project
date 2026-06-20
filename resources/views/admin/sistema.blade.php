@@ -9,19 +9,19 @@
         <div class="space-y-3">
             @foreach($comandos as $cmd => $descricao)
             @php $ultima = $ultimasExecucoes[$cmd] ?? null; @endphp
-            <div class="flex items-center justify-between py-3 border-b border-white/[0.05] last:border-0">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-3 border-b border-white/[0.05] last:border-0">
                 <div class="flex-1 min-w-0">
                     <p class="text-sm text-[#EDE0CC]">{{ $descricao }}</p>
-                    <p class="text-[10px] text-[#3A5E2D] font-mono mt-0.5">{{ $cmd }}</p>
+                    <p class="text-[10px] text-[#3A5E2D] font-mono mt-0.5 truncate">{{ $cmd }}</p>
                     @if($ultima)
-                    <p class="text-[10px] text-[#7A8E72] mt-1">Última execução: {{ \Carbon\Carbon::parse($ultima['at'])->diffForHumans() }}</p>
+                    <p class="text-[10px] text-[#7A8E72] mt-1">Última: {{ \Carbon\Carbon::parse($ultima['at'])->diffForHumans() }}</p>
                     @else
                     <p class="text-[10px] text-[#3A5E2D] mt-1">Nunca executado via painel</p>
                     @endif
                 </div>
-                <form method="POST" action="/admin/sistema/rodar/{{ urlencode($cmd) }}" class="ml-4 shrink-0">
+                <form method="POST" action="/admin/sistema/rodar/{{ urlencode($cmd) }}" class="shrink-0">
                     @csrf
-                    <button class="glass border border-[#C8A96E]/20 text-[#C8A96E] text-[9px] uppercase tracking-widest px-4 py-2 rounded-xl hover:border-[#C8A96E]/50 transition-all">
+                    <button class="w-full sm:w-auto glass border border-[#C8A96E]/20 text-[#C8A96E] text-[9px] uppercase tracking-widest px-4 py-2 rounded-xl hover:border-[#C8A96E]/50 transition-all">
                         ▶ Rodar agora
                     </button>
                 </form>

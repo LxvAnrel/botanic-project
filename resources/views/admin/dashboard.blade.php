@@ -4,7 +4,7 @@
 @section('content')
 
 {{-- Stats grid --}}
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
     @php
     $cards = [
         ['label' => 'Usuários total',    'value' => $stats['usuarios'],             'sub' => '+' . $stats['usuarios_hoje'] . ' hoje',  'cor' => '#C8A96E'],
@@ -14,9 +14,9 @@
     ];
     @endphp
     @foreach($cards as $card)
-    <div class="glass rounded-2xl p-5">
-        <p class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72] mb-2">{{ $card['label'] }}</p>
-        <p class="font-serif text-3xl text-[#EDE0CC] mb-1" style="color:{{ $card['cor'] }}">{{ $card['value'] }}</p>
+    <div class="glass rounded-2xl p-4 md:p-5">
+        <p class="text-[9px] uppercase tracking-[0.3em] text-[#7A8E72] mb-2 truncate">{{ $card['label'] }}</p>
+        <p class="font-serif text-2xl md:text-3xl text-[#EDE0CC] mb-1" style="color:{{ $card['cor'] }}">{{ $card['value'] }}</p>
         <p class="text-[10px] text-[#3A5E2D]">{{ $card['sub'] }}</p>
     </div>
     @endforeach
@@ -34,7 +34,7 @@
             @foreach($recentes as $u)
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-[#EDE0CC]">{{ $u->name }}</p>
+                    <p class="text-sm text-[#EDE0CC]">{{ $u->nickname ?? $u->name }}</p>
                     <p class="text-[10px] text-[#3A5E2D]">{{ $u->email }}</p>
                 </div>
                 <div class="text-right">
