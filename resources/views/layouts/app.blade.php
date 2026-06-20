@@ -118,7 +118,7 @@
                                 <div class="px-3 py-3 border-b border-[#C8A96E]/10 mb-1">
                                     <p class="text-[#EDE0CC] text-sm font-medium truncate">{{ $navDisplay }}</p>
                                     @if($navUser->nickname)
-                                    <p class="text-[#C8A96E]/60 text-[10px] truncate">@{{ $navUser->nickname }}</p>
+                                    <p class="text-[#C8A96E]/60 text-[10px] truncate">{{ '@' . $navUser->nickname }}</p>
                                     @endif
                                     <p class="text-[#3A5E2D] text-[10px] truncate">{{ $navUser->email }}</p>
                                     @php $navLevel = \App\Support\Gamification::level($navUser->xp ?? 0); @endphp
