@@ -77,7 +77,7 @@
         <div class="mt-16 pt-8 border-t border-white/[0.06] grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl">
             @php
                 $stats = [
-                    ['v' => '20+', 'l' => 'Espécies'],
+                    ['v' => '20', 'l' => 'Espécies'],
                     ['v' => '3',   'l' => 'Tipos de alerta'],
                     ['v' => '11',  'l' => 'Badges'],
                     ['v' => '5',   'l' => 'Níveis'],
