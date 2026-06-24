@@ -32,10 +32,17 @@
 
     {{-- Avatar + nome --}}
     <div class="text-center mb-8">
-        <div class="w-20 h-20 glass-gold rounded-full flex items-center justify-center mx-auto mb-4"
-             style="box-shadow: 0 0 40px rgba(200,169,110,0.25);">
-            <span class="font-serif text-3xl text-[#C8A96E]">{{ strtoupper(substr(auth()->user()->nickname ?? auth()->user()->name, 0, 1)) }}</span>
-        </div>
+        @if(auth()->user()->avatar_url)
+            <img src="{{ auth()->user()->avatar_url }}"
+                 alt="{{ auth()->user()->nickname ?? auth()->user()->name }}"
+                 class="w-20 h-20 rounded-full object-cover border-2 border-[#C8A96E]/40 mx-auto mb-4"
+                 style="box-shadow: 0 0 40px rgba(200,169,110,0.25);">
+        @else
+            <div class="w-20 h-20 glass-gold rounded-full flex items-center justify-center mx-auto mb-4"
+                 style="box-shadow: 0 0 40px rgba(200,169,110,0.25);">
+                <span class="font-serif text-3xl text-[#C8A96E]">{{ mb_strtoupper(mb_substr(auth()->user()->nickname ?? auth()->user()->name, 0, 1)) }}</span>
+            </div>
+        @endif
         <h1 class="font-serif font-light text-2xl text-[#EDE0CC]">{{ auth()->user()->nickname ?? auth()->user()->name }}</h1>
         <p class="text-[#3A5E2D] text-xs uppercase tracking-wider mt-1">Membro desde {{ auth()->user()->created_at->format('M Y') }}</p>
     </div>
