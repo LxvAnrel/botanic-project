@@ -6,6 +6,7 @@ use App\Models\CareLog;
 use App\Models\Plant;
 use App\Support\Gamification;
 use App\Support\PlantCare;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -18,21 +19,53 @@ class CareController extends Controller
         ]);
 
         $user = $request->user();
+        $tipo = $data['tipo'];
+        $hoje = now()->toDateString();
 
         // So registra cuidado de planta que esta no Diario do usuario.
         abort_unless($user->plants()->where('plant_id', $plant->id)->exists(), 403);
 
-        $user->careLogs()->create([
-            'plant_id' => $plant->id,
-            'tipo' => $data['tipo'],
-            'data' => now()->toDateString(),
-        ]);
+        // Evita XP infinito: so um registro do mesmo tipo, por planta, por dia.
+        // Cliques repetidos no mesmo dia nao criam log nem dao XP.
+        $jaRegistrado = $user->careLogs()
+            ->where('plant_id', $plant->id)
+            ->where('tipo', $tipo)
+            ->whereDate('data', $hoje)
+            ->exists();
 
-        Gamification::addXp($user, 'care_' . $data['tipo']);
+        if ($jaRegistrado) {
+            $message = CareLog::rotulo($tipo) . ' já registrada hoje.';
+
+            if ($request->expectsJson()) {
+                return response()->json($this->carePayload($user, $plant, $message));
+            }
+
+            return back()->with('care_ok', $message);
+        }
+
+        try {
+            $user->careLogs()->create([
+                'plant_id' => $plant->id,
+                'tipo' => $tipo,
+                'data' => $hoje,
+            ]);
+        } catch (QueryException $e) {
+            // Corrida de cliques simultaneos: o indice unico barra o duplicado.
+            // Nao concede XP de novo, apenas devolve o estado atual.
+            $message = CareLog::rotulo($tipo) . ' já registrada hoje.';
+
+            if ($request->expectsJson()) {
+                return response()->json($this->carePayload($user, $plant, $message));
+            }
+
+            return back()->with('care_ok', $message);
+        }
+
+        Gamification::addXp($user, 'care_' . $tipo);
         Gamification::updateStreak($user);
         Gamification::checkAllBadges($user);
 
-        $message = CareLog::rotulo($data['tipo']) . ' registrada!';
+        $message = CareLog::rotulo($tipo) . ' registrada!';
 
         if ($request->expectsJson()) {
             return response()->json($this->carePayload($user, $plant, $message));
