@@ -128,7 +128,7 @@
                     default => 'text-[#3A5E2D]',
                 };
             @endphp
-            <div class="glass rounded-2xl p-6 space-y-5">
+            <div id="care-panel" class="glass rounded-2xl p-6 space-y-5" style="{{ $inDiario ? '' : 'display:none;' }}">
                 <div class="flex items-center justify-between">
                     <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E]">Cuidados</p>
                     <p class="text-[9px] uppercase tracking-wider text-[#3A5E2D]">Rega a cada {{ $plant->intervaloRega() }}d · Aduba a cada {{ $plant->intervaloAdubacao() }}d</p>
@@ -300,6 +300,10 @@ function setFavoriteState(active) {
     const goldGhost = ['glass-gold', 'text-[#C8A96E]', 'hover:text-[#D4BA8A]'];
     btn.classList.remove(...(active ? goldSolid : goldGhost));
     btn.classList.add(...(active ? goldGhost : goldSolid));
+
+    // Mostra/esconde o painel de cuidados sem recarregar a pagina.
+    const panel = document.getElementById('care-panel');
+    if (panel) panel.style.display = active ? '' : 'none';
 }
 
 function toggleFavorite(plantId) {
