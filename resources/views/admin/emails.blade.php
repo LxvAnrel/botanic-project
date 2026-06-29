@@ -5,7 +5,7 @@
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-    {{-- Email de teste --}}
+    {{-- Formulario para enviar um email de teste para um endereco especifico --}}
     <div class="glass rounded-2xl p-6">
         <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-5">Enviar email de teste</h2>
         <form method="POST" action="/admin/emails/teste" class="space-y-4">
@@ -29,7 +29,7 @@
         </form>
     </div>
 
-    {{-- Broadcast de notificação --}}
+    {{-- Envia uma notificacao para todos os usuarios de uma vez --}}
     <div class="glass rounded-2xl p-6">
         <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-1">Broadcast de notificação</h2>
         <p class="text-[10px] text-[#3A5E2D] mb-5">Aparece na página de alertas de todos os usuários.</p>
@@ -52,7 +52,7 @@
         </form>
     </div>
 
-    {{-- Email em massa --}}
+    {{-- Email em massa segmentado por preferencia de notificacao --}}
     <div class="glass rounded-2xl p-6 lg:col-span-2">
         <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-1">Email em massa</h2>
         <p class="text-[10px] text-[#3A5E2D] mb-5">Só envia para usuários com notificações por email ativas.</p>

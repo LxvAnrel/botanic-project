@@ -4,9 +4,7 @@
 
 @section('content')
 
-{{-- ══════════════════════════════════════
-     HERO
-══════════════════════════════════════ --}}
+{{-- Hero principal --}}
 <section class="relative min-h-[92vh] flex flex-col justify-center overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-b from-[#060E05] via-[#0A1408] to-[#0E1A0B] pointer-events-none"></div>
 
@@ -93,9 +91,7 @@
     </div>
 </section>
 
-{{-- ══════════════════════════════════════
-     COMO FUNCIONA
-══════════════════════════════════════ --}}
+{{-- Como funciona --}}
 <section class="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-16 md:py-24">
     <div class="text-center mb-12 md:mb-16">
         <p class="text-[9px] uppercase tracking-[0.5em] text-[#7A8E72] mb-4">— Do zero ao jardim</p>
@@ -128,9 +124,7 @@
     </div>
 </section>
 
-{{-- ══════════════════════════════════════
-     PRÉVIA DO CATÁLOGO
-══════════════════════════════════════ --}}
+{{-- Previa do catalogo de plantas --}}
 @if($plantas->count() > 0)
 <section class="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-8 md:py-16">
     <div class="flex items-end justify-between mb-8 pb-6 border-b border-white/[0.06]">
@@ -187,9 +181,7 @@
 </section>
 @endif
 
-{{-- ══════════════════════════════════════
-     DIÁRIO VERDE + ALERTAS
-══════════════════════════════════════ --}}
+{{-- Diario verde e alertas de cuidados --}}
 <section class="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-8 md:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
@@ -244,9 +236,7 @@
     </div>
 </section>
 
-{{-- ══════════════════════════════════════
-     GAMIFICAÇÃO
-══════════════════════════════════════ --}}
+{{-- Gamificacao: XP, nivel e conquistas --}}
 <section class="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-8 md:py-16">
     <div class="glass-gold rounded-3xl p-8 md:p-12">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
@@ -299,9 +289,7 @@
     </div>
 </section>
 
-{{-- ══════════════════════════════════════
-     QUIZ
-══════════════════════════════════════ --}}
+{{-- Quiz de recomendacao de plantas --}}
 <section class="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-8 md:py-16">
     <div class="glass rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center gap-10">
         <div class="flex-1">
@@ -344,9 +332,7 @@
     </div>
 </section>
 
-{{-- ══════════════════════════════════════
-     CTA FINAL
-══════════════════════════════════════ --}}
+{{-- Chamada final para o usuario criar uma conta --}}
 @guest
 <section class="max-w-7xl mx-auto px-5 md:px-8 lg:px-12 py-8 md:py-16 mb-4">
     <div class="relative glass-gold rounded-3xl px-8 md:px-14 py-14 md:py-20 overflow-hidden text-center">

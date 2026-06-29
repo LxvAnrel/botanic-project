@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 
 class AdminController extends Controller
 {
-    // ── Dashboard ────────────────────────────────────────────────────────────
+    // Painel principal
 
     public function dashboard()
     {
@@ -37,7 +37,7 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('stats', 'recentes'));
     }
 
-    // ── Usuários ─────────────────────────────────────────────────────────────
+    // Gerenciamento de usuarios
 
     public function usuarios(Request $request)
     {
@@ -98,7 +98,7 @@ class AdminController extends Controller
         return redirect('/admin/usuarios')->with('success', "Conta removida.");
     }
 
-    // ── Plantas ──────────────────────────────────────────────────────────────
+    // Gerenciamento de plantas do catalogo
 
     public function plantas(Request $request)
     {
@@ -201,7 +201,7 @@ class AdminController extends Controller
         return redirect('/admin/plantas')->with('success', 'Planta removida.');
     }
 
-    // ── Emails ───────────────────────────────────────────────────────────────
+    // Envio de emails e notificacoes
 
     public function emails()
     {
@@ -286,7 +286,7 @@ class AdminController extends Controller
         return back()->with('success', "Notificação enviada para {$usuarios->count()} usuários.");
     }
 
-    // ── Sistema ──────────────────────────────────────────────────────────────
+    // Informacoes do sistema e ferramentas de debug
 
     public function sistema()
     {
@@ -338,7 +338,7 @@ class AdminController extends Controller
         return back()->with('cmd_output', $resultado ?: 'Concluído sem saída.');
     }
 
-    // ── Analytics ────────────────────────────────────────────────────────────
+    // Metricas e analytics de uso
 
     public function analytics()
     {

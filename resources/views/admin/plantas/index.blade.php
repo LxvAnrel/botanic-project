@@ -10,7 +10,7 @@
 
 @section('content')
 
-{{-- Barra de busca + filtros ──────────────────────────────────────────────── --}}
+{{-- Barra de busca e filtros --}}
 <form method="GET" id="plant-filter-form" class="space-y-3 mb-6">
 
     {{-- Busca --}}
@@ -67,7 +67,7 @@
     </div>
 </form>
 
-{{-- Grade de plantas (cards) ──────────────────────────────────────────────── --}}
+{{-- Grade de plantas em cards --}}
 @if($plantas->isEmpty())
 <div class="glass rounded-2xl p-12 text-center">
     <p class="text-[#3A5E2D] text-sm">Nenhuma planta encontrada com esses filtros.</p>

@@ -33,14 +33,14 @@ Route::get('/catalogo', [PlantController::class, 'index'])->name('plants.index')
 Route::get('/planta/{plant}', [PlantController::class, 'show'])->name('plants.show')->where('plant', '[a-z0-9-]+');
 Route::get('/quiz', fn() => view('quiz'))->name('quiz');
 
-// ── Nickname (auth obrigatório, sem middleware nickname para não criar loop) ──
+// Rotas de nickname sem o middleware nickname para evitar loop de redirecionamento
 Route::middleware('auth')->group(function () {
     Route::get('/escolher-nick',  [NicknameController::class, 'escolher'])->name('nickname.escolher');
     Route::post('/escolher-nick', [NicknameController::class, 'salvar'])->name('nickname.salvar');
     Route::get('/nickname/gerar', [NicknameController::class, 'gerar'])->name('nickname.gerar');
 });
 
-// ── Área autenticada ──────────────────────────────────────────────────────────
+// Rotas que exigem login e nickname configurado
 Route::middleware(['auth', 'nickname'])->group(function () {
     Route::post('/planta/{plant}/favorite', [PlantController::class, 'toggleFavorite'])->name('plants.favorite');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -65,7 +65,7 @@ Route::middleware(['auth', 'nickname'])->group(function () {
     Route::delete('/cuidado/{careLog}', [CareController::class, 'destroy'])->name('care.destroy');
 });
 
-// ── Painel admin ──────────────────────────────────────────────────────────────
+// Rotas do painel admin (exige login + email de admin)
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/',                              [AdminController::class, 'dashboard'])->name('admin.dashboard');
 

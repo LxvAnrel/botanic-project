@@ -24,7 +24,7 @@
         Pular para o conteúdo
     </a>
 
-    {{-- Ambient colour orbs (give glass something to blur against) --}}
+    {{-- Esferas de cor no fundo para o efeito de vidro funcionar --}}
     <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
         <div class="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-[#C8A96E]/8 blur-[120px]"></div>
         <div class="absolute top-1/3 -left-60 w-[500px] h-[500px] rounded-full bg-[#2D6A2D]/12 blur-[100px]"></div>
@@ -37,9 +37,9 @@
             <div class="glass rounded-2xl px-4 md:px-6">
                 <div class="flex items-center justify-between h-14 relative">
 
-                    {{-- Esq: hamburguer de navegação (mobile) + links (desktop) --}}
+                    {{-- Lado esquerdo: hamburguer no mobile, links no desktop --}}
                     <div class="flex items-center gap-1">
-                        {{-- Hamburguer (mobile apenas) --}}
+                        {{-- Botao de menu hamburguer (so aparece no mobile) --}}
                         <button id="nav-toggle" onclick="floraNavToggle()"
                                 class="xl:hidden flex flex-col gap-1.5 p-2 rounded-xl hover:bg-white/5 transition-colors"
                                 aria-label="Menu de navegação">
@@ -47,7 +47,7 @@
                             <span id="nav-bar2" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
                             <span id="nav-bar3" class="block w-5 h-px bg-[#C8A96E]/70 transition-all duration-300"></span>
                         </button>
-                        {{-- Links (desktop) --}}
+                        {{-- Links de navegacao (so aparecem no desktop) --}}
                         <nav class="hidden xl:flex items-center gap-1">
                             <a href="{{ route('plants.index') }}"
                                class="text-xs uppercase tracking-widest font-medium hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200 {{ request()->routeIs('plants.*') ? 'text-[#C8A96E]' : 'text-[#DFD0B8]/70' }}">
@@ -82,13 +82,13 @@
                         </nav>
                     </div>
 
-                    {{-- Logo centro --}}
+                    {{-- Logo centralizado --}}
                     <a href="/" class="shrink-0 text-center px-2">
                         <span class="font-serif text-2xl tracking-[0.2em] text-[#C8A96E] uppercase leading-none">Flora</span>
                         <span class="block text-[8px] uppercase tracking-[0.4em] text-[#7A8E72] mt-0.5">Botânica Interativa</span>
                     </a>
 
-                    {{-- Dir: avatar de conta (auth) ou login/register (guest) --}}
+                    {{-- Lado direito: avatar do usuario logado ou botoes de entrar/registrar --}}
                     <div class="flex items-center gap-2">
                         @auth
                         @php
@@ -98,7 +98,7 @@
                             $navUnread  = $unread ?? $navUser->unreadNotifications()->count();
                         @endphp
 
-                        {{-- Avatar → dropdown de conta --}}
+                        {{-- Avatar com menu dropdown de conta --}}
                         <div class="relative" id="profile-dropdown-wrap">
                             <button onclick="floraProfileToggle()"
                                     class="relative flex items-center gap-2 bg-[#131F11] border border-[#C8A96E]/40 hover:border-[#C8A96E]/80 rounded-full pl-1 pr-3 py-1 hover:bg-[#1A2E17] transition-all duration-200 group"
@@ -118,12 +118,12 @@
                                 @endif
                             </button>
 
-                            {{-- Dropdown de conta --}}
+                            {{-- Menu suspenso com opcoes da conta --}}
                             <div id="profile-dropdown"
                                  class="absolute right-0 top-[calc(100%+8px)] w-60 bg-[#0E1A0B] border border-[#C8A96E]/20 rounded-2xl p-2 shadow-[0_12px_48px_rgba(0,0,0,0.8)] z-50"
                                  style="display:none;">
 
-                                {{-- Cabeçalho --}}
+                                {{-- Nome, nickname e nivel do usuario --}}
                                 <div class="px-3 py-3 border-b border-[#C8A96E]/10 mb-1">
                                     <p class="text-[#EDE0CC] text-sm font-medium truncate">{{ $navDisplay }}</p>
                                     @if($navUser->nickname)
@@ -189,7 +189,7 @@
                         </div>
 
                         @else
-                        {{-- Guest --}}
+                        {{-- Visitante nao logado: mostra botoes de entrar e registrar --}}
                         <nav class="hidden xl:flex items-center gap-1">
                             <a href="{{ route('login') }}"
                                class="text-xs uppercase tracking-widest font-medium text-[#DFD0B8]/70 hover:text-[#C8A96E] hover:bg-white/5 px-4 py-2 rounded-full transition-all duration-200">
@@ -301,7 +301,7 @@
         });
     </script>
 
-    {{-- ── Barra de preview por token ──────────────────────────────────────── --}}
+    {{-- Barra de aviso quando admin esta visualizando como outro usuario --}}
     @if(isset($adminPreview))
     <div id="adm-preview-bar"
          class="fixed bottom-0 inset-x-0 z-[500] flex justify-center pb-3 px-4 pointer-events-none">

@@ -35,7 +35,7 @@
         <h1 class="font-serif font-light text-3xl text-[#EDE0CC]">Editar perfil</h1>
     </div>
 
-    {{-- ① Avatar --}}
+    {{-- Secao de foto de perfil --}}
     <div class="glass rounded-2xl p-6">
         <p class="text-[9px] uppercase tracking-[0.3em] text-[#C8A96E] mb-5">Foto de perfil</p>
 

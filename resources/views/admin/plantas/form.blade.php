@@ -21,7 +21,7 @@
     </div>
     @endif
 
-    {{-- Topo: imagem + identificação (espelho do catálogo) ─────────────────── --}}
+    {{-- Topo do formulario: imagem e identificacao da planta --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
 
         {{-- Imagem --}}
@@ -57,7 +57,7 @@
             @error('image')<p class="text-xs text-red-400 mt-1.5">{{ $message }}</p>@enderror
         </div>
 
-        {{-- Identificação em estilo catálogo ──────────────────────────────── --}}
+        {{-- Campos de identificacao da planta --}}
         <div class="flex flex-col justify-center space-y-6">
 
             <div>
@@ -127,7 +127,7 @@
         </div>
     </div>
 
-    {{-- 3 cards de conteúdo (espelho do catálogo) ─────────────────────────── --}}
+    {{-- Cards de conteudo: cultivo, cuidados e curiosidades --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
 
         <div class="glass rounded-3xl p-8 space-y-5">

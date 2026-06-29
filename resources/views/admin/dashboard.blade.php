@@ -3,7 +3,7 @@
 
 @section('content')
 
-{{-- Stats grid --}}
+{{-- Cards com as principais metricas do sistema --}}
 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
     @php
     $cards = [
@@ -24,7 +24,7 @@
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-    {{-- Usuários recentes --}}
+    {{-- Ultimos usuarios cadastrados --}}
     <div class="glass rounded-2xl p-6">
         <div class="flex items-center justify-between mb-5">
             <h2 class="text-[10px] uppercase tracking-widest text-[#7A8E72]">Últimos cadastros</h2>
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    {{-- Catálogo --}}
+    {{-- Resumo do catalogo de plantas --}}
     <div class="glass rounded-2xl p-6">
         <div class="flex items-center justify-between mb-5">
             <h2 class="text-[10px] uppercase tracking-widest text-[#7A8E72]">Catálogo de plantas</h2>

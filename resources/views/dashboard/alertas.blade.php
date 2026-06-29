@@ -4,7 +4,7 @@
 
 @section('content')
 
-{{-- Sub-nav --}}
+{{-- Navegacao entre as secoes do dashboard --}}
 <div class="sticky top-[72px] z-40 px-4 pb-2">
     <div class="max-w-7xl mx-auto">
         <div class="glass rounded-2xl px-2 py-1.5 flex gap-1 overflow-x-auto">
@@ -33,7 +33,7 @@
 
 <div class="max-w-3xl mx-auto px-4 md:px-6 py-8">
 
-    {{-- Cabeçalho --}}
+    {{-- Titulo e botao de marcar todas como lidas --}}
     <div class="flex items-end justify-between gap-4 mb-6 pb-6 border-b border-white/[0.06]">
         <div>
             <p class="text-[9px] uppercase tracking-[0.5em] text-[#7A8E72] mb-2">— Cuidados das suas plantas</p>
@@ -55,7 +55,7 @@
         @endif
     </div>
 
-    {{-- Tabs de filtro --}}
+    {{-- Abas para filtrar por tipo de alerta --}}
     <div class="flex gap-2 mb-6 overflow-x-auto pb-1">
         @php
             $tabs = ['todas' => 'Todas', 'poda' => '✂ Poda', 'cuidados' => '💧 Cuidados'];
@@ -71,7 +71,7 @@
         @endforeach
     </div>
 
-    {{-- Lista --}}
+    {{-- Lista de alertas e notificacoes --}}
     @if($notificacoes->count() > 0)
         <div class="space-y-2">
             @foreach($notificacoes as $notif)

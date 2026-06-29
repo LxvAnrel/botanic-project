@@ -17,23 +17,23 @@
 </head>
 <body class="min-h-screen bg-[#080F07]">
 
-{{-- Ambient orbs --}}
+{{-- Esferas de cor no fundo para o efeito visual do admin --}}
 <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
     <div class="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-[#C8A96E]/5 blur-[120px]"></div>
     <div class="absolute bottom-0 -left-40 w-[400px] h-[400px] rounded-full bg-[#2D6A2D]/8 blur-[100px]"></div>
 </div>
 
-{{-- ══ MOBILE: Backdrop ══════════════════════════════════════════════════════ --}}
+{{-- Backdrop escurecido que aparece atrás do menu mobile --}}
 <div id="adm-backdrop"
      class="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm md:hidden"
      onclick="admDrawerClose()"></div>
 
-{{-- ══ MOBILE: Drawer (slide-over) ══════════════════════════════════════════ --}}
+{{-- Menu lateral que desliza pela esquerda no mobile --}}
 <aside id="adm-drawer"
        class="fixed inset-y-0 left-0 z-50 w-64 flex flex-col md:hidden border-r border-white/[0.06]"
        style="background:#0A1309;">
 
-    {{-- Header do drawer --}}
+    {{-- Topo do drawer: logo e botao de fechar --}}
     <div class="flex items-center justify-between px-5 py-5 border-b border-white/[0.06]">
         <a href="/admin" onclick="admDrawerClose()">
             <span class="font-serif text-lg tracking-[0.2em] text-[#C8A96E] uppercase">Flora</span>
@@ -47,47 +47,47 @@
         </button>
     </div>
 
-    {{-- Nav --}}
+    {{-- Links de navegacao do drawer mobile --}}
     <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         @include('admin._nav')
     </nav>
 
-    {{-- Footer --}}
+    {{-- Rodape do drawer com info do usuario --}}
     <div class="px-3 py-4 border-t border-white/[0.06] space-y-1">
         @include('admin._sidebar-footer')
     </div>
 </aside>
 
-{{-- ══ DESKTOP: Sidebar fixa ══════════════════════════════════════════════════ --}}
+{{-- Sidebar fixa que so aparece no desktop --}}
 <div class="hidden md:flex">
     <aside class="fixed inset-y-0 left-0 w-56 flex flex-col z-30 border-r border-white/[0.06]"
            style="background:#0A1309;">
-        {{-- Logo --}}
+        {{-- Logo do painel admin --}}
         <div class="px-5 py-5 border-b border-white/[0.06]">
             <a href="/admin" class="block">
                 <span class="font-serif text-lg tracking-[0.2em] text-[#C8A96E] uppercase">Flora</span>
                 <span class="block text-[8px] uppercase tracking-[0.3em] text-[#3A5E2D] mt-0.5">Painel Admin</span>
             </a>
         </div>
-        {{-- Nav --}}
+        {{-- Links de navegacao da sidebar --}}
         <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
             @include('admin._nav')
         </nav>
-        {{-- Footer --}}
+        {{-- Rodape da sidebar com info do usuario --}}
         <div class="px-3 py-4 border-t border-white/[0.06] space-y-1">
             @include('admin._sidebar-footer')
         </div>
     </aside>
 </div>
 
-{{-- ══ Main content ════════════════════════════════════════════════════════════ --}}
+{{-- Conteudo principal da pagina --}}
 <div class="min-h-screen flex flex-col md:pl-56">
 
-    {{-- Topbar --}}
+    {{-- Barra superior com titulo da pagina e acoes --}}
     <header class="sticky top-0 z-20 flex items-center gap-3 px-4 md:px-6 py-3.5 border-b border-white/[0.06]"
             style="background:#0A1309;">
 
-        {{-- Hamburger (mobile) --}}
+        {{-- Botao de abrir menu no mobile --}}
         <button onclick="admDrawerOpen()"
                 class="md:hidden flex flex-col gap-1.5 p-1.5 rounded-xl text-[#7A8E72] hover:text-[#C8A96E] hover:bg-white/5 transition-all shrink-0"
                 aria-label="Menu">
@@ -96,7 +96,7 @@
             <span class="block w-5 h-px bg-current transition-all"></span>
         </button>
 
-        {{-- Back button contextual --}}
+        {{-- Botao de voltar, aparece quando a pagina define back_url --}}
         @hasSection('back_url')
         <a href="@yield('back_url')"
            class="flex items-center gap-1.5 text-[#7A8E72] hover:text-[#C8A96E] transition-colors group shrink-0">
@@ -108,7 +108,7 @@
         <span class="text-white/10 text-lg shrink-0 hidden sm:inline">/</span>
         @endif
 
-        {{-- Título / breadcrumb --}}
+        {{-- Titulo da pagina e caminho de navegacao --}}
         <div class="flex-1 min-w-0">
             @hasSection('breadcrumb')
             <p class="text-[9px] uppercase tracking-widest text-[#3A5E2D] mb-0.5 hidden sm:block">@yield('breadcrumb')</p>
@@ -116,14 +116,14 @@
             <h1 class="font-serif font-light text-base md:text-lg text-[#EDE0CC] truncate">@yield('title', 'Dashboard')</h1>
         </div>
 
-        {{-- Ações --}}
+        {{-- Botoes de acao que cada pagina pode injetar no topo --}}
         <div class="flex items-center gap-2 shrink-0">
             @yield('header_actions')
             <span class="text-[10px] text-[#2A3A28] uppercase tracking-widest hidden lg:block">{{ now()->format('d/m/Y') }}</span>
         </div>
     </header>
 
-    {{-- Alerts --}}
+    {{-- Mensagens de sucesso ou erro vindas da sessao --}}
     <div class="px-4 md:px-6 pt-4">
         @if(session('success'))
         <div class="mb-4 flex items-center gap-3 px-4 py-3 bg-[#2D6A2D]/20 border border-[#2D6A2D]/40 rounded-xl text-sm text-[#7AC77A]">
@@ -145,13 +145,13 @@
         @endif
     </div>
 
-    {{-- Content --}}
+    {{-- Conteudo da pagina definido pela view filha --}}
     <main class="flex-1 px-4 md:px-6 py-4 pb-24 md:pb-12">
         @yield('content')
     </main>
 </div>
 
-{{-- ══ MOBILE: Bottom nav ══════════════════════════════════════════════════════ --}}
+{{-- Barra de navegacao inferior (so aparece no mobile) --}}
 <nav class="fixed bottom-0 inset-x-0 z-30 md:hidden border-t border-white/[0.06]" style="background:#0A1309;">
     <div class="flex items-stretch">
         @php

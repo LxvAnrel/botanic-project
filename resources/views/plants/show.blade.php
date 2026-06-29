@@ -5,7 +5,7 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-10 py-8 md:py-10">
 
-    {{-- Navegação de volta --}}
+    {{-- Botao de voltar para o catalogo --}}
     <div class="flex items-center gap-3 mb-6 md:mb-12">
         <a href="{{ route('plants.index') }}"
            class="flex items-center gap-2 glass border border-white/[0.08] hover:border-[#C8A96E]/40
@@ -22,7 +22,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
 
-        {{-- Imagem --}}
+        {{-- Foto ou placeholder da planta --}}
         <div class="relative">
             @if($plant->image_path)
                 <img src="{{ asset($plant->image_path) }}"
@@ -46,7 +46,7 @@
                 <p class="font-serif italic text-[#7A8E72] text-base md:text-lg">{{ $plant->nome_cientifico }}</p>
             </div>
 
-            {{-- Badges --}}
+            {{-- Badges com caracteristicas: luz, pet-friendly, tamanho --}}
             <div class="flex flex-wrap gap-2">
                 @switch($plant->habitat_luz)
                     @case('sol_pleno')
@@ -69,7 +69,7 @@
                 <span class="text-[9px] uppercase tracking-widest bg-[#1A2E17] border border-white/10 px-4 py-2 rounded-full text-[#9AA88E]">Até {{ $plant->porte_max_cm }}cm</span>
             </div>
 
-            {{-- Ficha --}}
+            {{-- Ficha tecnica com dados botanicos e de cuidado --}}
             <div class="glass rounded-2xl divide-y divide-white/[0.05]">
                 <div class="grid grid-cols-2 px-6 py-4">
                     <div>
@@ -212,7 +212,7 @@
         </div>
     </div>
 
-    {{-- Recomendações ──────────────────────────────────────────────────────── --}}
+    {{-- Plantas relacionadas / recomendadas --}}
     @if($relacionadas->isNotEmpty())
     <div class="mt-24">
         <div class="flex items-end justify-between gap-4 mb-8">
@@ -231,7 +231,7 @@
             <a href="{{ route('plants.show', $rel) }}"
                class="group glass rounded-2xl overflow-hidden hover:glass-gold transition-all duration-300">
 
-                {{-- Imagem --}}
+                {{-- Foto da planta relacionada --}}
                 @if($rel->image_path)
                     <img src="{{ asset($rel->image_path) }}" alt="{{ $rel->nome_popular }}"
                          class="w-full h-40 object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300">
@@ -241,7 +241,7 @@
                     </div>
                 @endif
 
-                {{-- Info --}}
+                {{-- Informacoes e detalhes da planta --}}
                 <div class="p-4 space-y-1">
                     <p class="text-[#EDE0CC] text-sm font-medium leading-snug group-hover:text-[#C8A96E] transition-colors">
                         {{ $rel->nome_popular }}
@@ -335,7 +335,7 @@ function toggleFavorite(plantId) {
     });
 }
 
-/* ── Cuidados (sem reload) ───────────────────────────────────────── */
+/* Registro de cuidados via AJAX, sem recarregar a pagina */
 const FLORA_CSRF = document.querySelector('meta[name="csrf-token"]').content;
 
 function careColor(estado) {

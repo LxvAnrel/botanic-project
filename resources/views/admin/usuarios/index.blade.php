@@ -19,7 +19,7 @@
     @endif
 </form>
 
-{{-- ── Mobile: cards ─────────────────────────────────────────────────────── --}}
+{{-- Lista de usuarios em cards (mobile) --}}
 <div class="sm:hidden space-y-2">
     @foreach($usuarios as $u)
     <a href="/admin/usuarios/{{ $u->id }}"
@@ -45,7 +45,7 @@
     @endforeach
 </div>
 
-{{-- ── Desktop: tabela ───────────────────────────────────────────────────── --}}
+{{-- Tabela de usuarios (desktop) --}}
 <div class="hidden sm:block glass rounded-2xl overflow-hidden">
     <table class="w-full text-sm">
         <thead>

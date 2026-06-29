@@ -4,7 +4,7 @@
 
 @section('content')
 
-{{-- Sub-nav do dashboard --}}
+{{-- Navegacao entre as secoes do dashboard (Diario, Alertas, Conquistas, Perfil) --}}
 <div class="sticky top-[72px] z-40 px-4 pb-2">
     <div class="max-w-7xl mx-auto">
         <div class="glass rounded-2xl px-2 py-1.5 flex gap-1 overflow-x-auto">
@@ -30,7 +30,7 @@
 
 <div class="max-w-7xl mx-auto px-4 md:px-6 lg:px-10 py-8">
 
-    {{-- Header --}}
+    {{-- Saudacao com nome, nivel e XP do usuario --}}
     @php
         $userXp      = (int) auth()->user()->xp;
         $userStreak  = (int) auth()->user()->streak_days;
@@ -55,7 +55,7 @@
         </a>
     </div>
 
-    {{-- XP bar --}}
+    {{-- Barra de progresso de XP ate o proximo nivel --}}
     @if($lvlProgress['nextLevel'])
     <div class="glass rounded-2xl px-5 py-3 mb-6 flex items-center gap-4">
         <span class="text-[9px] uppercase tracking-wider text-[#7A8E72] shrink-0">{{ $lvl['label'] }}</span>
@@ -69,7 +69,7 @@
     </div>
     @endif
 
-    {{-- Banner de notificações push --}}
+    {{-- Banner para convidar o usuario a ativar notificacoes push --}}
     <div id="push-banner" class="glass-gold rounded-2xl p-4 md:p-5 mb-6 flex items-center gap-4" style="display:none;">
         <div class="shrink-0 w-10 h-10 glass rounded-full flex items-center justify-center text-lg">🔔</div>
         <div class="flex-1 min-w-0">

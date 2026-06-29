@@ -3,7 +3,7 @@
 
 @section('content')
 
-{{-- Funil de onboarding --}}
+{{-- Funil mostrando quantos usuarios completaram cada etapa do onboarding --}}
 <div class="glass rounded-2xl p-6 mb-6">
     <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-6">Funil de onboarding</h2>
     <div class="grid grid-cols-3 gap-2 md:gap-4">
@@ -29,7 +29,7 @@
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
 
-    {{-- Retenção --}}
+    {{-- Taxa de retencao de usuarios por periodo --}}
     <div class="glass rounded-2xl p-6">
         <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-5">Retenção por atividade</h2>
         <div class="space-y-4">
@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    {{-- Plantas populares --}}
+    {{-- Plantas com mais usuarios no diario --}}
     <div class="glass rounded-2xl p-6">
         <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-5">Plantas mais populares</h2>
         <div class="space-y-2.5">
@@ -78,7 +78,7 @@
 
 </div>
 
-{{-- Novos usuários por dia --}}
+{{-- Grafico de novos cadastros nos ultimos 14 dias --}}
 <div class="glass rounded-2xl p-6 mb-6">
     <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-5">Novos usuários — últimos 14 dias</h2>
     @if($novosPorDia->isEmpty())

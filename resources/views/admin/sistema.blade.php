@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    {{-- Schedule --}}
+    {{-- Horarios dos comandos agendados no scheduler --}}
     <div class="glass rounded-2xl p-6">
         <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-5">Horários configurados</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    {{-- Info do sistema --}}
+    {{-- Versoes e ambiente do servidor --}}
     <div class="glass rounded-2xl p-6">
         <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-5">Informações</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
@@ -63,7 +63,7 @@
         </div>
     </div>
 
-    {{-- Rota de debug (movida aqui) --}}
+    {{-- Ferramenta de debug: roda o check-care e exibe o output na tela --}}
     <div class="glass rounded-2xl p-6">
         <h2 class="text-[9px] uppercase tracking-widest text-[#7A8E72] mb-3">Debug rápido</h2>
         <p class="text-xs text-[#7A8E72] mb-4">Roda o check-care e exibe o output completo em tempo real.</p>
